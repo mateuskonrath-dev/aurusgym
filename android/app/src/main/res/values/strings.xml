@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Aurus Gym</string>
+    <string name="title_activity_main">Aurus Gym</string>
+    <string name="package_name">com.aurus.app</string>
+    <string name="custom_url_scheme">com.aurus.app</string>
+</resources>

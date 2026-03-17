@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,700&display=swap');
+
+:root {
+  /* v3 Elite Sports Tech Palette */
+  --bg-pure: #080808;
+  --bg-elevated: #111111;
+  --bg-card: #1a1a1a;
+
+  --brand-primary: #00f5d4;
+  /* Neon Teal */
+  --brand-secondary: #00bbfa;
+  /* Electric Blue */
+  --brand-danger: #ff4b4b;
+
+  --text-high: #ffffff;
+  --text-med: #a0a0a0;
+  --text-low: #666666;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(0, 245, 212, 0.4);
+
+  --radius-pro: 4px;
+  /* Seriedade = bordas menos arredondadas */
+  --font-data: 'Inter', sans-serif;
+  --font-accent: 'Playfair Display', serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-pure);
+  color: var(--text-high);
+  font-family: var(--font-data);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+.mobile-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100%;
+  background: var(--bg-pure);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography Pro */
+h1,
+h2,
+h3 {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.title-italic {
+  font-family: var(--font-accent);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+
+/* Glass & Panel v3 */
+.panel-tech {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pro);
+  padding: 20px;
+}
+
+.tech-border-l {
+  border-left: 4px solid var(--brand-primary);
+}
+
+/* Interaction */
+.btn-tech {
+  background: var(--brand-primary);
+  color: #000;
+  border: none;
+  padding: 16px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.btn-tech:active {
+  background: var(--brand-secondary);
+  transform: translateY(2px);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--text-low);
+  color: var(--text-med);
+  padding: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Data Viz Elements */
+.data-label {
+  font-size: 0.65rem;
+  color: var(--text-low);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.data-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-high);
+}
+
+/* Animations */
+@keyframes techSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-tech {
+  animation: techSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Tab Bar Tech */
+.tab-bar-v3 {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 64px;
+  background: rgba(14, 14, 14, 0.98);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Progress bar v3 */
+.progress-bar-container {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+  transition: width 0.4s ease;
+}

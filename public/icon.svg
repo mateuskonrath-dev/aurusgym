@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="100" fill="#050505"/>
+  <path d="M256 120L120 400H180L256 220L332 400H392L256 120Z" fill="url(#paint0_linear)" />
+  <circle cx="256" cy="256" r="200" stroke="url(#paint1_radial)" stroke-width="15" stroke-dasharray="20 10"/>
+  <defs>
+    <linearGradient id="paint0_linear" x1="256" y1="120" x2="256" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD700"/>
+      <stop offset="1" stop-color="#FFA500"/>
+    </linearGradient>
+    <radialGradient id="paint1_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 256) rotate(90) scale(200)">
+      <stop stop-color="#FFD700" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#FFD700" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
