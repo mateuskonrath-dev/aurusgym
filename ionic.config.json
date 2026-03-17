@@ -1,5 +1,8 @@
 {
   "name": "Aurus Gym",
-  "integrations": {},
+  "id": "021dd2c2",
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }
