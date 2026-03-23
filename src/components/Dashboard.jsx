@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
-import { generateDailyWorkout, generateWeeklyPlan, EXERCISES } from '../data/workoutData'
-import WorkoutPlayer from './WorkoutPlayer'
-import ExerciseDetail from './ExerciseDetail'
+import { generateWeeklyPlan, EXERCISES } from '@/data/workoutData'
+import WorkoutPlayer from '@/components/WorkoutPlayer'
+import ExerciseDetail from '@/components/ExerciseDetail'
+import WeeklyRoadmap from '@/components/WeeklyRoadmap'
+import ProgressStats from '@/components/ProgressStats'
+import WorkoutSession from '@/components/WorkoutSession'
 
-export default function Dashboard({ profile }) {
+export default function Dashboard({ profile, personalBests = {}, volumeHistory = {}, onUpdatePBs, onUpdateVolume }) {
     const [activeWorkout, setActiveWorkout] = useState(false)
     const [weeklyPlan, setWeeklyPlan] = useState([])
     const [selectedDayIndex, setSelectedDayIndex] = useState(0)
@@ -19,7 +22,6 @@ export default function Dashboard({ profile }) {
         const exToSwap = weeklyPlan[dayIdx].workout[exerciseIdx]
         const location = profile.place === 'gym' ? 'gym' : (profile.place === 'calisthenics' ? 'calisthenics' : 'home')
 
-        // Find all exercises for the same muscle group
         const availableOptions = Object.values(EXERCISES[location])
             .flat()
             .filter(e => e.muscle === exToSwap.muscle && e.id !== exToSwap.id)
@@ -52,7 +54,6 @@ export default function Dashboard({ profile }) {
 
     const selectedWorkout = weeklyPlan[selectedDayIndex] || { workout: [], label: '', focus: '' }
 
-    // Logic for Muscle Volume Chart
     const calculateVolume = () => {
         const stats = { Peito: 0, Costas: 0, Pernas: 0, Ombros: 0, Braços: 0, Core: 0 }
         let total = 0
@@ -74,12 +75,12 @@ export default function Dashboard({ profile }) {
     const { stats, total } = calculateVolume()
 
     const colors = {
-        Peito: 'var(--brand-primary)', // Teal Neon
-        Costas: '#ff4b4b', // Red
-        Pernas: 'var(--brand-secondary)', // Yellow Neon
-        Ombros: '#9b5de5', // Purple
-        Braços: '#00bbf9', // Blue
-        Core: '#f15bb5' // Pink
+        Peito: 'var(--brand-primary)',
+        Costas: '#ff4b4b',
+        Pernas: 'var(--brand-secondary)',
+        Ombros: '#9b5de5',
+        Braços: '#00bbf9',
+        Core: '#f15bb5'
     }
 
     let currentOffset = 0;
@@ -91,9 +92,34 @@ export default function Dashboard({ profile }) {
         return { label, pct, offset };
     }).filter(Boolean);
 
-    const handleWorkoutComplete = () => {
+    const handleWorkoutComplete = (sessionLogs) => {
         if (!completedDays.includes(selectedDayIndex)) {
             setCompletedDays([...completedDays, selectedDayIndex]);
+        }
+
+        if (sessionLogs) {
+            const sessionTonnage = Object.values(sessionLogs).reduce((acc, log) => {
+                const w = parseFloat(log.weight) || 0
+                const r = parseFloat(log.reps) || 0
+                return acc + (w * r)
+            }, 0)
+
+            if (onUpdateVolume) {
+                const date = new Date().toISOString().split('T')[0]
+                onUpdateVolume(date, sessionTonnage)
+            }
+
+            if (onUpdatePBs) {
+                const sessionPBs = {}
+                Object.entries(sessionLogs).forEach(([key, data]) => {
+                    const exerciseId = key.substring(0, key.lastIndexOf('_'))
+                    const weight = parseFloat(data.weight) || 0
+                    if (!sessionPBs[exerciseId] || weight > sessionPBs[exerciseId]) {
+                        sessionPBs[exerciseId] = weight
+                    }
+                })
+                onUpdatePBs(sessionPBs)
+            }
         }
         setActiveWorkout(false)
     }
@@ -108,121 +134,47 @@ export default function Dashboard({ profile }) {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px' }}>
                             <div>
                                 <h1 style={{ fontSize: '1.4rem' }}>MONITOR <span className="title-italic">Aurus</span></h1>
-                                <p className="data-label" style={{ marginTop: '4px' }}>Status: Ativo • {profile.level.toUpperCase()}</p>
+                                <p className="data-label" style={{ marginTop: '4px' }}>Status: Ativo • {(profile.level || 'RECRUTA').toUpperCase()}</p>
                             </div>
                             <div style={{ textAlign: 'right' }}>
                                 <p className="data-label">OBJETIVO</p>
-                                <p style={{ color: 'var(--brand-primary)', fontWeight: 800 }}>{profile.goal.toUpperCase()}</p>
+                                <p style={{ color: 'var(--brand-primary)', fontWeight: 800 }}>{(profile.goal || 'DESEMPENHO').toUpperCase()}</p>
                             </div>
                         </div>
 
-                        {/* Muscle Load Chart (Mini SVG) */}
-                        <div className="panel-tech" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '25px' }}>
-                            <div style={{ position: 'relative', width: '80px', height: '80px' }}>
-                                <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-                                    <circle cx="18" cy="18" r="16" fill="transparent" stroke="var(--bg-pure)" strokeWidth="4" />
-                                    {donutSegments.map(segment => (
-                                        <circle key={segment.label} cx="18" cy="18" r="16" fill="transparent" stroke={colors[segment.label]} strokeWidth="4"
-                                            strokeDasharray={`${segment.pct} 100`} strokeDashoffset={`-${segment.offset}`} />
-                                    ))}
-                                </svg>
-                                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: '0.6rem', fontWeight: 900 }}>LOAD</div>
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                <p className="data-label" style={{ marginBottom: '8px' }}>Volume Semanal</p>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
-                                    {donutSegments.map(seg => (
-                                        <p key={seg.label} style={{ fontSize: '0.65rem', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                                            <span style={{ color: colors[seg.label] }}>●</span> {seg.label.toUpperCase()}: {Math.round(seg.pct)}%
-                                        </p>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
+                        <ProgressStats 
+                            donutSegments={donutSegments} 
+                            colors={colors} 
+                            volumeHistory={volumeHistory} 
+                        />
 
-                        <div className="weekly-roadmap-v3" style={{ display: 'flex', gap: '10px' }}>
-                            {weeklyPlan.map((day, idx) => {
-                                const isCompleted = completedDays.includes(idx);
-                                const isSelected = selectedDayIndex === idx;
-                                return (
-                                    <div key={idx} onClick={() => setSelectedDayIndex(idx)}
-                                        style={{ flex: 1, textAlign: 'center', cursor: 'pointer', opacity: isSelected ? 1 : 0.4, transition: 'all 0.2s' }}>
-                                        <p className="data-label" style={{ fontSize: '0.55rem' }}>{day.label}</p>
-                                        <div style={{
-                                            height: '30px',
-                                            background: isCompleted ? 'var(--brand-primary)' : (isSelected ? 'transparent' : 'var(--bg-card)'),
-                                            border: isCompleted ? '1px solid var(--brand-primary)' : (isSelected ? '1px solid var(--brand-primary)' : '1px solid var(--border-subtle)'),
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            color: isCompleted ? '#000' : (isSelected ? 'var(--brand-primary)' : '#fff'),
-                                            fontSize: '0.7rem', fontWeight: 900, borderRadius: '4px'
-                                        }}>
-                                            {isCompleted ? '✓' : (day.isRest ? 'Z' : (idx === currentDayIndex ? '●' : '—'))}
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
+                        <WeeklyRoadmap 
+                            weeklyPlan={weeklyPlan}
+                            completedDays={completedDays}
+                            currentDayIndex={currentDayIndex}
+                            selectedDayIndex={selectedDayIndex}
+                            onSelectDay={setSelectedDayIndex}
+                        />
                     </header>
 
-                    <div className="session-card animate-tech" key={selectedDayIndex}>
-                        <div className="panel-tech tech-border-l" style={{ marginBottom: '30px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                <div>
-                                    <p className="data-label">SESSÃO DE TREINAMENTO</p>
-                                    <h2 style={{ fontSize: '1.4rem', marginBottom: '4px' }}>{selectedWorkout.label}</h2>
-                                    <p style={{ color: 'var(--brand-secondary)', fontWeight: 800, fontSize: '0.8rem' }}>{selectedWorkout.focus}</p>
-                                </div>
-                                {selectedDayIndex === currentDayIndex && <span style={{ background: 'var(--brand-primary)', color: '#000', padding: '4px 8px', fontSize: '0.6rem', fontWeight: 900, borderRadius: '2px' }}>HOJE</span>}
-                            </div>
-                        </div>
-
-                        {!selectedWorkout.isRest ? (
-                            <>
-                                <div style={{ display: 'grid', gap: '10px', marginBottom: '40px' }}>
-                                    {selectedWorkout.workout.map((ex, i) => (
-                                        <div key={i} className="panel-tech" style={{ padding: '15px' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <div onClick={() => setSelectedExercise(ex)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', flex: 1 }}>
-                                                    <span style={{ fontSize: '1rem', fontWeight: 900, color: 'var(--text-low)' }}>{String(i + 1).padStart(2, '0')}</span>
-                                                    <div>
-                                                        <p style={{ fontWeight: 700, fontSize: '0.9rem' }}>{ex.name}</p>
-                                                        <p className="data-label" style={{ marginBottom: 0 }}>{ex.muscle} • PRESCRIÇÃO: {ex.sets}x{ex.reps}</p>
-                                                    </div>
-                                                </div>
-                                                <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                                                    <button
-                                                        onClick={(e) => { e.stopPropagation(); handleSwapClick(selectedDayIndex, i); }}
-                                                        style={{ background: 'transparent', border: 'none', color: 'var(--brand-secondary)', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}
-                                                    >
-                                                        [ TROCAR ]
-                                                    </button>
-                                                    <div onClick={() => setSelectedExercise(ex)} style={{ cursor: 'pointer', fontSize: '0.8rem', color: 'var(--brand-primary)' }}>ⓘ</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {completedDays.includes(selectedDayIndex) ? (
-                                    <button className="btn-tech" style={{ background: 'transparent', color: 'var(--brand-primary)', border: '1px solid var(--brand-primary)' }} onClick={() => setActiveWorkout(true)}>
-                                        PROTOCOLO CONCLUÍDO ✓
-                                    </button>
-                                ) : (
-                                    <button className="btn-tech" onClick={() => setActiveWorkout(true)}>
-                                        EXECUTAR PROTOCOLO
-                                    </button>
-                                )}
-                            </>
-                        ) : (
-                            <div style={{ textAlign: 'center', padding: '60px 0', opacity: 0.3 }}>
-                                <div style={{ fontSize: '4rem' }}>⚡</div>
-                                <h3 style={{ marginTop: '20px' }}>RECUPERAÇÃO TÉCNICA</h3>
-                            </div>
-                        )}
-                    </div>
+                    <WorkoutSession 
+                        selectedWorkout={selectedWorkout}
+                        selectedDayIndex={selectedDayIndex}
+                        currentDayIndex={currentDayIndex}
+                        completedDays={completedDays}
+                        onExerciseSelect={setSelectedExercise}
+                        onSwapClick={handleSwapClick}
+                        onStartWorkout={() => setActiveWorkout(true)}
+                    />
                 </>
             ) : (
-                <WorkoutPlayer workout={selectedWorkout.workout} onComplete={handleWorkoutComplete} onCancel={() => setActiveWorkout(false)} />
+                <WorkoutPlayer
+                    workout={selectedWorkout.workout}
+                    profile={profile}
+                    personalBests={personalBests}
+                    onComplete={handleWorkoutComplete}
+                    onCancel={() => setActiveWorkout(false)}
+                />
             )}
 
             {selectedExercise && (

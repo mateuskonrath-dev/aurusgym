@@ -1,6 +1,8 @@
 export default function TabNavigation({ activeTab, onTabChange }) {
     const tabs = [
         { id: 'home', icon: '📊', label: 'Monitor' },
+        { id: 'prs', icon: '🏆', label: 'Recordes' },
+        { id: 'fuel', icon: '⚡', label: 'Fuel' },
         { id: 'library', icon: '🧬', label: 'Anatomia' },
         { id: 'profile', icon: '⚙️', label: 'Atleta' }
     ]

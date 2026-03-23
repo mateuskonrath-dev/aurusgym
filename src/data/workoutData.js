@@ -132,7 +132,7 @@ export const EXERCISES = {
 
 export const SPLITS = {
     full_body: { days: { 1: ['chest', 'back', 'legs', 'core'], 3: ['chest', 'shoulders', 'legs', 'triceps', 'biceps'], 5: ['back', 'legs', 'shoulders', 'core'] }, default: ['chest', 'back', 'legs', 'core'] },
-    upper_lower: { days: { 1: ['chest', 'back', 'shoulders', 'triceps', 'biceps'], 2: ['legs', 'core'], 4: ['back', 'chest', 'shoulders', 'biceps', 'triceps'], 5: ['legs', 'core'] }, default: ['chest', 'back', 'legs'] },
+    upper_lower: { days: { 1: ['chest', 'triceps'], 2: ['back', 'biceps'], 4: ['legs'], 5: ['shoulders', 'core'] }, default: ['chest', 'back', 'legs'] },
     ppl: { days: { 1: ['chest', 'shoulders', 'triceps'], 2: ['back', 'biceps', 'forearms'], 3: ['legs', 'core'], 4: ['chest', 'shoulders', 'triceps'], 5: ['back', 'biceps', 'forearms'], 6: ['legs', 'core'] }, default: ['chest', 'shoulders', 'triceps'] },
     bro_split: { days: { 1: ['chest', 'core'], 2: ['back', 'forearms'], 3: ['legs'], 4: ['shoulders', 'core'], 5: ['biceps', 'triceps'] }, default: ['chest'] }
 };
@@ -180,16 +180,33 @@ export function generateDailyWorkout(profile, dayIndex) {
     return workout;
 }
 
+const MUSCLE_LABELS = {
+    chest: 'Peito',
+    back: 'Costas',
+    shoulders: 'Ombros',
+    legs: 'Pernas',
+    triceps: 'Tríceps',
+    biceps: 'Bíceps',
+    core: 'Core',
+    forearms: 'Antebraços'
+};
+
 export function generateWeeklyPlan(profile) {
     const days = [1, 2, 3, 4, 5, 6, 7];
     return days.map(day => {
-        const muscles = SPLITS[profile.freq].days[day] || [];
+        let muscles = SPLITS[profile.freq].days[day] || [];
+        
+        // Apply exclusion filters to the labeling
+        if (profile.sex === 'female' && profile.includeChest === 'no') {
+            muscles = muscles.filter(m => m !== 'chest');
+        }
+
         const isRest = muscles.length === 0;
         return {
             day,
             label: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'][day - 1],
             isRest,
-            focus: isRest ? 'Recuperação' : muscles.map(m => m.charAt(0).toUpperCase() + m.slice(1)).join(' & '),
+            focus: isRest ? 'Recuperação' : muscles.map(m => MUSCLE_LABELS[m] || m).join(' & '),
             workout: generateDailyWorkout(profile, day)
         };
     });

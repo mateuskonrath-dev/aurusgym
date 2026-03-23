@@ -1,36 +1,66 @@
-import { useState, useEffect } from 'react'
-import Onboarding from './components/Onboarding'
-import Dashboard from './components/Dashboard'
-import TabNavigation from './components/TabNavigation'
-import { EXERCISES } from './data/workoutData'
+import { useState } from 'react'
+import Onboarding from '@/components/Onboarding'
+import Dashboard from '@/components/Dashboard'
+import PersonalBests from '@/components/PersonalBests'
+import EliteNutrition from '@/components/EliteNutrition'
+import TabNavigation from '@/components/TabNavigation'
+import { EXERCISES } from '@/data/workoutData'
 
 function App() {
-  const [userProfile, setUserProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [userProfile, setUserProfile] = useState(() => {
+    const saved = localStorage.getItem('aurus-profile')
+    return saved ? JSON.parse(saved) : null
+  })
+  const [personalBests, setPersonalBests] = useState(() => {
+    const saved = localStorage.getItem('aurus-pbs')
+    return saved ? JSON.parse(saved) : {}
+  })
+  const [volumeHistory, setVolumeHistory] = useState(() => {
+    const saved = localStorage.getItem('aurus-volume')
+    return saved ? JSON.parse(saved) : {}
+  })
   const [activeTab, setActiveTab] = useState('home')
-
-  useEffect(() => {
-    const savedProfile = localStorage.getItem('aurus-profile')
-    if (savedProfile) {
-      setUserProfile(JSON.parse(savedProfile))
-    }
-    setLoading(false)
-  }, [])
 
   const handleOnboardingComplete = (profile) => {
     localStorage.setItem('aurus-profile', JSON.stringify(profile))
     setUserProfile(profile)
   }
 
-  const handleReset = () => {
-    if (window.confirm('EXCLUIR DADOS DE TREINAMENTO? Esta ação é irreversível.')) {
-      localStorage.removeItem('aurus-profile')
-      setUserProfile(null)
-      setActiveTab('home')
+  const handleUpdatePBs = (newLogs) => {
+    // newLogs is { exerciseId: weight }
+    const updatedPBs = { ...personalBests }
+    let changed = false
+
+    Object.entries(newLogs).forEach(([id, weight]) => {
+      const numericWeight = parseFloat(weight) || 0
+      const currentPB = parseFloat(updatedPBs[id]?.weight) || 0
+
+      if (numericWeight > currentPB) {
+        updatedPBs[id] = {
+          weight: numericWeight,
+          date: new Date().toLocaleDateString('pt-BR')
+        }
+        changed = true
+      }
+    })
+
+    if (changed) {
+      setPersonalBests(updatedPBs)
+      localStorage.setItem('aurus-pbs', JSON.stringify(updatedPBs))
     }
   }
 
-  if (loading) return null
+  const handleReset = () => {
+    if (window.confirm('EXCLUIR DADOS DE TREINAMENTO? Esta ação é irreversível.')) {
+      localStorage.removeItem('aurus-profile')
+      localStorage.removeItem('aurus-pbs')
+      localStorage.removeItem('aurus-volume')
+      setUserProfile(null)
+      setPersonalBests({})
+      setVolumeHistory({})
+      setActiveTab('home')
+    }
+  }
 
   return (
     <div className="mobile-container" style={{ paddingBottom: userProfile ? '100px' : '0' }}>
@@ -39,7 +69,25 @@ function App() {
       ) : (
         <>
           {activeTab === 'home' && (
-            <Dashboard profile={userProfile} />
+            <Dashboard
+              profile={userProfile}
+              personalBests={personalBests}
+              volumeHistory={volumeHistory}
+              onUpdatePBs={handleUpdatePBs}
+              onUpdateVolume={(date, tonnage) => {
+                const newHistory = { ...volumeHistory, [date]: tonnage }
+                setVolumeHistory(newHistory)
+                localStorage.setItem('aurus-volume', JSON.stringify(newHistory))
+              }}
+            />
+          )}
+
+          {activeTab === 'prs' && (
+            <PersonalBests personalBests={personalBests} />
+          )}
+
+          {activeTab === 'fuel' && (
+            <EliteNutrition profile={userProfile} />
           )}
 
           {activeTab === 'library' && (
@@ -81,18 +129,32 @@ function App() {
 
               <div className="panel-tech" style={{ textAlign: 'center', marginBottom: '30px', background: 'var(--bg-elevated)' }}>
                 <div style={{ width: '60px', height: '60px', borderRadius: '4px', background: 'var(--brand-primary)', margin: '0 auto 15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', color: '#000' }}>👤</div>
-                <h2 style={{ fontSize: '1rem', marginBottom: '5px' }}>OPERADOR_01</h2>
-                <p style={{ color: 'var(--brand-secondary)', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '2px' }}>{userProfile.level.toUpperCase()}</p>
+                <h2 style={{ fontSize: '1rem', marginBottom: '5px' }}>{userProfile.name?.toUpperCase() || 'OPERADOR_01'}</h2>
+                <p style={{ color: 'var(--brand-secondary)', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '2px' }}>{(userProfile.level || 'INICIANTE').toUpperCase()}</p>
               </div>
 
               <div style={{ display: 'grid', gap: '10px' }}>
+                <div className="panel-tech" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', padding: '15px' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <p className="data-label" style={{ fontSize: '0.5rem' }}>PESO</p>
+                    <p style={{ fontWeight: 800 }}>{userProfile.weight} KG</p>
+                  </div>
+                  <div style={{ textAlign: 'center', borderLeft: '1px solid var(--border-subtle)', borderRight: '1px solid var(--border-subtle)' }}>
+                    <p className="data-label" style={{ fontSize: '0.5rem' }}>ALTURA</p>
+                    <p style={{ fontWeight: 800 }}>{userProfile.height} CM</p>
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <p className="data-label" style={{ fontSize: '0.5rem' }}>BF%</p>
+                    <p style={{ fontWeight: 800 }}>{userProfile.bf || '--'}%</p>
+                  </div>
+                </div>
                 <div className="panel-tech" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px' }}>
                   <span className="data-label">PROTOCOLO</span>
-                  <span style={{ fontWeight: 800, fontSize: '0.8rem' }}>{userProfile.goal.toUpperCase()}</span>
+                  <span style={{ fontWeight: 800, fontSize: '0.8rem' }}>{(userProfile.goal || 'HIERTRTROFIA').toUpperCase() || 'MODO TÉCNICO'}</span>
                 </div>
                 <div className="panel-tech" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px' }}>
                   <span className="data-label">CADÊNCIA</span>
-                  <span style={{ fontWeight: 800, fontSize: '0.8rem' }}>{userProfile.freq.toUpperCase()}</span>
+                  <span style={{ fontWeight: 800, fontSize: '0.8rem' }}>{(userProfile.freq || 'PADRÃO').toUpperCase()}</span>
                 </div>
                 <div className="panel-tech" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px' }}>
                   <span className="data-label">AMBIENTE</span>

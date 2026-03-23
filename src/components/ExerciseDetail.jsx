@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import MuscleMap from './MuscleMap'
+import MuscleMap from '@/components/MuscleMap'
 
 export default function ExerciseDetail({ exercise, onClose }) {
     const [activeTab, setActiveTab] = useState('setup') // setup, anatomy, tips

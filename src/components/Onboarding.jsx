@@ -2,6 +2,20 @@ import { useState } from 'react'
 
 const steps = [
     {
+        id: 'name',
+        title: 'Como devemos te chamar?',
+        type: 'text',
+        placeholder: 'Seu Nome ou Codinome',
+        unit: ''
+    },
+    {
+        id: 'email',
+        title: 'Qual seu e-mail operacional?',
+        type: 'email',
+        placeholder: 'exemplo@aurus.com',
+        unit: ''
+    },
+    {
         id: 'sex',
         title: 'Qual seu sexo biológico?',
         options: [
@@ -29,6 +43,24 @@ const steps = [
         type: 'number',
         placeholder: 'Ex: 175',
         unit: 'cm'
+    },
+    {
+        id: 'bf',
+        title: 'Qual seu percentual de gordura?',
+        type: 'number',
+        placeholder: 'Ex: 15',
+        unit: '%'
+    },
+    {
+        id: 'activity',
+        title: 'Qual seu nível de atividade?',
+        options: [
+            { label: 'Nível Base', value: '1.2', desc: 'No momento não realizo exercícios' },
+            { label: 'Leve', value: '1.375', desc: 'Exercício 1-3x por semana' },
+            { label: 'Moderado', value: '1.55', desc: 'Exercício 3-5x por semana' },
+            { label: 'Intenso', value: '1.725', desc: 'Exercício 6-7x por semana' },
+            { label: 'Atleta', value: '1.9', desc: 'Treino pesado diário ou trabalho físico' }
+        ]
     },
     {
         id: 'level',
@@ -62,7 +94,7 @@ const steps = [
         title: 'Divisão de Treino (Split)',
         options: [
             { label: 'Full Body (3x)', value: 'full_body', desc: 'Corpo todo, foco em exercícios base' },
-            { label: 'Upper / Lower (4x)', value: 'upper_lower', desc: 'Membros Superiores e Inferiores' },
+            { label: '4 dias/semana (ABCD Focado)', value: 'upper_lower', desc: 'Membros Superiores e Inferiores' },
             { label: 'Bro Split (5x)', value: 'bro_split', desc: '1 Músculo por dia (Altíssimo Volume)' },
             { label: 'PPL / ABC (6x)', value: 'ppl', desc: 'Push, Pull, Legs (Ouro para Hipertrofia)' }
         ]
@@ -120,14 +152,20 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         return prev
     }
 
-    const isInputValid = () => {
+    const isInputValid = (valToTest) => {
         if (!step.type) return true;
-        const val = parseFloat(inputValue);
+        const rawVal = valToTest !== undefined ? valToTest : inputValue;
+
+        if (step.type === 'text') return String(rawVal).trim().length >= 2;
+        if (step.type === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(rawVal));
+
+        const val = parseFloat(rawVal);
         if (isNaN(val)) return false;
 
         if (step.id === 'age') return val >= 10 && val <= 100;
         if (step.id === 'weight') return val >= 30 && val <= 250;
         if (step.id === 'height') return val >= 140 && val <= 220;
+        if (step.id === 'bf') return val >= 3 && val <= 60;
 
         return true;
     }
@@ -136,8 +174,8 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         const val = value !== undefined ? value : inputValue
         if (val === '') return;
 
-        // Numeric validation check
-        if (step.type && !isInputValid()) {
+        // Numeric/Text validation check
+        if (step.type && !isInputValid(val)) {
             setShowError(true)
             return;
         }
@@ -198,7 +236,7 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-card)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
                                 <input
-                                    type={step.type}
+                                    type={step.type === 'email' ? 'email' : (step.type === 'number' ? 'number' : 'text')}
                                     value={inputValue}
                                     onChange={(e) => { setInputValue(e.target.value); setShowError(false); }}
                                     placeholder={step.placeholder}
@@ -207,14 +245,14 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                                         background: 'transparent',
                                         border: 'none',
                                         color: showError ? 'var(--brand-danger)' : 'var(--brand-primary)',
-                                        fontSize: '2rem',
+                                        fontSize: (step.type === 'text' || step.type === 'email') ? '1.2rem' : '2rem',
                                         fontWeight: 900,
                                         width: '100%',
                                         outline: 'none',
                                         transition: 'color 0.3s ease'
                                     }}
                                 />
-                                <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-low)' }}>{step.unit}</span>
+                                {step.unit && <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-low)' }}>{step.unit}</span>}
                             </div>
 
                             {showError && (
@@ -226,6 +264,16 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                             <button className="btn-tech" onClick={() => handleNext()}>
                                 CONTINUAR
                             </button>
+
+                            {step.id === 'bf' && (
+                                <button
+                                    className="btn-outline"
+                                    style={{ borderStyle: 'dashed', opacity: 0.7 }}
+                                    onClick={() => handleNext(answers.sex === 'male' ? '15' : '25')}
+                                >
+                                    NÃO SEI MEU BF %
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>
