@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import MuscleMap from '@/components/MuscleMap'
-import ExerciseAnimation from '@/components/ExerciseAnimation'
 
 const MISTAKES = {
     peito: 'Não deixe os cotovelos flarem demais para os lados — mantenha a 45° para proteger o ombro. Evite quicar a barra no peito.',
@@ -20,7 +19,6 @@ function getCommonMistake(ex) {
 
 export default function ExerciseDetail({ exercise, onClose }) {
     const [activeTab, setActiveTab] = useState('setup') // setup, anatomy, tips
-    const [showAnimationModal, setShowAnimationModal] = useState(false)
 
     const tabs = [
         { id: 'setup', label: 'Setup' },
@@ -80,27 +78,7 @@ export default function ExerciseDetail({ exercise, onClose }) {
 
             <div style={{ flex: 1, padding: '25px', overflowY: 'auto' }}>
                 {activeTab === 'setup' && (
-                    <div className="animate-tech" style={{ display: 'grid', gap: '16px' }}>
-                        <button
-                            onClick={() => setShowAnimationModal(true)}
-                            className="btn-tech"
-                            style={{
-                                padding: '14px 20px',
-                                fontSize: '0.75rem',
-                                fontWeight: 800,
-                                letterSpacing: '0.5px',
-                                background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))',
-                                color: '#000',
-                                border: 'none',
-                                borderRadius: 'var(--radius-pro)',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
-                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-                        >
-                            📹 VER MOVIMENTO
-                        </button>
+                    <div className="animate-tech">
                         <div className="panel-tech tech-border-l">
                             <p className="data-label">EXECUTAR</p>
                             <p style={{ fontSize: '0.88rem', lineHeight: 1.65, color: 'var(--text-high)' }}>
@@ -171,91 +149,6 @@ export default function ExerciseDetail({ exercise, onClose }) {
                     VOLTAR AO MONITOR
                 </button>
             </footer>
-
-            {/* Animation Modal */}
-            {showAnimationModal && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(0,0,0,0.92)',
-                    zIndex: 1200,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '20px'
-                }}>
-                    <button
-                        onClick={() => setShowAnimationModal(false)}
-                        style={{
-                            position: 'absolute',
-                            top: '20px',
-                            right: '20px',
-                            background: 'none',
-                            border: 'none',
-                            color: 'var(--brand-primary)',
-                            fontSize: '2rem',
-                            cursor: 'pointer',
-                            zIndex: 1201
-                        }}
-                    >
-                        ✕
-                    </button>
-
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: '16px',
-                        width: '100%',
-                        maxWidth: '600px'
-                    }}>
-                        <p style={{
-                            color: 'var(--brand-primary)',
-                            fontSize: '0.7rem',
-                            fontWeight: 800,
-                            letterSpacing: '1px',
-                            margin: 0,
-                            marginBottom: '16px'
-                        }}>
-                            TÉCNICA — {exercise.name.toUpperCase()}
-                        </p>
-
-                        <div style={{
-                            background: 'var(--bg-elevated)',
-                            borderRadius: 'var(--radius-pro)',
-                            padding: '32px 24px',
-                            border: '1px solid var(--border-subtle)',
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            minHeight: '500px'
-                        }}>
-                            <ExerciseAnimation exercise={exercise} large={true} />
-                        </div>
-
-                        <button
-                            onClick={() => setShowAnimationModal(false)}
-                            className="btn-outline"
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                fontSize: '0.7rem',
-                                fontWeight: 800,
-                                letterSpacing: '0.5px',
-                                color: 'var(--brand-secondary)',
-                                borderColor: 'var(--brand-secondary)'
-                            }}
-                        >
-                            FECHAR
-                        </button>
-                    </div>
-                </div>
-            )}
         </div>
     )
 }
