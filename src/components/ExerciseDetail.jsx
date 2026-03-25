@@ -66,7 +66,7 @@ export default function ExerciseDetail({ exercise, onClose }) {
                         <div className="panel-tech tech-border-l" style={{ marginBottom: '20px' }}>
                             <p className="data-label">EXECUTAR</p>
                             <p style={{ fontSize: '0.95rem', lineHeight: 1.6, color: 'var(--text-high)' }}>
-                                {exercise.howTo || 'Instruções técnicas sendo processadas pelo núcleo Orion...'}
+                                {exercise.howTo || 'Instruções técnicas em breve.'}
                             </p>
                         </div>
                         <div style={{ textAlign: 'center', padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: 'var(--radius-pro)' }}>
@@ -102,8 +102,7 @@ export default function ExerciseDetail({ exercise, onClose }) {
                     <div className="animate-tech">
                         <div className="panel-tech" style={{ border: '1px solid var(--brand-secondary)', background: 'rgba(0, 187, 250, 0.05)', borderRadius: 'var(--radius-pro)' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-                                <span style={{ fontSize: '1.5rem' }}>🤖</span>
-                                <p className="data-label" style={{ color: 'var(--brand-secondary)', margin: 0 }}>DICA DO COACH ORION</p>
+                                <p className="data-label" style={{ color: 'var(--brand-secondary)', margin: 0 }}>DICA</p>
                             </div>
                             <p style={{ fontStyle: 'italic', lineHeight: 1.6, fontSize: '1rem', color: '#fff' }}>
                                 {exercise.proTip ? `"${exercise.proTip}"` : '"Mantenha o foco na técnica e no tempo sob tensão para máximos resultados."'}

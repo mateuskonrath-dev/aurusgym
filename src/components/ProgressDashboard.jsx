@@ -196,7 +196,7 @@ export default function ProgressDashboard({ profile, personalBests = {}, volumeH
         }
 
         if (list.length === 0) {
-            list.push({ type: 'info', icon: '🤖', text: 'Núcleo Orion monitorando protocolos ativos. Complete treinos para ativar análises avançadas.' })
+            list.push({ type: 'info', icon: '📊', text: 'Complete treinos para ativar análises avançadas.' })
         }
 
         return list.slice(0, 4)
@@ -222,7 +222,7 @@ export default function ProgressDashboard({ profile, personalBests = {}, volumeH
             {/* Header */}
             <header style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                    <p className="data-label">NÚCLEO ORION</p>
+                    <p className="data-label">ANÁLISE DE PROGRESSO</p>
                     <h1 style={{ fontSize: '1.4rem' }}>PROGRESSO <span className="title-italic">Live</span></h1>
                 </div>
                 <div style={{
