@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
 
 // ─── Paleta ──────────────────────────────────────────────────────────────────
-const SKIN   = '#d4956a'
-const SKIN_SHADOW = '#9d6f48'
-const CLOTH  = '#2a2a3e'
-const EQ     = '#4a4a5a'
-const EQL    = '#6a6a7a'
-const HL     = '#b3ff00'   // músculo em destaque
-const HL_GLOW = 'rgba(179,255,0,0.35)'
-const HL2    = 'rgba(179,255,0,0.18)'
+const SKIN_LIGHT = '#d4956a'
+const SKIN_MID = '#b8825a'
+const SKIN_DARK = '#8a5f3d'
+const MUSCLE_ACTIVE = '#d97e3d'  // Laranja/vermelho para músculos ativos
+const MUSCLE_SHADOW = '#9d6f48'
+const MUSCLE_LIGHT = '#c0a080'
+const BODY_OUTLINE = '#4a4a4a'
+const EQ_METAL = '#6a7a8a'
+const EQ_DARK = '#3a3a4a'
+const HIGHLIGHT = '#b3ff00'
 
 // ─── Classificação do movimento ──────────────────────────────────────────────
 function getType(ex) {
@@ -30,335 +32,269 @@ function getType(ex) {
     return 'push'
 }
 
-// Equipamento baseado no nome do exercício
-function getEquip(ex) {
-    const n = (ex?.name || '').toLowerCase()
-    if (n.includes('barra') || n.includes('agachamento') || n.includes('terra') || n.includes('supino') || n.includes('remada baixa') || n.includes('desenvolvimento com barra')) return 'barbell'
-    if (n.includes('halter') || n.includes('rosca direta') || n.includes('elevação') || n.includes('arnold') || n.includes('serrote')) return 'dumbbell'
-    if (n.includes('polia') || n.includes('cabo') || n.includes('puxada') || n.includes('cruzamento') || n.includes('corda') || n.includes('remada baixa')) return 'cable'
-    if (n.includes('leg press') || n.includes('cadeira') || n.includes('mesa flexora') || n.includes('voador') || n.includes('pec deck') || n.includes('abdutora')) return 'machine'
-    if (n.includes('barra fixa')) return 'pullbar'
-    return 'none'
-}
+// ─── Figura humana realista ───────────────────────────────────────────────────
+function RealisticFigure({ phase, type, activeMuscle }) {
+    // Poses: phase 0 = relaxado, phase 1 = contraído
 
-// ─── Componentes de equipamento ──────────────────────────────────────────────
-function Barbell({ y = 95, x1 = 8, x2 = 92 }) {
-    return (
-        <g>
-            <rect x={x1} y={y - 3} width={x2 - x1} height={6} rx={3} fill={EQ} />
-            <rect x={x1} y={y - 8} width={7} height={16} rx={2} fill={EQL} />
-            <rect x={x2 - 7} y={y - 8} width={7} height={16} rx={2} fill={EQL} />
-        </g>
-    )
-}
+    // Braço esquerdo posições
+    const leftArmRelax = { shoulder: [35, 85], elbow: [28, 110], hand: [30, 135] }
+    const leftArmContracted = { shoulder: [35, 85], elbow: [32, 100], hand: [45, 105] }
+    const leftArm = phase === 0 ? leftArmRelax : leftArmContracted
 
-function Dumbbell({ x, y, angle = 0 }) {
-    return (
-        <g transform={`translate(${x},${y}) rotate(${angle})`}>
-            <rect x={-16} y={-3} width={32} height={6} rx={3} fill={EQ} />
-            <rect x={-18} y={-6} width={6} height={12} rx={2} fill={EQL} />
-            <rect x={12} y={-6} width={6} height={12} rx={2} fill={EQL} />
-        </g>
-    )
-}
+    // Braço direito posições
+    const rightArmRelax = { shoulder: [65, 85], elbow: [72, 110], hand: [70, 135] }
+    const rightArmContracted = { shoulder: [65, 85], elbow: [68, 100], hand: [55, 105] }
+    const rightArm = phase === 0 ? rightArmRelax : rightArmContracted
 
-function CablePulley({ side = 'left' }) {
-    const x = side === 'left' ? 8 : 92
-    return (
-        <g>
-            <line x1={x} y1={0} x2={x} y2={30} stroke={EQ} strokeWidth={3} />
-            <circle cx={x} cy={5} r={5} fill="none" stroke={EQL} strokeWidth={2} />
-        </g>
-    )
-}
-
-function PullBar() {
-    return (
-        <g>
-            <rect x={5} y={0} width={90} height={5} rx={2} fill={EQ} />
-            <rect x={42} y={5} width={16} height={10} rx={3} fill={EQL} />
-        </g>
-    )
-}
-
-function Bench({ y = 108 }) {
-    return (
-        <g>
-            <rect x={20} y={y} width={60} height={8} rx={3} fill={EQ} />
-            <rect x={25} y={y + 8} width={8} height={14} rx={2} fill={EQL} />
-            <rect x={67} y={y + 8} width={8} height={14} rx={2} fill={EQL} />
-        </g>
-    )
-}
-
-// ─── Figura humana com detalhes e shading ────────────────────────────────────
-// Pose = posições dos joints: lE(elbow), lH(hand), rE, rH, lK(knee), lF(foot), rK, rF
-// Opcional: bent=true (tronco inclinado), seated=true
-
-function Figure({ pose, hlMuscle }) {
-    const {
-        lE, lH, rE, rH,
-        lK = [34, 86], lF = [32, 116],
-        rK = [48, 86], rF = [50, 116],
-        bent = false, seated = false
-    } = pose
-
-    const LS = [24, 30], RS = [56, 30]
-    const LH = [30, 66], RH = [50, 66]
-
-    // tronco: ponto topo e base dependem de bent
-    const trunkBot = bent ? [20, 66] : [40, 66]
-    const hipL = bent ? [18, 64] : LH
-    const hipR = bent ? [28, 60] : RH
-
-    // Cor de destaque no músculo ativo
-    const armColor   = (hlMuscle === 'arm')   ? HL : SKIN
-    const chestColor = (hlMuscle === 'chest') ? HL : CLOTH
-    const backColor  = (hlMuscle === 'back')  ? HL : CLOTH
-    const legColor   = (hlMuscle === 'leg')   ? HL : SKIN
-
-    const S = { strokeLinecap: 'round', fill: 'none' }
+    const chestColor = activeMuscle === 'chest' && phase === 1 ? MUSCLE_ACTIVE : SKIN_LIGHT
+    const armColor = activeMuscle === 'arm' && phase === 1 ? MUSCLE_ACTIVE : SKIN_LIGHT
 
     return (
         <g>
-            {/* Peitoral/tronco com gradiente */}
+            {/* Defs para gradientes */}
             <defs>
-                <linearGradient id="chestGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor={CLOTH} stopOpacity="0.9" />
-                    <stop offset="50%" stopColor={chestColor} stopOpacity="0.8" />
-                    <stop offset="100%" stopColor={CLOTH} stopOpacity="0.9" />
+                <linearGradient id="chestGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor={BODY_OUTLINE} />
+                    <stop offset="25%" stopColor={chestColor} />
+                    <stop offset="75%" stopColor={chestColor} />
+                    <stop offset="100%" stopColor={BODY_OUTLINE} />
                 </linearGradient>
-                <radialGradient id="muscleGlow" cx="40%" cy="40%">
-                    <stop offset="0%" stopColor={HL_GLOW} />
-                    <stop offset="100%" stopColor={HL_GLOW} stopOpacity="0" />
+                <radialGradient id="muscleShine">
+                    <stop offset="0%" stopColor={MUSCLE_LIGHT} stopOpacity="0.8" />
+                    <stop offset="100%" stopColor={chestColor} stopOpacity="0.3" />
                 </radialGradient>
             </defs>
 
-            {/* Tronco com shading */}
-            <ellipse cx="40" cy="45" rx="16" ry="24" fill="url(#chestGrad)" opacity="0.85" />
-            <line x1="40" y1="22" x2={trunkBot[0]} y2={trunkBot[1]}
-                stroke={CLOTH} strokeWidth={24} {...S} />
+            {/* Cabeça */}
+            <ellipse cx="50" cy="50" rx="10" ry="11" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.8" />
+            {/* Rosto - olhos */}
+            <circle cx="47" cy="48" r="1.5" fill={BODY_OUTLINE} />
+            <circle cx="53" cy="48" r="1.5" fill={BODY_OUTLINE} />
+            {/* Nariz */}
+            <line x1="50" y1="48" x2="50" y2="51" stroke={BODY_OUTLINE} strokeWidth="0.6" />
+            {/* Boca */}
+            <path d="M 47 53 Q 50 54 53 53" stroke={BODY_OUTLINE} strokeWidth="0.6" fill="none" />
 
             {/* Pescoço */}
-            <line x1="40" y1="18" x2="40" y2="22" stroke={SKIN} strokeWidth={10} {...S} />
+            <rect x="47" y="60" width="6" height="8" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.6" />
 
-            {/* Cabeça com gradiente */}
-            <circle cx="40" cy="11" r="10" fill={SKIN} />
-            <circle cx="40" cy="11" r="10" fill="url(#muscleGlow)" opacity="0.6" />
-            {/* Cabelo hint */}
-            <ellipse cx="40" cy="4" rx="9" ry="5" fill={CLOTH} opacity="0.8" />
+            {/* Tronco/Peito com músculos definidos */}
+            <ellipse cx="50" cy="85" rx="16" ry="20" fill="url(#chestGradient)" stroke={BODY_OUTLINE} strokeWidth="0.8" />
 
-            {/* Braços - parte superior (bíceps) */}
-            <line x1={LS[0]} y1={LS[1]} x2={lE[0]} y2={lE[1]}
-                stroke={armColor} strokeWidth={13} {...S} />
-            <line x1={RS[0]} y1={RS[1]} x2={rE[0]} y2={rE[1]}
-                stroke={armColor} strokeWidth={13} {...S} />
-
-            {/* Bíceps highlights quando contraído */}
-            {hlMuscle === 'arm' && (
+            {/* Linha do peitoral (divisão peitoral maior e menor) */}
+            {activeMuscle === 'chest' && phase === 1 ? (
                 <>
-                    <circle cx={(LS[0] + lE[0])/2} cy={(LS[1] + lE[1])/2} r="6" fill={HL_GLOW} />
-                    <circle cx={(RS[0] + rE[0])/2} cy={(RS[1] + rE[1])/2} r="6" fill={HL_GLOW} />
+                    <path d="M 50 68 Q 48 80 47 95" stroke={MUSCLE_SHADOW} strokeWidth="1.2" fill="none" opacity="0.6" />
+                    <path d="M 50 68 Q 52 80 53 95" stroke={MUSCLE_SHADOW} strokeWidth="1.2" fill="none" opacity="0.6" />
+                    {/* Sulco abdominal */}
+                    <line x1="50" y1="88" x2="50" y2="110" stroke={MUSCLE_SHADOW} strokeWidth="0.8" opacity="0.5" />
                 </>
-            )}
+            ) : null}
 
-            {/* Antebraços */}
-            <line x1={lE[0]} y1={lE[1]} x2={lH[0]} y2={lH[1]}
-                stroke={SKIN} strokeWidth={11} {...S} />
-            <line x1={rE[0]} y1={rE[1]} x2={rH[0]} y2={rH[1]}
-                stroke={SKIN} strokeWidth={11} {...S} />
+            {/* Abdominais */}
+            <g opacity={activeMuscle === 'chest' ? 0.7 : 0.6}>
+                <rect x="42" y="100" width="5" height="5" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.5" rx="1" />
+                <rect x="53" y="100" width="5" height="5" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.5" rx="1" />
+                <rect x="42" y="108" width="5" height="5" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.5" rx="1" />
+                <rect x="53" y="108" width="5" height="5" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.5" rx="1" />
+            </g>
 
-            {/* Cotovelos (articulação com destaque) */}
-            <circle cx={lE[0]} cy={lE[1]} r={5} fill={SKIN} />
-            <circle cx={rE[0]} cy={rE[1]} r={5} fill={SKIN} />
-            {hlMuscle === 'arm' && (
-                <>
-                    <circle cx={lE[0]} cy={lE[1]} r={5} fill={HL_GLOW} opacity="0.8" />
-                    <circle cx={rE[0]} cy={rE[1]} r={5} fill={HL_GLOW} opacity="0.8" />
-                </>
-            )}
+            {/* Braço esquerdo */}
+            <g>
+                {/* Ombro */}
+                <circle cx={leftArm.shoulder[0]} cy={leftArm.shoulder[1]} r="5" fill={armColor} stroke={BODY_OUTLINE} strokeWidth="0.8" />
+                {/* Bíceps/Tríceps */}
+                <path
+                    d={`M ${leftArm.shoulder[0]} ${leftArm.shoulder[1]} Q ${leftArm.shoulder[0] - 3} ${(leftArm.shoulder[1] + leftArm.elbow[1])/2} ${leftArm.elbow[0]} ${leftArm.elbow[1]}`}
+                    stroke={armColor}
+                    strokeWidth="4.5"
+                    fill="none"
+                    strokeLinecap="round"
+                />
+                {/* Cotovelo */}
+                <circle cx={leftArm.elbow[0]} cy={leftArm.elbow[1]} r="3" fill={armColor} stroke={BODY_OUTLINE} strokeWidth="0.6" />
+                {/* Antebraço */}
+                <path
+                    d={`M ${leftArm.elbow[0]} ${leftArm.elbow[1]} L ${leftArm.hand[0]} ${leftArm.hand[1]}`}
+                    stroke={SKIN_LIGHT}
+                    strokeWidth="3.5"
+                    fill="none"
+                    strokeLinecap="round"
+                />
+                {/* Mão */}
+                <ellipse cx={leftArm.hand[0]} cy={leftArm.hand[1]} rx="2.5" ry="3" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.5" />
 
-            {/* Mãos */}
-            <circle cx={lH[0]} cy={lH[1]} r={5} fill={SKIN} />
-            <circle cx={rH[0]} cy={rH[1]} r={5} fill={SKIN} />
+                {/* Destaque de músculos contraídos */}
+                {activeMuscle === 'arm' && phase === 1 && (
+                    <ellipse cx={(leftArm.shoulder[0] + leftArm.elbow[0])/2} cy={(leftArm.shoulder[1] + leftArm.elbow[1])/2} rx="3" ry="2" fill={MUSCLE_ACTIVE} opacity="0.6" />
+                )}
+            </g>
 
-            {/* Shorts/cintura */}
-            {!seated && (
-                <line x1={hipL[0]} y1={hipL[1]} x2={hipR[0]} y2={hipR[1]}
-                    stroke={CLOTH} strokeWidth={20} {...S} />
-            )}
+            {/* Braço direito */}
+            <g>
+                {/* Ombro */}
+                <circle cx={rightArm.shoulder[0]} cy={rightArm.shoulder[1]} r="5" fill={armColor} stroke={BODY_OUTLINE} strokeWidth="0.8" />
+                {/* Bíceps/Tríceps */}
+                <path
+                    d={`M ${rightArm.shoulder[0]} ${rightArm.shoulder[1]} Q ${rightArm.shoulder[0] + 3} ${(rightArm.shoulder[1] + rightArm.elbow[1])/2} ${rightArm.elbow[0]} ${rightArm.elbow[1]}`}
+                    stroke={armColor}
+                    strokeWidth="4.5"
+                    fill="none"
+                    strokeLinecap="round"
+                />
+                {/* Cotovelo */}
+                <circle cx={rightArm.elbow[0]} cy={rightArm.elbow[1]} r="3" fill={armColor} stroke={BODY_OUTLINE} strokeWidth="0.6" />
+                {/* Antebraço */}
+                <path
+                    d={`M ${rightArm.elbow[0]} ${rightArm.elbow[1]} L ${rightArm.hand[0]} ${rightArm.hand[1]}`}
+                    stroke={SKIN_LIGHT}
+                    strokeWidth="3.5"
+                    fill="none"
+                    strokeLinecap="round"
+                />
+                {/* Mão */}
+                <ellipse cx={rightArm.hand[0]} cy={rightArm.hand[1]} rx="2.5" ry="3" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.5" />
 
-            {/* Pernas em pé - quadríceps e isquiotibiais */}
-            {!seated && (
-                <>
-                    <line x1={hipL[0]} y1={hipL[1]} x2={lK[0]} y2={lK[1]}
-                        stroke={legColor} strokeWidth={15} {...S} />
-                    <line x1={hipR[0]} y1={hipR[1]} x2={rK[0]} y2={rK[1]}
-                        stroke={legColor} strokeWidth={15} {...S} />
+                {/* Destaque de músculos contraídos */}
+                {activeMuscle === 'arm' && phase === 1 && (
+                    <ellipse cx={(rightArm.shoulder[0] + rightArm.elbow[0])/2} cy={(rightArm.shoulder[1] + rightArm.elbow[1])/2} rx="3" ry="2" fill={MUSCLE_ACTIVE} opacity="0.6" />
+                )}
+            </g>
 
-                    {/* Destaque de perna quando contraída */}
-                    {hlMuscle === 'leg' && (
-                        <>
-                            <ellipse cx={(hipL[0]+lK[0])/2} cy={(hipL[1]+lK[1])/2} rx="8" ry="5" fill={HL_GLOW} />
-                            <ellipse cx={(hipR[0]+rK[0])/2} cy={(hipR[1]+rK[1])/2} rx="8" ry="5" fill={HL_GLOW} />
-                        </>
-                    )}
+            {/* Cintura/Quadril */}
+            <ellipse cx="50" cy="115" rx="12" ry="8" fill={SKIN_MID} stroke={BODY_OUTLINE} strokeWidth="0.8" />
 
-                    <circle cx={lK[0]} cy={lK[1]} r={6} fill={SKIN} />
-                    <circle cx={rK[0]} cy={rK[1]} r={6} fill={SKIN} />
-                    <line x1={lK[0]} y1={lK[1]} x2={lF[0]} y2={lF[1]}
-                        stroke={SKIN} strokeWidth={13} {...S} />
-                    <line x1={rK[0]} y1={rK[1]} x2={rF[0]} y2={rF[1]}
-                        stroke={SKIN} strokeWidth={13} {...S} />
-                    {/* Pés */}
-                    <ellipse cx={lF[0]} cy={lF[1]} rx={8} ry={5} fill={CLOTH} />
-                    <ellipse cx={rF[0]} cy={rF[1]} rx={8} ry={5} fill={CLOTH} />
-                </>
-            )}
+            {/* Perna esquerda */}
+            <g>
+                {/* Coxa */}
+                <path
+                    d="M 44 115 Q 42 135 44 155"
+                    stroke={SKIN_MID}
+                    strokeWidth="5"
+                    fill="none"
+                    strokeLinecap="round"
+                />
+                {/* Joelho */}
+                <circle cx="44" cy="155" r="2.5" fill={BODY_OUTLINE} stroke={BODY_OUTLINE} strokeWidth="0.4" />
+                {/* Panturrilha */}
+                <path
+                    d="M 44 155 Q 45 168 44 180"
+                    stroke={SKIN_MID}
+                    strokeWidth="4"
+                    fill="none"
+                    strokeLinecap="round"
+                />
+                {/* Pé */}
+                <ellipse cx="44" cy="182" rx="3" ry="2" fill={EQ_DARK} stroke={BODY_OUTLINE} strokeWidth="0.5" />
+            </g>
 
-            {/* Pernas sentado - com melhor proporção */}
-            {seated && (
-                <>
-                    <line x1={LH[0]} y1={LH[1]} x2={lK[0]} y2={lK[1]}
-                        stroke={legColor} strokeWidth={15} {...S} />
-                    <line x1={RH[0]} y1={RH[1]} x2={rK[0]} y2={rK[1]}
-                        stroke={legColor} strokeWidth={15} {...S} />
-                    <circle cx={lK[0]} cy={lK[1]} r={6} fill={SKIN} />
-                    <circle cx={rK[0]} cy={rK[1]} r={6} fill={SKIN} />
-                    <line x1={lK[0]} y1={lK[1]} x2={lF[0]} y2={lF[1]}
-                        stroke={SKIN} strokeWidth={13} {...S} />
-                    <line x1={rK[0]} y1={rK[1]} x2={rF[0]} y2={rF[1]}
-                        stroke={SKIN} strokeWidth={13} {...S} />
-                    <ellipse cx={lF[0]} cy={lF[1]} rx={8} ry={5} fill={CLOTH} />
-                    <ellipse cx={rF[0]} cy={rF[1]} rx={8} ry={5} fill={CLOTH} />
-                </>
-            )}
-
-            {/* Halo de destaque global */}
-            {hlMuscle && (
-                <circle cx="40" cy="45" r="38"
-                    fill={HL2} stroke="none" opacity="0.15"
-                    style={{ mixBlendMode: 'screen' }} />
-            )}
+            {/* Perna direita */}
+            <g>
+                {/* Coxa */}
+                <path
+                    d="M 56 115 Q 58 135 56 155"
+                    stroke={SKIN_MID}
+                    strokeWidth="5"
+                    fill="none"
+                    strokeLinecap="round"
+                />
+                {/* Joelho */}
+                <circle cx="56" cy="155" r="2.5" fill={BODY_OUTLINE} stroke={BODY_OUTLINE} strokeWidth="0.4" />
+                {/* Panturrilha */}
+                <path
+                    d="M 56 155 Q 55 168 56 180"
+                    stroke={SKIN_MID}
+                    strokeWidth="4"
+                    fill="none"
+                    strokeLinecap="round"
+                />
+                {/* Pé */}
+                <ellipse cx="56" cy="182" rx="3" ry="2" fill={EQ_DARK} stroke={BODY_OUTLINE} strokeWidth="0.5" />
+            </g>
         </g>
     )
 }
 
-// ─── Poses por tipo de movimento ─────────────────────────────────────────────
-const LEG_STAND = { lK: [34, 88], lF: [32, 116], rK: [46, 88], rF: [48, 116] }
-
-const POSES = {
-    push: [
-        { lE: [18, 44], lH: [24, 56], rE: [62, 44], rH: [56, 56], ...LEG_STAND },
-        { lE: [10, 34], lH: [2,  34], rE: [70, 34], rH: [78, 34], ...LEG_STAND }
-    ],
-    overhead: [
-        { lE: [18, 42], lH: [18, 56], rE: [62, 42], rH: [62, 56], ...LEG_STAND },
-        { lE: [16, 16], lH: [14, 2],  rE: [64, 16], rH: [66, 2],  ...LEG_STAND }
-    ],
-    pulldown: [
-        { seated: true, lE: [14, 16], lH: [10, 2],  rE: [66, 16], rH: [70, 2],  lK: [22, 90], lF: [22, 116], rK: [58, 90], rF: [58, 116] },
-        { seated: true, lE: [22, 38], lH: [28, 28],  rE: [58, 38], rH: [52, 28], lK: [22, 90], lF: [22, 116], rK: [58, 90], rF: [58, 116] }
-    ],
-    row: [
-        { bent: true, lE: [10, 66], lH: [4,  74], rE: [42, 54], rH: [48, 46], lK: [28, 86], lF: [24, 114], rK: [52, 86], rF: [54, 114] },
-        { bent: true, lE: [16, 54], lH: [12, 44], rE: [42, 46], rH: [48, 36], lK: [28, 86], lF: [24, 114], rK: [52, 86], rF: [54, 114] }
-    ],
-    squat: [
-        { lE: [20, 44], lH: [20, 58], rE: [60, 44], rH: [60, 58], ...LEG_STAND },
-        { lE: [14, 50], lH: [16, 64], rE: [66, 50], rH: [64, 64], lK: [22, 80], lF: [16, 104], rK: [58, 80], rF: [64, 104] }
-    ],
-    hinge: [
-        { lE: [20, 44], lH: [24, 58], rE: [60, 44], rH: [56, 58], ...LEG_STAND },
-        { bent: true, lE: [10, 64], lH: [4, 72], rE: [46, 56], rH: [52, 46], lK: [32, 86], lF: [30, 114], rK: [50, 86], rF: [52, 114] }
-    ],
-    curl: [
-        { lE: [20, 50], lH: [22, 66], rE: [60, 50], rH: [58, 66], ...LEG_STAND },
-        { lE: [20, 44], lH: [16, 26], rE: [60, 44], rH: [64, 26], ...LEG_STAND }
-    ],
-    tricep: [
-        { lE: [26, 36], lH: [30, 20], rE: [54, 36], rH: [50, 20], ...LEG_STAND },
-        { lE: [26, 36], lH: [28, 56], rE: [54, 36], rH: [52, 56], ...LEG_STAND }
-    ],
-    raise: [
-        { lE: [20, 46], lH: [18, 62], rE: [60, 46], rH: [62, 62], ...LEG_STAND },
-        { lE: [10, 32], lH: [2,  34], rE: [70, 32], rH: [78, 34], ...LEG_STAND }
-    ],
-}
-
-// ─── Figuras especiais ────────────────────────────────────────────────────────
-function CrunchFigure({ phase }) {
-    const S = { strokeLinecap: 'round', fill: 'none' }
-    const torsoAngle = phase === 1 ? -35 : 0
-    const headX = phase === 1 ? 60 : 72
-    const headY = phase === 1 ? 52 : 66
-    const torsoEndX = phase === 1 ? 50 : 62
-    const torsoEndY = phase === 1 ? 62 : 66
-
+// ─── Máquina de treino (Pec Deck) ─────────────────────────────────────────────
+function PecDeckMachine({ phase }) {
     return (
-        <g>
-            {/* Pernas */}
-            <line x1="8" y1="66" x2="38" y2="66" stroke={SKIN} strokeWidth={13} {...S} />
-            <line x1="38" y1="66" x2="48" y2="56" stroke={SKIN} strokeWidth={13} {...S} />
-            <ellipse cx="8" cy="66" rx="6" ry="4" fill={CLOTH} />
-            {/* Tronco */}
-            <line x1="38" y1="66" x2={torsoEndX} y2={torsoEndY} stroke={CLOTH} strokeWidth={22} {...S} />
-            {/* Cabeça */}
-            <circle cx={headX} cy={headY - 8} r={9} fill={SKIN} />
-            {/* Braços cruzados */}
-            <line x1={torsoEndX - 4} y1={torsoEndY + 2} x2={torsoEndX - 14} y2={torsoEndY + 12} stroke={SKIN} strokeWidth={9} {...S} />
+        <g opacity="0.85">
+            {/* Estrutura traseira da máquina */}
+            {/* Coluna vertical esquerda */}
+            <rect x="8" y="20" width="3" height="170" fill={EQ_DARK} stroke={EQ_METAL} strokeWidth="0.8" />
+            {/* Coluna vertical direita */}
+            <rect x="90" y="20" width="3" height="170" fill={EQ_DARK} stroke={EQ_METAL} strokeWidth="0.8" />
+
+            {/* Estrutura superior */}
+            <rect x="8" y="20" width="85" height="4" rx="2" fill={EQ_METAL} stroke={EQ_DARK} strokeWidth="0.8" />
+
+            {/* Estrutura do assento */}
+            <rect x="30" y="150" width="40" height="8" rx="3" fill={EQ_METAL} stroke={EQ_DARK} strokeWidth="0.8" />
+            <rect x="32" y="158" width="36" height="4" rx="2" fill={EQ_DARK} stroke={EQ_METAL} strokeWidth="0.6" />
+
+            {/* Braços de alavanca (handles) */}
+            {/* Esquerdo - relaxado */}
+            {phase === 0 && (
+                <>
+                    <path d="M 20 85 Q 18 70 22 55" stroke={EQ_METAL} strokeWidth="3" fill="none" strokeLinecap="round" />
+                    <circle cx="22" cy="55" r="2.5" fill={EQ_METAL} />
+                </>
+            )}
+            {/* Esquerdo - contraído */}
+            {phase === 1 && (
+                <>
+                    <path d="M 20 85 Q 35 70 45 60" stroke={EQ_METAL} strokeWidth="3" fill="none" strokeLinecap="round" />
+                    <circle cx="45" cy="60" r="2.5" fill={EQ_METAL} />
+                </>
+            )}
+
+            {/* Direito - relaxado */}
+            {phase === 0 && (
+                <>
+                    <path d="M 80 85 Q 82 70 78 55" stroke={EQ_METAL} strokeWidth="3" fill="none" strokeLinecap="round" />
+                    <circle cx="78" cy="55" r="2.5" fill={EQ_METAL} />
+                </>
+            )}
+            {/* Direito - contraído */}
+            {phase === 1 && (
+                <>
+                    <path d="M 80 85 Q 65 70 55 60" stroke={EQ_METAL} strokeWidth="3" fill="none" strokeLinecap="round" />
+                    <circle cx="55" cy="60" r="2.5" fill={EQ_METAL} />
+                </>
+            )}
+
+            {/* Cabos */}
+            <path d="M 20 30 Q 18 50 20 85" stroke={EQ_DARK} strokeWidth="1.5" fill="none" opacity="0.6" />
+            <path d="M 80 30 Q 82 50 80 85" stroke={EQ_DARK} strokeWidth="1.5" fill="none" opacity="0.6" />
+
+            {/* Pesos (stack) */}
+            <rect x="13" y="70" width="12" height="50" fill={EQ_DARK} stroke={EQ_METAL} strokeWidth="0.8" rx="1" />
+            <rect x="76" y="70" width="12" height="50" fill={EQ_DARK} stroke={EQ_METAL} strokeWidth="0.8" rx="1" />
+
+            {/* Base/pés */}
+            <rect x="6" y="188" width="6" height="6" fill={EQ_DARK} rx="1" />
+            <rect x="89" y="188" width="6" height="6" fill={EQ_DARK} rx="1" />
         </g>
     )
-}
-
-function PlankFigure({ phase }) {
-    const S = { strokeLinecap: 'round', fill: 'none' }
-    const glow = phase === 1
-    return (
-        <g>
-            {/* Corpo horizontal */}
-            <line x1="68" y1="58" x2="14" y2="66" stroke={CLOTH} strokeWidth={22} {...S} />
-            {/* Pescoço + cabeça */}
-            <line x1="66" y1="56" x2="72" y2="50" stroke={SKIN} strokeWidth={9} {...S} />
-            <circle cx="76" cy="46" r={9} fill={SKIN} />
-            {/* Antebraços no chão */}
-            <line x1="52" y1="62" x2="46" y2="78" stroke={SKIN} strokeWidth={9} {...S} />
-            <line x1="38" y1="64" x2="32" y2="80" stroke={SKIN} strokeWidth={9} {...S} />
-            {/* Pés */}
-            <ellipse cx="14" cy="66" rx="6" ry="4" fill={CLOTH} />
-            {/* Pulso muscular */}
-            {glow && <ellipse cx="40" cy="62" rx="30" ry="8" fill={HL2} />}
-        </g>
-    )
-}
-
-// ─── Rótulos ──────────────────────────────────────────────────────────────────
-const LABELS = {
-    push: 'EMPURRAR', overhead: 'PRESS', pulldown: 'PUXAR',
-    row: 'REMADA', squat: 'AGACHAR', hinge: 'QUADRIL',
-    curl: 'FLEXÃO', tricep: 'EXTENSÃO', raise: 'ELEVAR',
-    crunch: 'CONTRAÇÃO', plank: 'ISOMÉTRICO'
 }
 
 // ─── Componente principal ─────────────────────────────────────────────────────
 export default function ExerciseAnimation({ exercise, large = false }) {
     const [phase, setPhase] = useState(0)
     const [fade, setFade] = useState(false)
-    const type  = getType(exercise)
-    const equip = getEquip(exercise)
-    const isSpecial = type === 'crunch' || type === 'plank'
-    const poses = POSES[type]
-    const vb = isSpecial ? '0 0 90 85' : '0 0 90 125'
+
+    const type = getType(exercise)
+    const isMachineFriendly = type === 'push' || type === 'pulldown' || type === 'raise'
 
     // Tamanho responsivo
-    const containerSize = large ? { w: '420px', h: isSpecial ? '360px' : '510px' } : { w: '112px', h: isSpecial ? '96px' : '136px' }
-    const svgSize = large ? { w: 380, h: isSpecial ? 330 : 480 } : { w: isSpecial ? 102 : 98, h: isSpecial ? 88 : 128 }
+    const containerSize = large ? { w: '480px', h: '550px' } : { w: '140px', h: '160px' }
+    const svgSize = large ? { w: 480, h: 550 } : { w: 140, h: 160 }
 
     useEffect(() => {
         const id = setInterval(() => {
             setFade(true)
-            setTimeout(() => { setPhase(p => 1 - p); setFade(false) }, 200)
-        }, type === 'plank' ? 800 : 1200)
+            setTimeout(() => { setPhase(p => 1 - p); setFade(false) }, 250)
+        }, 1400)
         return () => clearInterval(id)
     }, [type])
 
@@ -367,72 +303,56 @@ export default function ExerciseAnimation({ exercise, large = false }) {
             <div style={{
                 width: containerSize.w,
                 height: containerSize.h,
-                background: 'rgba(10,10,15,0.7)',
+                background: large ? 'linear-gradient(135deg, rgba(10,10,15,0.8), rgba(10,10,20,0.9))' : 'rgba(10,10,15,0.8)',
                 border: '2px solid rgba(179,255,0,0.2)',
-                borderRadius: large ? '16px' : '10px',
+                borderRadius: large ? '20px' : '10px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 overflow: 'hidden', position: 'relative',
-                boxShadow: large ? '0 0 30px rgba(179,255,0,0.1)' : 'none'
+                boxShadow: large ? '0 0 40px rgba(179,255,0,0.08), inset 0 0 40px rgba(179,255,0,0.03)' : 'none'
             }}>
-                {/* Linha de chão */}
-                {!isSpecial && (
-                    <div style={{
-                        position: 'absolute', bottom: large ? '24px' : '8px', left: large ? '32px' : '12px', right: large ? '32px' : '12px',
-                        height: large ? '2px' : '1px', background: 'rgba(255,255,255,0.1)'
-                    }} />
-                )}
                 <svg
-                    viewBox={vb}
+                    viewBox="0 0 100 200"
                     width={svgSize.w}
                     height={svgSize.h}
                     style={{
-                        opacity: fade ? 0.2 : 1,
-                        transition: 'opacity 0.2s ease',
-                        filter: large ? 'drop-shadow(0 0 8px rgba(179,255,0,0.08))' : 'none'
+                        opacity: fade ? 0.3 : 1,
+                        transition: 'opacity 0.25s ease',
+                        filter: large ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.4))' : 'none'
                     }}
                 >
-                    {/* Equipamento (atrás da figura) */}
-                    {!isSpecial && equip === 'pullbar' && <PullBar />}
-                    {!isSpecial && equip === 'cable'   && <><CablePulley side="left" /><CablePulley side="right" /></>}
-                    {!isSpecial && equip === 'machine' && <Bench y={102} />}
-                    {!isSpecial && (type === 'pulldown') && <PullBar />}
+                    {/* Máquina de treino como fundo */}
+                    {isMachineFriendly && <PecDeckMachine phase={phase} />}
 
-                    {/* Figura */}
-                    {type === 'crunch' && <CrunchFigure phase={phase} />}
-                    {type === 'plank'  && <PlankFigure  phase={phase} />}
-                    {!isSpecial && poses && <Figure pose={poses[phase]} hlMuscle={phase === 1 ? 'arm' : 'chest'} />}
-
-                    {/* Equipamento (na frente) */}
-                    {!isSpecial && equip === 'barbell'  && <Barbell y={type === 'hinge' || type === 'row' ? 66 : type === 'squat' ? 30 : 96} />}
-                    {!isSpecial && equip === 'dumbbell' && (
-                        <>
-                            <Dumbbell x={poses[phase].lH[0]} y={poses[phase].lH[1]} />
-                            <Dumbbell x={poses[phase].rH[0]} y={poses[phase].rH[1]} />
-                        </>
-                    )}
+                    {/* Figura humanóide realista */}
+                    <RealisticFigure
+                        phase={phase}
+                        type={type}
+                        activeMuscle={type === 'push' ? 'chest' : 'arm'}
+                    />
                 </svg>
             </div>
 
-            <p style={{
-                fontSize: large ? '0.85rem' : '0.46rem',
+            <div style={{
+                fontSize: large ? '0.9rem' : '0.5rem',
                 fontWeight: 900,
-                letterSpacing: large ? '2px' : '1.5px',
-                color: 'rgba(179,255,0,0.6)',
-                margin: 0,
+                letterSpacing: large ? '2px' : '1px',
+                color: 'rgba(179,255,0,0.7)',
+                textAlign: 'center',
                 textTransform: 'uppercase'
             }}>
-                {LABELS[type] || 'MOVIMENTO'}
-            </p>
+                {exercise.name.toUpperCase()}
+            </div>
 
             {large && (
                 <div style={{
-                    fontSize: '0.75rem',
-                    color: 'rgba(179,255,0,0.45)',
+                    fontSize: '0.8rem',
+                    color: 'rgba(179,255,0,0.5)',
                     textAlign: 'center',
-                    maxWidth: '400px',
-                    lineHeight: '1.4'
+                    maxWidth: '440px',
+                    lineHeight: '1.5',
+                    fontStyle: 'italic'
                 }}>
-                    Observe o movimento em duas fases. Mantenha a técnica correta durante toda a amplitude.
+                    Esquerda: posição inicial • Direita: contração máxima
                 </div>
             )}
         </div>
