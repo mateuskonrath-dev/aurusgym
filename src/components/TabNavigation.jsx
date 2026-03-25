@@ -1,9 +1,10 @@
 export default function TabNavigation({ activeTab, onTabChange }) {
     const tabs = [
-        { id: 'home', icon: '📊', label: 'Monitor' },
+        { id: 'home', icon: '📊', label: 'Treino' },
+        { id: 'progress', icon: '📈', label: 'Análise' },
         { id: 'prs', icon: '🏆', label: 'Recordes' },
-        { id: 'fuel', icon: '⚡', label: 'Fuel' },
-        { id: 'library', icon: '🧬', label: 'Anatomia' },
+        { id: 'fuel', icon: '🥗', label: 'Nutrição' },
+        { id: 'library', icon: '📖', label: 'Exercícios' },
         { id: 'profile', icon: '⚙️', label: 'Atleta' }
     ]
 

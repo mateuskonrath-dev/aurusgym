@@ -6,17 +6,61 @@ import WeeklyRoadmap from '@/components/WeeklyRoadmap'
 import ProgressStats from '@/components/ProgressStats'
 import WorkoutSession from '@/components/WorkoutSession'
 
+// Epley 1RM
+const calc1RM = (weight, reps) => {
+    const w = parseFloat(weight) || 0
+    const r = parseInt(reps) || 1
+    if (r === 1 || w === 0) return w
+    return Math.round(w * (1 + r / 30))
+}
+
+const calcStreak = (volumeHistory) => {
+    const dates = Object.keys(volumeHistory).sort().reverse()
+    if (dates.length === 0) return 0
+    let streak = 0
+    let check = new Date()
+    check.setHours(0, 0, 0, 0)
+    for (const date of dates) {
+        const d = new Date(date + 'T00:00:00')
+        const diff = Math.round((check - d) / 86400000)
+        if (diff <= 1) { streak++; check = d } else break
+    }
+    return streak
+}
+
+const getWeekStart = () => {
+    const now = new Date()
+    const day = now.getDay()
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1)
+    return new Date(now.getFullYear(), now.getMonth(), diff).toISOString().split('T')[0]
+}
+
 export default function Dashboard({ profile, personalBests = {}, volumeHistory = {}, onUpdatePBs, onUpdateVolume }) {
     const [activeWorkout, setActiveWorkout] = useState(false)
     const [weeklyPlan, setWeeklyPlan] = useState([])
     const [selectedDayIndex, setSelectedDayIndex] = useState(0)
     const [currentDayIndex, setCurrentDayIndex] = useState(0)
     const [selectedExercise, setSelectedExercise] = useState(null)
+    const [swappingData, setSwappingData] = useState(null)
 
-    const [completedDays, setCompletedDays] = useState([])
-    const [swappingData, setSwappingData] = useState(null) // { dayIdx, exerciseIdx, options }
+    const [completedDays, setCompletedDays] = useState(() => {
+        try {
+            const saved = JSON.parse(localStorage.getItem('aurus-completed-days') || 'null')
+            if (saved?.weekStart === getWeekStart()) return saved.days
+            return []
+        } catch { return [] }
+    })
 
-    const catMap = { 'peito': 'Peito', 'costas': 'Costas', 'pernas': 'Pernas', 'ombros': 'Ombros', 'tríceps': 'Braços', 'bíceps': 'Braços', 'antebraços': 'Braços', 'abs': 'Core', 'core': 'Core' }
+    const catMap = {
+        'peito': 'Peito', 'costas': 'Costas', 'pernas': 'Pernas', 'ombros': 'Ombros',
+        'tríceps': 'Braços', 'bíceps': 'Braços', 'antebraços': 'Braços',
+        'abs': 'Core', 'core': 'Core'
+    }
+
+    const persistCompletedDays = (days) => {
+        setCompletedDays(days)
+        localStorage.setItem('aurus-completed-days', JSON.stringify({ weekStart: getWeekStart(), days }))
+    }
 
     const handleSwapClick = (dayIdx, exerciseIdx) => {
         const exToSwap = weeklyPlan[dayIdx].workout[exerciseIdx]
@@ -32,10 +76,8 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
     const confirmSwap = (newExercise) => {
         const { dayIdx, exerciseIdx } = swappingData
         const newPlan = [...weeklyPlan]
-        const day = { ...newPlan[dayIdx] }
-
+        const day = { ...newPlan[dayIdx], workout: [...newPlan[dayIdx].workout] }
         day.workout[exerciseIdx] = { ...newExercise, sets: day.workout[exerciseIdx].sets, reps: day.workout[exerciseIdx].reps }
-
         newPlan[dayIdx] = day
         setWeeklyPlan(newPlan)
         setSwappingData(null)
@@ -60,13 +102,10 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
 
         weeklyPlan.forEach(day => {
             day.workout.forEach(ex => {
-                if (!ex || !ex.muscle) return;
-                const m = ex.muscle.trim().toLowerCase();
+                if (!ex || !ex.muscle) return
+                const m = ex.muscle.trim().toLowerCase()
                 const group = catMap[m] || 'Core'
-                if (stats[group] !== undefined) {
-                    stats[group]++
-                    total++
-                }
+                if (stats[group] !== undefined) { stats[group]++; total++ }
             })
         })
         return { stats, total: total || 1 }
@@ -75,33 +114,29 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
     const { stats, total } = calculateVolume()
 
     const colors = {
-        Peito: 'var(--brand-primary)',
-        Costas: '#ff4b4b',
-        Pernas: 'var(--brand-secondary)',
-        Ombros: '#9b5de5',
-        Braços: '#00bbf9',
-        Core: '#f15bb5'
+        Peito: 'var(--brand-primary)', Costas: '#ff4b4b',
+        Pernas: 'var(--brand-secondary)', Ombros: '#9b5de5',
+        Braços: '#00bbf9', Core: '#f15bb5'
     }
 
-    let currentOffset = 0;
+    let currentOffset = 0
     const donutSegments = Object.entries(stats).map(([label, val]) => {
-        if (val === 0) return null;
-        const pct = (val / total) * 100;
-        const offset = currentOffset;
-        currentOffset += pct;
-        return { label, pct, offset };
-    }).filter(Boolean);
+        if (val === 0) return null
+        const pct = (val / total) * 100
+        const offset = currentOffset
+        currentOffset += pct
+        return { label, pct, offset }
+    }).filter(Boolean)
 
     const handleWorkoutComplete = (sessionLogs) => {
         if (!completedDays.includes(selectedDayIndex)) {
-            setCompletedDays([...completedDays, selectedDayIndex]);
+            persistCompletedDays([...completedDays, selectedDayIndex])
         }
 
         if (sessionLogs) {
+            // Calculate tonnage
             const sessionTonnage = Object.values(sessionLogs).reduce((acc, log) => {
-                const w = parseFloat(log.weight) || 0
-                const r = parseFloat(log.reps) || 0
-                return acc + (w * r)
+                return acc + ((parseFloat(log.weight) || 0) * (parseFloat(log.reps) || 0))
             }, 0)
 
             if (onUpdateVolume) {
@@ -110,12 +145,16 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
             }
 
             if (onUpdatePBs) {
+                // Build best set per exercise using estimated 1RM
                 const sessionPBs = {}
                 Object.entries(sessionLogs).forEach(([key, data]) => {
                     const exerciseId = key.substring(0, key.lastIndexOf('_'))
                     const weight = parseFloat(data.weight) || 0
-                    if (!sessionPBs[exerciseId] || weight > sessionPBs[exerciseId]) {
-                        sessionPBs[exerciseId] = weight
+                    const reps = parseInt(data.reps) || 1
+                    const estimated1RM = calc1RM(weight, reps)
+
+                    if (!sessionPBs[exerciseId] || estimated1RM > sessionPBs[exerciseId].estimated1RM) {
+                        sessionPBs[exerciseId] = { weight, reps, estimated1RM }
                     }
                 })
                 onUpdatePBs(sessionPBs)
@@ -137,18 +176,26 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
                                 <p className="data-label" style={{ marginTop: '4px' }}>Status: Ativo • {(profile.level || 'RECRUTA').toUpperCase()}</p>
                             </div>
                             <div style={{ textAlign: 'right' }}>
+                                {calcStreak(volumeHistory) > 0 && (
+                                    <div style={{ marginBottom: '6px' }}>
+                                        <p className="data-label" style={{ fontSize: '0.46rem' }}>SEQUÊNCIA</p>
+                                        <p style={{ color: calcStreak(volumeHistory) >= 3 ? 'var(--brand-primary)' : 'var(--text-med)', fontWeight: 900, fontSize: '1.1rem', lineHeight: 1 }}>
+                                            🔥 {calcStreak(volumeHistory)}
+                                        </p>
+                                    </div>
+                                )}
                                 <p className="data-label">OBJETIVO</p>
                                 <p style={{ color: 'var(--brand-primary)', fontWeight: 800 }}>{(profile.goal || 'DESEMPENHO').toUpperCase()}</p>
                             </div>
                         </div>
 
-                        <ProgressStats 
-                            donutSegments={donutSegments} 
-                            colors={colors} 
-                            volumeHistory={volumeHistory} 
+                        <ProgressStats
+                            donutSegments={donutSegments}
+                            colors={colors}
+                            volumeHistory={volumeHistory}
                         />
 
-                        <WeeklyRoadmap 
+                        <WeeklyRoadmap
                             weeklyPlan={weeklyPlan}
                             completedDays={completedDays}
                             currentDayIndex={currentDayIndex}
@@ -157,7 +204,7 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
                         />
                     </header>
 
-                    <WorkoutSession 
+                    <WorkoutSession
                         selectedWorkout={selectedWorkout}
                         selectedDayIndex={selectedDayIndex}
                         currentDayIndex={currentDayIndex}
@@ -172,6 +219,7 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
                     workout={selectedWorkout.workout}
                     profile={profile}
                     personalBests={personalBests}
+                    workoutMeta={{ label: selectedWorkout.label, focus: selectedWorkout.focus }}
                     onComplete={handleWorkoutComplete}
                     onCancel={() => setActiveWorkout(false)}
                 />
@@ -189,10 +237,10 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
                 }}>
                     <header style={{ marginBottom: '25px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                            <p className="data-label">SUBSITUTOS DISPONÍVEIS</p>
+                            <p className="data-label">SUBSTITUTOS DISPONÍVEIS</p>
                             <h2 style={{ fontSize: '1.2rem' }}>ESCOLHA UM EXERCÍCIO</h2>
                         </div>
-                        <button onClick={() => setSwappingData(null)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: '1.5rem' }}>✕</button>
+                        <button onClick={() => setSwappingData(null)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: '1.5rem', cursor: 'pointer' }}>✕</button>
                     </header>
 
                     <div style={{ flex: 1, overflowY: 'auto', display: 'grid', gap: '12px' }}>

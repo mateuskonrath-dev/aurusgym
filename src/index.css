@@ -112,7 +112,7 @@ h3 {
 
 /* Data Viz Elements */
 .data-label {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   color: var(--text-low);
   font-weight: 700;
   text-transform: uppercase;
@@ -172,4 +172,75 @@ h3 {
   height: 100%;
   background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
   transition: width 0.4s ease;
+}
+
+/* Splash button hover */
+.splash-btn:hover {
+  background: rgba(0, 245, 212, 0.1) !important;
+  box-shadow: 0 0 24px rgba(0, 245, 212, 0.18) !important;
+}
+
+/* Btn-tech hover */
+.btn-tech:hover {
+  opacity: 0.88;
+}
+
+/* Panel hover for library */
+.library-view .panel-tech > div:hover {
+  background: rgba(0, 245, 212, 0.06) !important;
+}
+
+/* Input number — hide spinners for cleaner look */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Rest timer glow animation */
+@keyframes restPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* PR celebration */
+@keyframes prFlash {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.pr-celebrate {
+  animation: prFlash 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 0.75rem;
+  color: var(--brand-primary);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+/* Opacity utility */
+.opacity-30 {
+  opacity: 0.3;
+}
+
+/* Scroll smoothing */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Safe area for notch phones */
+.tab-bar-v3 {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
 }

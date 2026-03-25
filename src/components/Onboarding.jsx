@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import SplashScreen from '@/components/SplashScreen'
 
 const steps = [
     {
@@ -6,13 +7,6 @@ const steps = [
         title: 'Como devemos te chamar?',
         type: 'text',
         placeholder: 'Seu Nome ou Codinome',
-        unit: ''
-    },
-    {
-        id: 'email',
-        title: 'Qual seu e-mail operacional?',
-        type: 'email',
-        placeholder: 'exemplo@aurus.com',
         unit: ''
     },
     {
@@ -55,10 +49,10 @@ const steps = [
         id: 'activity',
         title: 'Qual seu nível de atividade?',
         options: [
-            { label: 'Nível Base', value: '1.2', desc: 'No momento não realizo exercícios' },
-            { label: 'Leve', value: '1.375', desc: 'Exercício 1-3x por semana' },
-            { label: 'Moderado', value: '1.55', desc: 'Exercício 3-5x por semana' },
-            { label: 'Intenso', value: '1.725', desc: 'Exercício 6-7x por semana' },
+            { label: 'Nível Base', value: '1.2', desc: 'Não realizo exercícios atualmente' },
+            { label: 'Leve', value: '1.375', desc: 'Exercício 1–3x por semana' },
+            { label: 'Moderado', value: '1.55', desc: 'Exercício 3–5x por semana' },
+            { label: 'Intenso', value: '1.725', desc: 'Exercício 6–7x por semana' },
             { label: 'Atleta', value: '1.9', desc: 'Treino pesado diário ou trabalho físico' }
         ]
     },
@@ -94,19 +88,19 @@ const steps = [
         title: 'Divisão de Treino (Split)',
         options: [
             { label: 'Full Body (3x)', value: 'full_body', desc: 'Corpo todo, foco em exercícios base' },
-            { label: '4 dias/semana (ABCD Focado)', value: 'upper_lower', desc: 'Membros Superiores e Inferiores' },
-            { label: 'Bro Split (5x)', value: 'bro_split', desc: '1 Músculo por dia (Altíssimo Volume)' },
-            { label: 'PPL / ABC (6x)', value: 'ppl', desc: 'Push, Pull, Legs (Ouro para Hipertrofia)' }
+            { label: '4 dias/semana (ABCD)', value: 'upper_lower', desc: 'Membros Superiores e Inferiores' },
+            { label: 'Bro Split (5x)', value: 'bro_split', desc: '1 Músculo por dia — alto volume' },
+            { label: 'PPL / ABC (6x)', value: 'ppl', desc: 'Push, Pull, Legs — ideal para hipertrofia' }
         ]
     },
     {
         id: 'exerciseQty',
-        title: 'Quantos exercícios prefere por treino?',
+        title: 'Quantos exercícios por treino?',
         options: [
             { label: '4 Exercícios', value: '4' },
             { label: '5 Exercícios', value: '5' },
             { label: '6 Exercícios', value: '6' },
-            { label: 'Nenhuma preferência', value: 'none' }
+            { label: 'Sem preferência', value: 'none' }
         ]
     },
     {
@@ -114,16 +108,16 @@ const steps = [
         title: 'Onde você treina?',
         options: [
             { label: 'Academia', value: 'gym', desc: 'Máquinas e pesos livres' },
-            { label: 'Home Gym', value: 'home', desc: 'Apenas halteres/elásticos' },
-            { label: 'Ar Livre', value: 'calisthenics', desc: 'Apenas peso do corpo' }
+            { label: 'Home Gym', value: 'home', desc: 'Apenas halteres / elásticos' },
+            { label: 'Ao Ar Livre', value: 'calisthenics', desc: 'Apenas peso do corpo' }
         ]
     }
 ]
 
 export default function Onboarding({ onComplete, mode = 'onboarding', initialAnswers = {} }) {
     const isReconfig = mode === 'reconfig'
+    const [showSplash, setShowSplash] = useState(!isReconfig)
 
-    // Filter steps if in reconfig mode
     const activeSteps = isReconfig
         ? steps.filter(s => ['level', 'goal', 'includeChest', 'freq', 'exerciseQty', 'place'].includes(s.id))
         : steps
@@ -133,9 +127,12 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
     const [inputValue, setInputValue] = useState('')
     const [showError, setShowError] = useState(false)
 
+    if (showSplash) {
+        return <SplashScreen onStart={() => setShowSplash(false)} />
+    }
+
     const step = activeSteps[currentStep]
 
-    // Skip conditional steps
     const nextStepIndex = (fromIndex) => {
         let next = fromIndex + 1
         while (next < activeSteps.length && activeSteps[next].condition && !activeSteps[next].condition(answers)) {
@@ -153,31 +150,29 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
     }
 
     const isInputValid = (valToTest) => {
-        if (!step.type) return true;
-        const rawVal = valToTest !== undefined ? valToTest : inputValue;
+        if (!step.type) return true
+        const rawVal = valToTest !== undefined ? valToTest : inputValue
 
-        if (step.type === 'text') return String(rawVal).trim().length >= 2;
-        if (step.type === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(rawVal));
+        if (step.type === 'text') return String(rawVal).trim().length >= 2
 
-        const val = parseFloat(rawVal);
-        if (isNaN(val)) return false;
+        const val = parseFloat(rawVal)
+        if (isNaN(val)) return false
 
-        if (step.id === 'age') return val >= 10 && val <= 100;
-        if (step.id === 'weight') return val >= 30 && val <= 250;
-        if (step.id === 'height') return val >= 140 && val <= 220;
-        if (step.id === 'bf') return val >= 3 && val <= 60;
+        if (step.id === 'age') return val >= 10 && val <= 100
+        if (step.id === 'weight') return val >= 30 && val <= 250
+        if (step.id === 'height') return val >= 140 && val <= 220
+        if (step.id === 'bf') return val >= 3 && val <= 60
 
-        return true;
+        return true
     }
 
     const handleNext = (value) => {
         const val = value !== undefined ? value : inputValue
-        if (val === '') return;
+        if (val === '') return
 
-        // Numeric/Text validation check
-        if (step.type && !isInputValid(val)) {
+        if (step.type && value === undefined && !isInputValid(val)) {
             setShowError(true)
-            return;
+            return
         }
 
         const newAnswers = { ...answers, [step.id]: val }
@@ -198,17 +193,22 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         if (prev >= 0) setCurrentStep(prev)
     }
 
+    const totalSteps = activeSteps.length
+    const progressPct = ((currentStep + 1) / totalSteps) * 100
+
     return (
         <div className="onboarding-v3 animate-tech" style={{ padding: '30px' }}>
             <header style={{ marginBottom: '60px' }}>
-                <h1 style={{ fontSize: '1rem', letterSpacing: '0.3em', color: 'var(--brand-primary)' }}>AURUS PRO <span className="title-italic">v3</span></h1>
+                <h1 style={{ fontSize: '1rem', letterSpacing: '0.3em', color: 'var(--brand-primary)' }}>
+                    AURUS PRO <span className="title-italic">v3</span>
+                </h1>
                 <div className="progress-bar-container" style={{ marginTop: '15px' }}>
-                    <div className="progress-fill" style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }} />
+                    <div className="progress-fill" style={{ width: `${progressPct}%` }} />
                 </div>
             </header>
 
             <section>
-                <p className="data-label">PARÂMETRO 0{currentStep + 1}</p>
+                <p className="data-label">PARÂMETRO {String(currentStep + 1).padStart(2, '0')}</p>
                 <h2 style={{ fontSize: '1.8rem', marginBottom: '40px' }}>{step.title}</h2>
 
                 <div style={{ display: 'grid', gap: '12px' }}>
@@ -218,13 +218,9 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                                 key={opt.value}
                                 className="panel-tech"
                                 style={{
-                                    textAlign: 'left',
-                                    color: 'white',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s ease',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '4px'
+                                    textAlign: 'left', color: 'white', cursor: 'pointer',
+                                    transition: 'all 0.2s ease', display: 'flex',
+                                    flexDirection: 'column', gap: '4px'
                                 }}
                                 onClick={() => handleNext(opt.value)}
                             >
@@ -234,44 +230,60 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                         ))
                     ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-card)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                            <div style={{
+                                display: 'flex', alignItems: 'center', gap: '10px',
+                                background: 'var(--bg-card)', padding: '20px',
+                                borderRadius: '8px', border: '1px solid var(--border-subtle)'
+                            }}>
                                 <input
-                                    type={step.type === 'email' ? 'email' : (step.type === 'number' ? 'number' : 'text')}
+                                    type={step.type === 'number' ? 'number' : 'text'}
+                                    inputMode={step.type === 'number' ? 'decimal' : 'text'}
                                     value={inputValue}
-                                    onChange={(e) => { setInputValue(e.target.value); setShowError(false); }}
+                                    onChange={(e) => { setInputValue(e.target.value); setShowError(false) }}
                                     placeholder={step.placeholder}
                                     autoFocus
                                     style={{
-                                        background: 'transparent',
-                                        border: 'none',
+                                        background: 'transparent', border: 'none',
                                         color: showError ? 'var(--brand-danger)' : 'var(--brand-primary)',
-                                        fontSize: (step.type === 'text' || step.type === 'email') ? '1.2rem' : '2rem',
-                                        fontWeight: 900,
-                                        width: '100%',
-                                        outline: 'none',
+                                        fontSize: step.type === 'text' ? '1.2rem' : '2rem',
+                                        fontWeight: 900, width: '100%', outline: 'none',
                                         transition: 'color 0.3s ease'
                                     }}
                                 />
-                                {step.unit && <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-low)' }}>{step.unit}</span>}
+                                {step.unit && (
+                                    <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-low)' }}>
+                                        {step.unit}
+                                    </span>
+                                )}
                             </div>
 
                             {showError && (
-                                <p className="animate-tech" style={{ color: 'var(--brand-danger)', fontSize: '0.7rem', fontWeight: 800, marginTop: '-10px', letterSpacing: '1px' }}>
+                                <p className="animate-tech" style={{
+                                    color: 'var(--brand-danger)', fontSize: '0.7rem',
+                                    fontWeight: 800, marginTop: '-10px', letterSpacing: '1px'
+                                }}>
                                     ⚠️ VALOR FORA DOS PARÂMETROS OPERACIONAIS. AJUSTE PARA PROSSEGUIR.
                                 </p>
                             )}
 
-                            <button className="btn-tech" onClick={() => handleNext()}>
-                                CONTINUAR
-                            </button>
+                            <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>
 
                             {step.id === 'bf' && (
                                 <button
                                     className="btn-outline"
                                     style={{ borderStyle: 'dashed', opacity: 0.7 }}
-                                    onClick={() => handleNext(answers.sex === 'male' ? '15' : '25')}
+                                    onClick={() => {
+                                        setInputValue('')
+                                        setShowError(false)
+                                        const newAnswers = { ...answers }
+                                        delete newAnswers.bf
+                                        setAnswers(newAnswers)
+                                        const next = nextStepIndex(currentStep)
+                                        if (next < activeSteps.length) setCurrentStep(next)
+                                        else onComplete(newAnswers)
+                                    }}
                                 >
-                                    NÃO SEI MEU BF %
+                                    NÃO SEI MEU BF%
                                 </button>
                             )}
                         </div>
