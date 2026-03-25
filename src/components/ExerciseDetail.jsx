@@ -235,7 +235,7 @@ export default function ExerciseDetail({ exercise, onClose }) {
                             alignItems: 'center',
                             minHeight: '500px'
                         }}>
-                            <ExerciseAnimation exercise={exercise} />
+                            <ExerciseAnimation exercise={exercise} large={true} />
                         </div>
 
                         <button
