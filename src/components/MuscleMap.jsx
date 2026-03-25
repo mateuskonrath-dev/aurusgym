@@ -33,7 +33,8 @@ export default function MuscleMap({ target, specifics = [] }) {
             case 'Tríceps': return ['triceps'];
             case 'Bíceps': return ['biceps'];
             case 'Abs':
-            case 'Core': return ['abs', 'obliques'];
+            case 'Core':
+            case 'Abdômen': return ['abs', 'obliques'];
             default: return [];
         }
     };

@@ -38,7 +38,7 @@ const calculateStreak = (volumeHistory) => {
 
 const MEV = {
     'Peito': 8, 'Costas': 10, 'Ombros': 8, 'Pernas': 8,
-    'Bíceps': 8, 'Tríceps': 8, 'Core': 4, 'Abs': 4, 'Antebraços': 4
+    'Bíceps': 8, 'Tríceps': 8, 'Abdômen': 4, 'Antebraços': 4
 }
 
 export default function ProgressDashboard({ profile, personalBests = {}, volumeHistory = {} }) {

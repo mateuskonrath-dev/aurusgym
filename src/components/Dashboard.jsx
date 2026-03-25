@@ -54,7 +54,7 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
     const catMap = {
         'peito': 'Peito', 'costas': 'Costas', 'pernas': 'Pernas', 'ombros': 'Ombros',
         'tríceps': 'Braços', 'bíceps': 'Braços', 'antebraços': 'Braços',
-        'abs': 'Core', 'core': 'Core'
+        'abs': 'Abdômen', 'core': 'Abdômen', 'abdômen': 'Abdômen'
     }
 
     const persistCompletedDays = (days) => {
@@ -97,14 +97,14 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
     const selectedWorkout = weeklyPlan[selectedDayIndex] || { workout: [], label: '', focus: '' }
 
     const calculateVolume = () => {
-        const stats = { Peito: 0, Costas: 0, Pernas: 0, Ombros: 0, Braços: 0, Core: 0 }
+        const stats = { Peito: 0, Costas: 0, Pernas: 0, Ombros: 0, Braços: 0, Abdômen: 0 }
         let total = 0
 
         weeklyPlan.forEach(day => {
             day.workout.forEach(ex => {
                 if (!ex || !ex.muscle) return
                 const m = ex.muscle.trim().toLowerCase()
-                const group = catMap[m] || 'Core'
+                const group = catMap[m] || 'Abdômen'
                 if (stats[group] !== undefined) { stats[group]++; total++ }
             })
         })
@@ -116,7 +116,7 @@ export default function Dashboard({ profile, personalBests = {}, volumeHistory =
     const colors = {
         Peito: 'var(--brand-primary)', Costas: '#ff4b4b',
         Pernas: 'var(--brand-secondary)', Ombros: '#9b5de5',
-        Braços: '#00bbf9', Core: '#f15bb5'
+        Braços: '#00bbf9', Abdômen: '#f15bb5'
     }
 
     let currentOffset = 0

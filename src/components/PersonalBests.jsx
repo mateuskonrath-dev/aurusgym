@@ -20,12 +20,12 @@ const buildExerciseMap = () => {
 }
 const exerciseMap = buildExerciseMap()
 
-const MUSCLE_ORDER = ['Peito', 'Costas', 'Pernas', 'Ombros', 'Tríceps', 'Bíceps', 'Core', 'Antebraços']
+const MUSCLE_ORDER = ['Peito', 'Costas', 'Pernas', 'Ombros', 'Tríceps', 'Bíceps', 'Abdômen', 'Antebraços']
 const muscleColor = {
     'peito': 'var(--brand-primary)', 'costas': '#ff4b4b',
     'pernas': 'var(--brand-secondary)', 'ombros': '#9b5de5',
     'tríceps': '#00bbf9', 'bíceps': '#f15bb5',
-    'core': '#ffcc00', 'abs': '#ffcc00', 'antebraços': '#aaa'
+    'abdômen': '#ffcc00', 'core': '#ffcc00', 'abs': '#ffcc00', 'antebraços': '#aaa'
 }
 
 export default function PersonalBests({ personalBests = {} }) {

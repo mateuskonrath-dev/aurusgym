@@ -126,7 +126,7 @@ function App() {
   const categoryLabels = {
     chest: 'Peito', back: 'Costas', shoulders: 'Ombros',
     legs: 'Pernas', triceps: 'Tríceps', biceps: 'Bíceps',
-    core: 'Core / Abdômen', forearms: 'Antebraços'
+    core: 'Abdômen', forearms: 'Antebraços'
   }
 
   return (
