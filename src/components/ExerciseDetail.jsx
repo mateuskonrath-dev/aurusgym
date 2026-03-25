@@ -1,5 +1,22 @@
 import { useState } from 'react'
 import MuscleMap from '@/components/MuscleMap'
+import ExerciseAnimation from '@/components/ExerciseAnimation'
+
+const MISTAKES = {
+    peito: 'Não deixe os cotovelos flarem demais para os lados — mantenha a 45° para proteger o ombro. Evite quicar a barra no peito.',
+    costas: 'Não inicie o movimento com o bíceps. Puxe com os cotovelos e ative as escápulas antes de puxar.',
+    pernas: 'Não deixe os joelhos colapsarem para dentro. Mantenha o calcanhar no chão e o tronco reto durante todo o movimento.',
+    ombros: 'Não eleve os ombros em direção às orelhas. Mantenha o trapézio relaxado e ative apenas o deltoide alvo.',
+    bíceps: 'Não balance o corpo para dar impulso. Mantenha os cotovelos fixos ao lado do tronco durante toda a repetição.',
+    tríceps: 'Não deixe os cotovelos abrirem para os lados. Mantenha-os paralelos e próximos ao corpo.',
+    abdômen: 'Não puxe o pescoço com as mãos. O movimento deve vir da contração do abdômen, não da força do pescoço.',
+    antebraços: 'Não use o pulso como alavanca — o movimento deve ser pequeno e controlado, sem compensação do cotovelo.',
+}
+
+function getCommonMistake(ex) {
+    const m = (ex?.muscle || '').toLowerCase()
+    return MISTAKES[m] || 'Evite sacrificar a amplitude do movimento pela carga. Técnica correta sempre rende mais do que peso excessivo.'
+}
 
 export default function ExerciseDetail({ exercise, onClose }) {
     const [activeTab, setActiveTab] = useState('setup') // setup, anatomy, tips
@@ -63,15 +80,14 @@ export default function ExerciseDetail({ exercise, onClose }) {
             <div style={{ flex: 1, padding: '25px', overflowY: 'auto' }}>
                 {activeTab === 'setup' && (
                     <div className="animate-tech">
-                        <div className="panel-tech tech-border-l" style={{ marginBottom: '20px' }}>
-                            <p className="data-label">EXECUTAR</p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, color: 'var(--text-high)' }}>
-                                {exercise.howTo || 'Instruções técnicas em breve.'}
-                            </p>
-                        </div>
-                        <div style={{ textAlign: 'center', padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: 'var(--radius-pro)' }}>
-                            <div style={{ fontSize: '3rem', opacity: 0.2 }}>📐</div>
-                            <p style={{ fontSize: '0.7rem', color: 'var(--text-low)', marginTop: '10px' }}>REFERÊNCIA DE MOVIMENTO ANALISADA</p>
+                        <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', marginBottom: '20px' }}>
+                            <ExerciseAnimation exercise={exercise} />
+                            <div className="panel-tech tech-border-l" style={{ flex: 1 }}>
+                                <p className="data-label">EXECUTAR</p>
+                                <p style={{ fontSize: '0.88rem', lineHeight: 1.65, color: 'var(--text-high)' }}>
+                                    {exercise.howTo || 'Instruções técnicas em breve.'}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -99,13 +115,33 @@ export default function ExerciseDetail({ exercise, onClose }) {
                 )}
 
                 {activeTab === 'tips' && (
-                    <div className="animate-tech">
-                        <div className="panel-tech" style={{ border: '1px solid var(--brand-secondary)', background: 'rgba(0, 187, 250, 0.05)', borderRadius: 'var(--radius-pro)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-                                <p className="data-label" style={{ color: 'var(--brand-secondary)', margin: 0 }}>DICA</p>
-                            </div>
-                            <p style={{ fontStyle: 'italic', lineHeight: 1.6, fontSize: '1rem', color: '#fff' }}>
+                    <div className="animate-tech" style={{ display: 'grid', gap: '14px' }}>
+                        <div className="panel-tech" style={{ border: '1px solid var(--brand-secondary)', background: 'rgba(0,187,250,0.05)' }}>
+                            <p className="data-label" style={{ color: 'var(--brand-secondary)', marginBottom: '10px' }}>DICA TÉCNICA</p>
+                            <p style={{ fontStyle: 'italic', lineHeight: 1.65, fontSize: '0.92rem', color: '#fff' }}>
                                 {exercise.proTip ? `"${exercise.proTip}"` : '"Mantenha o foco na técnica e no tempo sob tensão para máximos resultados."'}
+                            </p>
+                        </div>
+                        <div className="panel-tech" style={{ border: '1px solid rgba(179,255,0,0.2)', background: 'rgba(179,255,0,0.03)' }}>
+                            <p className="data-label" style={{ color: 'var(--brand-primary)', marginBottom: '10px' }}>PARÂMETROS</p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                                {[
+                                    { label: 'SÉRIES', value: exercise.sets },
+                                    { label: 'REPETIÇÕES', value: exercise.reps },
+                                    { label: 'GRUPO', value: exercise.muscle },
+                                    { label: 'PRIORIDADE', value: `Tier ${exercise.tier}` },
+                                ].map(item => (
+                                    <div key={item.label} style={{ textAlign: 'center', padding: '8px', background: 'rgba(255,255,255,0.03)', borderRadius: '4px' }}>
+                                        <p className="data-label" style={{ fontSize: '0.45rem', marginBottom: '3px' }}>{item.label}</p>
+                                        <p style={{ fontWeight: 900, fontSize: '0.82rem', color: 'var(--text-high)' }}>{item.value}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="panel-tech" style={{ background: 'rgba(255,75,75,0.05)', border: '1px solid rgba(255,75,75,0.2)' }}>
+                            <p className="data-label" style={{ color: 'var(--brand-danger)', marginBottom: '8px' }}>ERROS COMUNS</p>
+                            <p style={{ fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--text-med)' }}>
+                                {getCommonMistake(exercise)}
                             </p>
                         </div>
                     </div>
