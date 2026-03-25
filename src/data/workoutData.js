@@ -177,24 +177,23 @@ export function generateDailyWorkout(profile, dayIndex) {
         targetTotal = variation[dayIndex % variation.length];
     }
 
-    let pools = muscles.map(muscle => {
-        let list = [...(EXERCISES[location][muscle] || [])];
-        return list.sort((a, b) => (a.tier || 3) - (b.tier || 3));
-    }).filter(p => p.length > 0);
+    // CORRIGIDO: Todos os exercícios de um grupo muscular ANTES de passar para o próximo
+    // Isso segue o padrão científico PPL/Upper-Lower que maximiza hipertrofia
+    for (const muscle of muscles) {
+        let exercisesForMuscle = [...(EXERCISES[location][muscle] || [])];
+        // Ordenar por tier (1 = mais importante, depois 2, depois 3)
+        exercisesForMuscle.sort((a, b) => (a.tier || 3) - (b.tier || 3));
 
-    if (pools.length > 0) {
-        let poolIndex = 0;
-        while (workout.length < targetTotal) {
-            const currentPool = pools[poolIndex];
-            if (currentPool.length > 0) {
-                workout.push(currentPool.shift());
+        // Adicionar os exercícios deste grupo muscular até atingir o alvo
+        for (const exercise of exercisesForMuscle) {
+            if (workout.length < targetTotal) {
+                workout.push(exercise);
+            } else {
+                break;
             }
-
-            poolIndex = (poolIndex + 1) % pools.length;
-
-            // Safety break if all pools are empty
-            if (pools.every(p => p.length === 0)) break;
         }
+
+        if (workout.length >= targetTotal) break;
     }
 
     return workout;
