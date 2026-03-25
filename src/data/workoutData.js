@@ -16,7 +16,7 @@ export const EXERCISES = {
             { id: 'g_bk_3', name: 'Serrote (Halter)', muscle: 'Costas', sets: 3, reps: '12', tier: 2, howTo: 'Puxe o halter rente ao corpo unilateramente, focando na dorsal.', proTip: 'Não rotacione o tronco excessivamente.', muscles: { primary: ['Latíssimo Inferior'], secondary: ['Bíceps'] } },
             { id: 'g_bk_4', name: 'Remada Cavalinho', muscle: 'Costas', sets: 3, reps: '10', tier: 1, howTo: 'Use o suporte V e puxe a carga concentrando no meio das costas.', proTip: 'Esprema as escápulas no topo do movimento.', muscles: { primary: ['Miolo das Costas'], secondary: ['Bíceps'] } },
             { id: 'g_bk_5', name: 'Puxada Triângulo', muscle: 'Costas', sets: 3, reps: '12', tier: 2, howTo: 'Puxe o triângulo até o peito, projetando o tórax para frente.', proTip: 'Ótimo para isolar a porção central do dorso.', muscles: { primary: ['Latíssimo do Dorso'], secondary: ['Bíceps'] } },
-            { id: 'g_bk_6', name: 'Levantamento Terra', muscle: 'Costas', sets: 4, reps: '5-6', tier: 1, howTo: 'Barra no chão, agache com a coluna reta e puxe mantendo a barra rente ao corpo até ficar ereto.', proTip: 'O rei dos exercícios. Mantenha o core travado e a barra colada na canela durante a subida.', muscles: { primary: ['Lombar', 'Glúteos', 'Isquiotibiais'], secondary: ['Trapézio', 'Core'] } },
+            { id: 'g_bk_6', name: 'Levantamento Terra', muscle: 'Costas', sets: 4, reps: '5-6', tier: 1, howTo: 'Barra no chão, agache com a coluna reta e puxe mantendo a barra rente ao corpo até ficar ereto.', proTip: 'O rei dos exercícios. Mantenha o core travado e a barra colada na canela durante a subida.', muscles: { primary: ['Lombar', 'Glúteos', 'Isquiotibiais'], secondary: ['Trapézio', 'Abdômen'] } },
             { id: 'g_bk_7', name: 'Remada Baixa (Polia)', muscle: 'Costas', sets: 3, reps: '12', tier: 2, howTo: 'Sentado no cabo, puxe a barra em direção ao abdômen retraindo as escápulas antes de puxar.', proTip: 'A retração escápular deve anteceder o puxão — não use o bíceps para iniciar.', muscles: { primary: ['Romboides', 'Miolo das Costas'], secondary: ['Bíceps'] } },
             { id: 'g_bk_8', name: 'Pullover (Halter)', muscle: 'Costas', sets: 3, reps: '12', tier: 2, howTo: 'Deitado no banco transversalmente, desça o halter atrás da cabeça sentindo o alongamento das dorsais.', proTip: 'Mantenha os cotovelos levemente flexionados. Ideal para expansão torácica.', muscles: { primary: ['Latíssimo do Dorso'], secondary: ['Peitoral'] } },
             { id: 'g_bk_9', name: 'Barra Fixa', muscle: 'Costas', sets: 4, reps: 'Máx', tier: 1, howTo: 'Puxe o queixo acima da barra com a pegada pronada, controlando a descida por 3 segundos.', proTip: 'A descida controlada (excêntrico) é responsável por grande parte dos ganhos.', muscles: { primary: ['Latíssimo do Dorso'], secondary: ['Bíceps', 'Braquial'] } }
@@ -43,7 +43,7 @@ export const EXERCISES = {
             { id: 'g_lg_9', name: 'Agachamento Búlgaro', muscle: 'Pernas', sets: 3, reps: '10', tier: 1, howTo: 'Pé traseiro apoiado num banco atrás, desça o joelho da perna traseira em direção ao chão mantendo o tronco reto.', proTip: 'Um dos exercícios unilaterais mais eficientes. Carregue com halteres nas mãos para progredir.', muscles: { primary: ['Quadríceps', 'Glúteos'], secondary: ['Isquiotibiais'] } },
             { id: 'g_lg_10', name: 'Agachamento Hack', muscle: 'Pernas', sets: 4, reps: '10-12', tier: 1, howTo: 'Na máquina, posicione os pés mais à frente na plataforma e agache profundamente com controle.', proTip: 'Ideal para isolar o quadríceps com menor sobrecarga na coluna.', muscles: { primary: ['Quadríceps'], secondary: ['Glúteos'] } },
             { id: 'g_lg_11', name: 'Terra Romeno (Halter)', muscle: 'Pernas', sets: 4, reps: '10-12', tier: 1, howTo: 'Segure os halteres na frente das coxas, desça jogando o quadril para trás mantendo as pernas quase estendidas.', proTip: 'Foco no alongamento e contração dos isquiotibiais, não na carga máxima.', muscles: { primary: ['Isquiotibiais', 'Glúteos'], secondary: ['Lombar'] } },
-            { id: 'g_lg_12', name: 'Afundo Caminhando', muscle: 'Pernas', sets: 3, reps: '12', tier: 2, howTo: 'Avance alternando as pernas, descendo o joelho traseiro próximo ao chão e empurrando para subir.', proTip: 'Ótimo para simetria entre os lados e melhora do equilíbrio dinâmico.', muscles: { primary: ['Quadríceps', 'Glúteos'], secondary: ['Core'] } },
+            { id: 'g_lg_12', name: 'Afundo Caminhando', muscle: 'Pernas', sets: 3, reps: '12', tier: 2, howTo: 'Avance alternando as pernas, descendo o joelho traseiro próximo ao chão e empurrando para subir.', proTip: 'Ótimo para simetria entre os lados e melhora do equilíbrio dinâmico.', muscles: { primary: ['Quadríceps', 'Glúteos'], secondary: ['Abdômen'] } },
             { id: 'g_lg_13', name: 'Agachamento Sumô', muscle: 'Pernas', sets: 4, reps: '10-12', tier: 1, howTo: 'Pés muito abertos com pontas voltadas para fora, desça mantendo o joelho alinhado com os pés.', proTip: 'Ativa mais o glúteo médio e os adutores do que o agachamento convencional.', muscles: { primary: ['Glúteos', 'Adutor'], secondary: ['Quadríceps'] } }
         ],
         triceps: [
@@ -65,8 +65,8 @@ export const EXERCISES = {
         core: [
             { id: 'g_co_1', name: 'Abdominal Polia', muscle: 'Abdômen', sets: 4, reps: '15-20', tier: 3, howTo: 'Ajoelhado, segure a corda acima da cabeça e "enrole" o tronco em direção ao chão.', proTip: 'O movimento deve ser de enrolar a coluna, não de dobrar o quadril.', muscles: { primary: ['Reto Abdominal'] } },
             { id: 'g_co_2', name: 'Elevação de Pernas', muscle: 'Abdômen', sets: 4, reps: '15', tier: 2, howTo: 'Suspenso ou deitado, eleve as pernas até formar um ângulo de 90 graus.', proTip: 'Mantenha o movimento controlado na descida.', muscles: { primary: ['Infra Abdominal', 'Flexores do Quadril'] } },
-            { id: 'g_co_3', name: 'Prancha Isométrica', muscle: 'Abdômen', sets: 3, reps: '60s', tier: 3, howTo: 'Corpo reto apoiado nos antebraços e pontas dos pés, mantenha a contração.', proTip: 'Não deixe o quadril cair nem subir demais.', muscles: { primary: ['Transverso do Abdômen', 'Core'] } },
-            { id: 'g_co_4', name: 'Roda Abdominal', muscle: 'Abdômen', sets: 3, reps: '10', tier: 1, howTo: 'Ajoelhado com a roda no chão, estenda o corpo para frente de forma controlada e retorne puxando o core.', proTip: 'Um dos exercícios mais eficientes para o core. Comece com amplitude parcial se necessário.', muscles: { primary: ['Reto Abdominal', 'Core'], secondary: ['Ombros'] } },
+            { id: 'g_co_3', name: 'Prancha Isométrica', muscle: 'Abdômen', sets: 3, reps: '60s', tier: 3, howTo: 'Corpo reto apoiado nos antebraços e pontas dos pés, mantenha a contração.', proTip: 'Não deixe o quadril cair nem subir demais.', muscles: { primary: ['Transverso do Abdômen', 'Abdômen'] } },
+            { id: 'g_co_4', name: 'Roda Abdominal', muscle: 'Abdômen', sets: 3, reps: '10', tier: 1, howTo: 'Ajoelhado com a roda no chão, estenda o corpo para frente de forma controlada e retorne puxando o core.', proTip: 'Um dos exercícios mais eficientes para o core. Comece com amplitude parcial se necessário.', muscles: { primary: ['Reto Abdominal', 'Abdômen'], secondary: ['Ombros'] } },
             { id: 'g_co_5', name: 'Abdominal Declinado', muscle: 'Abdômen', sets: 4, reps: '15-20', tier: 2, howTo: 'No banco declinado, suba o tronco de forma controlada até 45 graus.', proTip: 'Adicione uma anilha no peito para progredir com sobrecarga.', muscles: { primary: ['Reto Abdominal'] } }
         ],
         forearms: [
@@ -106,9 +106,9 @@ export const EXERCISES = {
             { id: 'h_bi_2', name: 'Rosca Martelo (Mochila)', muscle: 'Bíceps', sets: 4, reps: '12', tier: 2, howTo: 'Puxada neutra com o peso, focando na lateral do braço.', proTip: 'Use a alça da mochila para uma pegada firme.', muscles: { primary: ['Braquial'] } }
         ],
         core: [
-            { id: 'h_co_1', name: 'Escaladores', muscle: 'Abdômen', sets: 4, reps: '45s', tier: 3, howTo: 'Posição de flexão, traga os joelhos em direção ao peito em ritmo acelerado.', proTip: 'Mantenha o quadril baixo e o core travado.', muscles: { primary: ['Core'] } },
+            { id: 'h_co_1', name: 'Escaladores', muscle: 'Abdômen', sets: 4, reps: '45s', tier: 3, howTo: 'Posição de flexão, traga os joelhos em direção ao peito em ritmo acelerado.', proTip: 'Mantenha o quadril baixo e o core travado.', muscles: { primary: ['Abdômen'] } },
             { id: 'h_co_2', name: 'Abdominal Supra', muscle: 'Abdômen', sets: 4, reps: '20', tier: 3, howTo: 'Deitado, contraia o abdômen tirando apenas as escápulas do chão.', proTip: 'Não puxe o pescoço com as mãos.', muscles: { primary: ['Abs'] } },
-            { id: 'h_co_3', name: 'Prancha Lateral', muscle: 'Abdômen', sets: 3, reps: '30s', tier: 3, howTo: 'Apoie-se em um antebraço de lado e mantenha o corpo alinhado.', proTip: 'Trabalha intensamente os oblíquos.', muscles: { primary: ['Core', 'Oblíquos'] } }
+            { id: 'h_co_3', name: 'Prancha Lateral', muscle: 'Abdômen', sets: 3, reps: '30s', tier: 3, howTo: 'Apoie-se em um antebraço de lado e mantenha o corpo alinhado.', proTip: 'Trabalha intensamente os oblíquos.', muscles: { primary: ['Abdômen', 'Oblíquos'] } }
         ],
         forearms: [
             { id: 'h_fo_1', name: 'Caminhada do Fazendeiro', muscle: 'Antebraços', sets: 3, reps: '45s', tier: 3, howTo: 'Segure os pesos mais pesados que encontrar e caminhe mantendo a postura.', proTip: 'Ótimo para força de pegada e trapézio.', muscles: { primary: ['Grip Strength'] } }
@@ -127,7 +127,7 @@ export const EXERCISES = {
         ],
         shoulders: [
             { id: 'c_sh_1', name: 'Flexão em V', muscle: 'Ombros', sets: 3, reps: '10', tier: 1, howTo: 'Quadril elevado em V, desça a cabeça em direção ao chão.', proTip: 'Foco total no deltoide frontal.', muscles: { primary: ['Ombros'], secondary: ['Tríceps'] } },
-            { id: 'c_sh_2', name: 'Prancha Dinâmica', muscle: 'Ombros', sets: 3, reps: '12', tier: 2, howTo: 'Alternar entre prancha baixa (cotovelos) e prancha alta (mãos).', proTip: 'Estabilize bem o quadril durante a transição.', muscles: { primary: ['Ombros', 'Core'] } }
+            { id: 'c_sh_2', name: 'Prancha Dinâmica', muscle: 'Ombros', sets: 3, reps: '12', tier: 2, howTo: 'Alternar entre prancha baixa (cotovelos) e prancha alta (mãos).', proTip: 'Estabilize bem o quadril durante a transição.', muscles: { primary: ['Ombros', 'Abdômen'] } }
         ],
         legs: [
             { id: 'c_lg_1', name: 'Agachamento Livre', muscle: 'Pernas', sets: 4, reps: '20', tier: 1, howTo: 'Agache profundamente mantendo o calcanhar no chão.', proTip: 'Mantenha o tronco o mais vertical possível.', muscles: { primary: ['Quadríceps', 'Glúteo'] } },
@@ -143,9 +143,9 @@ export const EXERCISES = {
             { id: 'c_bi_1', name: 'Rosca Inversa Dinâmica', muscle: 'Bíceps', sets: 3, reps: '15', tier: 3, howTo: 'Realize o movimento de rosca contraindo o bíceps ao máximo de forma isométrica atenuada.', proTip: 'Mantenha a mente no músculo.', muscles: { primary: ['Bíceps'] } }
         ],
         core: [
-            { id: 'c_co_1', name: 'Escaladores', muscle: 'Abdômen', sets: 4, reps: '45s', tier: 3, howTo: 'Posição de prancha alta, traga os joelhos ao peito em velocidade.', proTip: 'Cardio e Core integrados.', muscles: { primary: ['Core'] } },
+            { id: 'c_co_1', name: 'Escaladores', muscle: 'Abdômen', sets: 4, reps: '45s', tier: 3, howTo: 'Posição de prancha alta, traga os joelhos ao peito em velocidade.', proTip: 'Cardio e Core integrados.', muscles: { primary: ['Abdômen'] } },
             { id: 'c_co_2', name: 'Abdominal Supra', muscle: 'Abdômen', sets: 4, reps: '20', tier: 3, howTo: 'Curto e controlado, focando na parte superior do abdômen.', proTip: 'Sinta cada fibra contraindo.', muscles: { primary: ['Abs'] } },
-            { id: 'c_co_3', name: 'Prancha Isométrica', muscle: 'Abdômen', sets: 3, reps: '60s', tier: 3, howTo: 'Corpo reto, antebraços no chão, segure a posição.', proTip: 'Respire fundo e mantenha o foco.', muscles: { primary: ['Core'] } }
+            { id: 'c_co_3', name: 'Prancha Isométrica', muscle: 'Abdômen', sets: 3, reps: '60s', tier: 3, howTo: 'Corpo reto, antebraços no chão, segure a posição.', proTip: 'Respire fundo e mantenha o foco.', muscles: { primary: ['Abdômen'] } }
         ]
     }
 };
@@ -207,7 +207,7 @@ const MUSCLE_LABELS = {
     legs: 'Pernas',
     triceps: 'Tríceps',
     biceps: 'Bíceps',
-    core: 'Core',
+    core: 'Abdômen',
     forearms: 'Antebraços'
 };
 
