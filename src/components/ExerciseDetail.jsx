@@ -118,22 +118,6 @@ export default function ExerciseDetail({ exercise, onClose }) {
                                 {exercise.proTip ? `"${exercise.proTip}"` : '"Mantenha o foco na técnica e no tempo sob tensão para máximos resultados."'}
                             </p>
                         </div>
-                        <div className="panel-tech" style={{ border: '1px solid rgba(179,255,0,0.2)', background: 'rgba(179,255,0,0.03)' }}>
-                            <p className="data-label" style={{ color: 'var(--brand-primary)', marginBottom: '10px' }}>PARÂMETROS</p>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                                {[
-                                    { label: 'SÉRIES', value: exercise.sets },
-                                    { label: 'REPETIÇÕES', value: exercise.reps },
-                                    { label: 'GRUPO', value: exercise.muscle },
-                                    { label: 'PRIORIDADE', value: `Tier ${exercise.tier}` },
-                                ].map(item => (
-                                    <div key={item.label} style={{ textAlign: 'center', padding: '8px', background: 'rgba(255,255,255,0.03)', borderRadius: '4px' }}>
-                                        <p className="data-label" style={{ fontSize: '0.45rem', marginBottom: '3px' }}>{item.label}</p>
-                                        <p style={{ fontWeight: 900, fontSize: '0.82rem', color: 'var(--text-high)' }}>{item.value}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
                         <div className="panel-tech" style={{ background: 'rgba(255,75,75,0.05)', border: '1px solid rgba(255,75,75,0.2)' }}>
                             <p className="data-label" style={{ color: 'var(--brand-danger)', marginBottom: '8px' }}>ERROS COMUNS</p>
                             <p style={{ fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--text-med)' }}>
