@@ -87,10 +87,11 @@ const steps = [
         id: 'freq',
         title: 'Divisão de Treino (Split)',
         options: [
-            { label: 'Full Body (3x)', value: 'full_body', desc: 'Corpo todo, foco em exercícios base' },
-            { label: '4 dias/semana (ABCD)', value: 'upper_lower', desc: 'Membros Superiores e Inferiores' },
-            { label: 'Bro Split (5x)', value: 'bro_split', desc: '1 Músculo por dia — alto volume' },
-            { label: 'PPL / ABC (6x)', value: 'ppl', desc: 'Push, Pull, Legs — ideal para hipertrofia' }
+            { label: 'Full Body (3x)', value: 'full_body', desc: 'Todos os grupos 2x/semana — ótimo para iniciantes' },
+            { label: 'Upper/Lower (4x)', value: 'upper_lower', desc: 'Superior/Inferior alternado — todos 2x/semana' },
+            { label: 'Híbrido (5x)', value: 'hybrid_5', desc: 'Push/Pull/Legs/Upper — frequência balanceada' },
+            { label: 'PPL (6x)', value: 'ppl', desc: 'Push/Pull/Legs 2x — ideal para avançados' },
+            { label: 'Bro Split (5x)', value: 'bro_split', desc: '1 músculo/dia (frequência 1x) — volume muito alto' }
         ]
     },
     {

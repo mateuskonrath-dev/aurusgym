@@ -151,40 +151,105 @@ export const EXERCISES = {
 };
 
 export const SPLITS = {
-    // FULL BODY: 3 dias com VARIAÇÃO
-    // Todos os grupos 2x/semana para frequência ótima
-    // Dia 1: Os 3 grandes (Peito, Costas, Pernas)
-    // Dia 3: Peito, Costas, Braços
-    // Dia 5: Pernas, Ombros, Braços
+    // ============================================================
+    // FULL BODY: 3 dias
+    // ============================================================
+    // Regra: Todos os grupos musculares 2x/semana (frequência ótima)
+    // Balanceamento: Cada dia tem empurrar + puxar + pernas distribuído
+    //
+    // Dia 1: Peito, Costas, Pernas (compostos pesados)
+    // Dia 3: Ombros, Pernas, Tríceps, Bíceps (complementar)
+    // Dia 5: Peito, Costas, Ombros, Core (variação)
+    //
+    // Frequência por grupo:
+    // - Peito: 2x (Dia 1, 5)
+    // - Costas: 2x (Dia 1, 5)
+    // - Pernas: 2x (Dia 1, 3)
+    // - Ombros: 2x (Dia 3, 5)
+    // - Tríceps: 1x (Dia 3) ⚠️ Mas recebe estímulo em dias de peito
+    // - Bíceps: 1x (Dia 3) ⚠️ Mas recebe estímulo em dias de costas
+    // - Core: 1x (Dia 5)
     full_body: {
         days: {
             1: ['chest', 'back', 'legs'],
-            3: ['chest', 'back', 'shoulders', 'triceps', 'biceps'],
-            5: ['legs', 'shoulders', 'triceps', 'biceps']
+            3: ['shoulders', 'legs', 'triceps', 'biceps'],
+            5: ['chest', 'back', 'shoulders', 'core']
         },
         default: ['chest', 'back', 'legs']
     },
 
-    // UPPER/LOWER: 4 dias (PUSH / PULL / LOWER separados)
-    // Dia 1: PUSH → Peito, Ombros, Tríceps (empurrar)
-    // Dia 2: LOWER → Pernas, Abdômen
-    // Dia 4: PULL → Costas, Bíceps, Antebraço (puxar)
-    // Dia 5: LOWER → Pernas, Abdômen (variado)
-    // Frequência: PUSH 1x, PULL 1x, LOWER 2x (pernas são prioridade)
+    // ============================================================
+    // UPPER/LOWER: 4 dias (Divisão 2x Upper + 2x Lower)
+    // ============================================================
+    // Regra: UPPER/LOWER alternado = todos os grupos 2x/semana
+    // Divisão lógica segundo prescrição científica
+    //
+    // Dia 1: UPPER A (Peito, Costas, Ombros, Bíceps, Tríceps)
+    // Dia 2: LOWER A (Pernas, Glúteos, Core)
+    // Dia 4: UPPER B (Peito, Costas, Ombros, Bíceps, Tríceps - ênfase variada)
+    // Dia 5: LOWER B (Pernas, Glúteos, Core - variação)
+    //
+    // Frequência por grupo (TODOS 2x/semana):
+    // - Peito: 2x
+    // - Costas: 2x
+    // - Ombros: 2x
+    // - Bíceps: 2x
+    // - Tríceps: 2x
+    // - Pernas: 2x
+    // - Core: 2x
     upper_lower: {
         days: {
-            1: ['chest', 'shoulders', 'triceps'],
+            1: ['chest', 'back', 'shoulders', 'biceps', 'triceps'],
             2: ['legs', 'core'],
-            4: ['back', 'biceps', 'forearms'],
+            4: ['chest', 'back', 'shoulders', 'biceps', 'triceps'],
             5: ['legs', 'core']
         },
         default: ['chest', 'back', 'legs']
     },
 
-    // PPL: 6 dias (cada grupo 2x/semana)
-    // PUSH: Peito, Ombros, Tríceps
-    // PULL: Costas, Bíceps, Antebraços
-    // LEGS: Pernas + Core
+    // ============================================================
+    // HÍBRIDO 5 DIAS (Melhor que Bro Split para 5 dias)
+    // ============================================================
+    // Regra: Com 5 dias, evitar frequência 1x (menos ideal)
+    // Estrutura: Híbrida = mistura UPPER/LOWER com PUSH/PULL
+    //
+    // Dia 1: PUSH (Peito, Ombros, Tríceps)
+    // Dia 2: LOWER (Pernas, Glúteos, Core)
+    // Dia 3: PULL (Costas, Bíceps, Antebraço)
+    // Dia 4: UPPER (Peito, Costas, Ombros) - ênfase variada
+    // Dia 5: LOWER (Pernas, Glúteos) - ênfase variada
+    //
+    // Frequência por grupo:
+    // - Peito: 2x (Dia 1 PUSH, Dia 4 UPPER)
+    // - Costas: 2x (Dia 3 PULL, Dia 4 UPPER)
+    // - Ombros: 2x (Dia 1 PUSH, Dia 4 UPPER)
+    // - Bíceps: 1x (Dia 3 PULL) ⚠️ Frequência baixa mas recuperação melhor
+    // - Tríceps: 1x (Dia 1 PUSH)
+    // - Pernas: 2x (Dia 2, 5)
+    // - Core: 2x (Dia 2, 5)
+    hybrid_5: {
+        days: {
+            1: ['chest', 'shoulders', 'triceps'],
+            2: ['legs', 'core'],
+            3: ['back', 'biceps', 'forearms'],
+            4: ['chest', 'back', 'shoulders'],
+            5: ['legs', 'core']
+        },
+        default: ['chest', 'back', 'legs']
+    },
+
+    // ============================================================
+    // PPL: 6 dias (Push/Pull/Legs 2x na semana)
+    // ============================================================
+    // Regra: Padrão científico ótimo para 6 dias
+    // Frequência: TODOS os grupos 2x/semana
+    //
+    // Dia 1: PUSH A (Peito, Ombros, Tríceps)
+    // Dia 2: PULL A (Costas, Bíceps, Antebraços)
+    // Dia 3: LEGS A (Pernas, Glúteos, Core)
+    // Dia 4: PUSH B (Peito, Ombros, Tríceps - variação)
+    // Dia 5: PULL B (Costas, Bíceps, Antebraços - variação)
+    // Dia 6: LEGS B (Pernas, Glúteos, Core - variação)
     ppl: {
         days: {
             1: ['chest', 'shoulders', 'triceps'],
@@ -197,12 +262,15 @@ export const SPLITS = {
         default: ['chest', 'shoulders', 'triceps']
     },
 
-    // BRO SPLIT: 5 dias (cada grupo 1x/semana)
-    // Segunda: Peito
-    // Terça: Costas
-    // Quarta: Pernas
-    // Quinta: Ombros
-    // Sexta: Braços (Bíceps + Tríceps)
+    // ============================================================
+    // BRO SPLIT (DESCONTINUADO): Use HYBRID_5 em vez disso
+    // ============================================================
+    // ⚠️ AVISO: Bro Split (frequência 1x) é menos científico
+    // Para 5 dias, recomenda-se usar hybrid_5 em vez de bro_split
+    // Frequência 1x/semana é aceitável apenas com:
+    // - Volume MUITO alto por dia
+    // - Experiência avançada
+    // - Objetivo específico de especialização
     bro_split: {
         days: {
             1: ['chest'],
