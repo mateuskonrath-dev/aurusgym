@@ -214,56 +214,78 @@ export const SPLITS = {
     },
 
     // ================================================================
-    // 4 DIAS TRADICIONAL - Estrutura clássica e comprovada
+    // 4 DIAS TRADICIONAL - Estrutura com descansos bem distribuídos
     // ================================================================
-    // Estrutura: Agrupamentos funcionais por sinergismo muscular
-    // Frequência: 1x por semana cada grupo (moderado)
-    // Volume: Alto por dia (compensar frequência menor)
-    // Ideal para: Intermediários, estrutura clássica, fácil memorizar
+    // PRINCÍPIOS CIENTÍFICOS APLICADOS:
+    // 1. DESCANSO ENTRE TREINOS: Não fazer 3+ dias consecutivos
+    // 2. FREQUÊNCIA MUSCULAR: 1-2x por semana por grupo (ideal científico)
+    // 3. RECUPERAÇÃO: 48-72h entre estímulos do mesmo grupo
+    // 4. VOLUME: 10-20 séries por grupo por semana
+    // 5. PADRÕES: Respeitar PUSH, PULL, LEGS para sinergia
+    // 6. DISTRIBUIÇÃO: Balancear dias leves/moderados/pesados
     //
-    // Dia 1 (Segunda): Peito + Tríceps
-    //   → Sinergistas em movimento PUSH
-    //   → Tríceps já fatigado do peito
-    //   → Volume moderado-alto
+    // Estrutura: UPPER/LOWER alternado com descansos estratégicos
     //
-    // Dia 2 (Terça): Costas + Bíceps + Abdômen
-    //   → Sinergistas em movimento PULL
-    //   → Bíceps já fatigado das costas
-    //   → Core trabalha com toda série de remada
-    //   → Volume alto
+    // Segunda: A (PUSH - Peito, Ombros, Tríceps)
+    //   - Padrão de movimento: Empurrada horizontal/vertical
+    //   - Volume: Moderado-alto
+    //   - Recuperação até próximo PUSH: 3 dias (Sexta)
     //
-    // Dia 3 (Quarta): Pernas
-    //   → Isolado para máximo volume e força
-    //   → Maior dispêndio de energia
-    //   → Recuperação importante
-    //   → Volume MUITO alto
+    // Terça: DESCANSO
+    //   - Essencial para recuperação após PUSH
+    //   - Tempo para síntese proteica
     //
-    // Dia 4 (Quinta): DESCANSO
-    //   → Recuperação essencial
+    // Quarta: B (PULL - Costas, Bíceps, Antebraço)
+    //   - Padrão de movimento: Puxada horizontal/vertical
+    //   - Volume: Moderado-alto
+    //   - Recuperação até próximo PULL: 3 dias (Sábado)
     //
-    // Dia 5 (Sexta): Ombros + Tríceps
-    //   → Ombro como movimento principal
-    //   → Tríceps complementa (já foi trabalhado seg)
-    //   → Volume moderado
-    //   → Alternativa: Ombros isolados ou Ombros + Braços
+    // Quinta: DESCANSO
+    //   - Recuperação do PULL
+    //   - Preparação para legs (dia pesado)
     //
-    // Frequência real:
-    // - Peito: 1x (Seg)
-    // - Costas: 1x (Ter)
-    // - Ombros: 1x (Sex)
-    // - Pernas: 1x (Qua)
-    // - Tríceps: 2x (Seg como primário, Sex como complemento)
-    // - Bíceps: 1x (Ter como complemento de costas)
-    // - Abdômen: 1x (Ter como complemento)
+    // Sexta: C (LEGS - Pernas, Core)
+    //   - Padrão de movimento: Extensão/flexão de joelho
+    //   - Volume: MUITO alto (maior dispêndio energético)
+    //   - Maior massa muscular = maior stimulus
+    //   - Recuperação até próximo LEGS: 6 dias (próxima quarta)
+    //
+    // Sábado: D (UPPER 2 - Ombros, Braços, Complemento)
+    //   - Ombro e Braços como complemento
+    //   - Volume: Moderado
+    //   - Frequência 2x para ombro/braços (ideal científico)
+    //
+    // Domingo: DESCANSO
+    //   - Descanso total da semana
+    //
+    // FREQUÊNCIA REAL (ideal científico):
+    // - Peito: 1x (Seg) ✓
+    // - Costas: 1x (Qua) ✓
+    // - Ombros: 2x (Seg primário, Sab complemento) ✓✓
+    // - Pernas: 1x (Sex) ✓
+    // - Tríceps: 2x (Seg primário, Sab complemento) ✓✓
+    // - Bíceps: 1x (Qua) ✓
+    // - Core: 1x (Sex) ✓
+    //
+    // DISTRIBUIÇÃO DE DESCANSO:
+    // - Após PUSH (Seg): 1 dia antes próximo treino
+    // - Após PULL (Qua): 1 dia antes próximo treino
+    // - Após LEGS (Sex): 2 dias antes próximo treino (mais pesado)
+    // - Intervalo mínimo entre grupos: 48-72h ✓
+    //
+    // PRINCÍPIO DE RECUPERAÇÃO:
+    // Cada grupo muscular tem MÍNIMO 2 dias de descanso completo
+    // antes de ser estimulado novamente
     traditional_4: {
         name: '4 Dias Tradicional',
-        description: 'Clássico e comprovado - Peito/Tri, Costas/Bi/Core, Pernas, Ombro/Tri',
+        description: 'Descansos distribuídos - PUSH, PULL, LEGS com frequência 2x para ombro/braços',
         days: {
-            1: ['chest', 'triceps'],                          // Segunda: Peito + Tríceps
-            2: ['back', 'biceps', 'core'],                    // Terça: Costas + Bíceps + Abdômen
-            3: ['legs'],                                      // Quarta: Pernas
-            4: [],                                            // Quinta: DESCANSO
-            5: ['shoulders', 'triceps']                       // Sexta: Ombros + Tríceps
+            1: ['chest', 'shoulders', 'triceps'],              // Segunda: PUSH A (frequência 1x peito, 2x ombro/tri)
+            2: [],                                              // Terça: DESCANSO (recuperação)
+            3: ['back', 'biceps', 'forearms'],                 // Quarta: PULL (frequência 1x)
+            4: [],                                              // Quinta: DESCANSO (antes dia pesado)
+            5: ['legs', 'core'],                               // Sexta: LEGS (volume MÁXIMO - dia mais pesado)
+            6: ['shoulders', 'triceps']                        // Sábado: UPPER 2 (complemento + frequência 2x)
         },
         default: ['chest', 'back', 'legs']
     },
@@ -302,11 +324,13 @@ export const SPLITS = {
     // Sab: C2 - LEGS (variante 2)
     abc_3: {
         name: 'ABC (3 dias)',
-        description: 'Push / Pull / Legs - 1x por semana cada padrão',
+        description: 'Push / Pull / Legs - 1x/semana, descansos estratégicos',
         days: {
-            1: ['chest', 'shoulders', 'triceps'],             // A - PUSH
-            3: ['back', 'biceps', 'forearms'],                // B - PULL
-            5: ['legs', 'core']                               // C - LEGS
+            1: ['chest', 'shoulders', 'triceps'],             // Segunda: A - PUSH
+            2: [],                                             // Terça: Descanso
+            3: ['back', 'biceps', 'forearms'],                // Quarta: B - PULL
+            4: [],                                             // Quinta: Descanso
+            5: ['legs', 'core']                               // Sexta: C - LEGS
         },
         default: ['chest', 'back', 'legs']
     },
@@ -376,23 +400,29 @@ export const SPLITS = {
     // BLOCO B: Costas, Bíceps, Antebraço + Pernas/Core alternado
     ab_2: {
         name: 'AB (2 dias)',
-        description: 'Alternância simples - Full day A, Full day B',
+        description: 'UPPER/LOWER - Frequência 1x, separados por 2-3 dias',
         days: {
-            1: ['chest', 'shoulders', 'triceps', 'legs'],     // A
-            2: ['back', 'biceps', 'forearms', 'core']         // B
+            1: ['chest', 'shoulders', 'triceps', 'back', 'biceps', 'forearms'],  // Segunda: UPPER (PUSH + PULL)
+            2: [],                                                                 // Terça: Descanso (recuperação)
+            3: ['legs', 'core'],                                                  // Quarta: LOWER (Pernas + Core)
+            4: [],                                                                 // Quinta-Domingo: Descanso
+            5: [],
+            6: [],
+            7: []
         },
         default: ['chest', 'back', 'legs']
     },
 
     ab_4: {
         name: 'AB (4 dias)',
-        description: 'Alternância 2x - A1, B1, A2, B2',
+        description: 'UPPER/LOWER 2x - com descansos distribuídos',
         days: {
-            1: ['chest', 'shoulders', 'triceps', 'core'],     // A1
-            2: ['back', 'biceps', 'forearms'],                // B1
-            3: ['legs'],                                      // C (intervalo)
-            4: ['chest', 'shoulders', 'triceps'],             // A2
-            5: ['back', 'biceps', 'forearms', 'core']         // B2
+            1: ['chest', 'shoulders', 'triceps'],             // Segunda: UPPER A - PUSH
+            2: [],                                             // Terça: DESCANSO
+            3: ['back', 'biceps', 'forearms'],                // Quarta: LOWER A - PULL
+            4: [],                                             // Quinta: DESCANSO
+            5: ['legs', 'core'],                              // Sexta: LEGS
+            6: ['chest', 'shoulders', 'triceps', 'back', 'biceps'] // Sábado: UPPER B + complemento
         },
         default: ['chest', 'back', 'legs']
     },
