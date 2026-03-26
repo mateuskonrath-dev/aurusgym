@@ -151,25 +151,29 @@ export const EXERCISES = {
 };
 
 export const SPLITS = {
-    // ============================================================
-    // FULL BODY: 3 dias
-    // ============================================================
-    // Regra: Todos os grupos musculares 2x/semana (frequência ótima)
-    // Balanceamento: Cada dia tem empurrar + puxar + pernas distribuído
+    // ================================================================
+    // FULL BODY: 3 DIAS - Para iniciantes e pouco tempo disponível
+    // ================================================================
+    // Estrutura: Todos os grupos musculares em cada dia
+    // Frequência: Máxima (3-4x por semana cada grupo)
+    // Volume: Moderado por dia, distribuído
+    // Ideal para: Iniciantes, sem muito tempo, ótima recuperação
     //
-    // Dia 1: Peito, Costas, Pernas (compostos pesados)
-    // Dia 3: Ombros, Pernas, Tríceps, Bíceps (complementar)
-    // Dia 5: Peito, Costas, Ombros, Core (variação)
+    // Dia 1 (Segunda): Peito, Costas, Pernas
+    // Dia 2 (Quarta): Ombros, Pernas, Tríceps, Bíceps
+    // Dia 3 (Sexta): Peito, Costas, Ombros, Core
     //
-    // Frequência por grupo:
-    // - Peito: 2x (Dia 1, 5)
-    // - Costas: 2x (Dia 1, 5)
-    // - Pernas: 2x (Dia 1, 3)
-    // - Ombros: 2x (Dia 3, 5)
-    // - Tríceps: 1x (Dia 3) ⚠️ Mas recebe estímulo em dias de peito
-    // - Bíceps: 1x (Dia 3) ⚠️ Mas recebe estímulo em dias de costas
-    // - Core: 1x (Dia 5)
+    // Frequência real:
+    // - Peito: 2x (Seg, Sex)
+    // - Costas: 2x (Seg, Sex)
+    // - Pernas: 2x (Seg, Qua)
+    // - Ombros: 2x (Qua, Sex)
+    // - Tríceps: 1x (Qua) + estímulo passivo em Seg/Sex (peito)
+    // - Bíceps: 1x (Qua) + estímulo passivo em Seg/Sex (costas)
+    // - Core: 1x (Sex)
     full_body: {
+        name: 'Full Body (3 dias)',
+        description: 'Todos os grupos em cada treino - máxima frequência',
         days: {
             1: ['chest', 'back', 'legs'],
             3: ['shoulders', 'legs', 'triceps', 'biceps'],
@@ -178,106 +182,239 @@ export const SPLITS = {
         default: ['chest', 'back', 'legs']
     },
 
-    // ============================================================
-    // UPPER/LOWER: 4 dias (Divisão 2x Upper + 2x Lower)
-    // ============================================================
-    // Regra: UPPER/LOWER alternado = todos os grupos 2x/semana
-    // Divisão lógica segundo prescrição científica
+    // ================================================================
+    // 4 DIAS TRADICIONAL - Estrutura clássica e comprovada
+    // ================================================================
+    // Estrutura: Agrupamentos funcionais por sinergismo muscular
+    // Frequência: 1x por semana cada grupo (moderado)
+    // Volume: Alto por dia (compensar frequência menor)
+    // Ideal para: Intermediários, estrutura clássica, fácil memorizar
     //
-    // Dia 1: UPPER A (Peito, Costas, Ombros, Bíceps, Tríceps)
-    // Dia 2: LOWER A (Pernas, Glúteos, Core)
-    // Dia 4: UPPER B (Peito, Costas, Ombros, Bíceps, Tríceps - ênfase variada)
-    // Dia 5: LOWER B (Pernas, Glúteos, Core - variação)
+    // Dia 1 (Segunda): Peito + Tríceps
+    //   → Sinergistas em movimento PUSH
+    //   → Tríceps já fatigado do peito
+    //   → Volume moderado-alto
     //
-    // Frequência por grupo (TODOS 2x/semana):
-    // - Peito: 2x
-    // - Costas: 2x
-    // - Ombros: 2x
-    // - Bíceps: 2x
-    // - Tríceps: 2x
-    // - Pernas: 2x
-    // - Core: 2x
-    upper_lower: {
+    // Dia 2 (Terça): Costas + Bíceps + Abdômen
+    //   → Sinergistas em movimento PULL
+    //   → Bíceps já fatigado das costas
+    //   → Core trabalha com toda série de remada
+    //   → Volume alto
+    //
+    // Dia 3 (Quarta): Pernas
+    //   → Isolado para máximo volume e força
+    //   → Maior dispêndio de energia
+    //   → Recuperação importante
+    //   → Volume MUITO alto
+    //
+    // Dia 4 (Quinta): DESCANSO
+    //   → Recuperação essencial
+    //
+    // Dia 5 (Sexta): Ombros + Tríceps
+    //   → Ombro como movimento principal
+    //   → Tríceps complementa (já foi trabalhado seg)
+    //   → Volume moderado
+    //   → Alternativa: Ombros isolados ou Ombros + Braços
+    //
+    // Frequência real:
+    // - Peito: 1x (Seg)
+    // - Costas: 1x (Ter)
+    // - Ombros: 1x (Sex)
+    // - Pernas: 1x (Qua)
+    // - Tríceps: 2x (Seg como primário, Sex como complemento)
+    // - Bíceps: 1x (Ter como complemento de costas)
+    // - Abdômen: 1x (Ter como complemento)
+    traditional_4: {
+        name: '4 Dias Tradicional',
+        description: 'Clássico e comprovado - Peito/Tri, Costas/Bi/Core, Pernas, Ombro/Tri',
         days: {
-            1: ['chest', 'back', 'shoulders', 'biceps', 'triceps'],
-            2: ['legs', 'core'],
-            4: ['chest', 'back', 'shoulders', 'biceps', 'triceps'],
-            5: ['legs', 'core']
+            1: ['chest', 'triceps'],                          // Segunda: Peito + Tríceps
+            2: ['back', 'biceps', 'core'],                    // Terça: Costas + Bíceps + Abdômen
+            3: ['legs'],                                      // Quarta: Pernas
+            4: [],                                            // Quinta: DESCANSO
+            5: ['shoulders', 'triceps']                       // Sexta: Ombros + Tríceps
         },
         default: ['chest', 'back', 'legs']
     },
 
-    // ============================================================
-    // HÍBRIDO 5 DIAS (Melhor que Bro Split para 5 dias)
-    // ============================================================
-    // Regra: Com 5 dias, evitar frequência 1x (menos ideal)
-    // Estrutura: Híbrida = mistura UPPER/LOWER com PUSH/PULL
+    // ================================================================
+    // ABC (3 PADRÕES) - 3 ou 6 dias conforme frequência desejada
+    // ================================================================
+    // Estrutura: Padrões de movimento (PUSH / PULL / LEGS)
+    // Frequência: 1x/semana (3 dias) ou 2x/semana (6 dias)
+    // Volume: Distribuído por padrão funcional
+    // Ideal para: Intermediários, lógica científica clara
     //
-    // Dia 1: PUSH (Peito, Ombros, Tríceps)
-    // Dia 2: LOWER (Pernas, Glúteos, Core)
-    // Dia 3: PULL (Costas, Bíceps, Antebraço)
-    // Dia 4: UPPER (Peito, Costas, Ombros) - ênfase variada
-    // Dia 5: LOWER (Pernas, Glúteos) - ênfase variada
+    // PADRÃO A - PUSH (Empurrar):
+    //   Primário: Peito, Ombros Anterior
+    //   Secundário: Tríceps
     //
-    // Frequência por grupo:
-    // - Peito: 2x (Dia 1 PUSH, Dia 4 UPPER)
-    // - Costas: 2x (Dia 3 PULL, Dia 4 UPPER)
-    // - Ombros: 2x (Dia 1 PUSH, Dia 4 UPPER)
-    // - Bíceps: 1x (Dia 3 PULL) ⚠️ Frequência baixa mas recuperação melhor
-    // - Tríceps: 1x (Dia 1 PUSH)
-    // - Pernas: 2x (Dia 2, 5)
-    // - Core: 2x (Dia 2, 5)
-    hybrid_5: {
+    // PADRÃO B - PULL (Puxar):
+    //   Primário: Costas (Dorsal, Romboides), Ombros Posterior
+    //   Secundário: Bíceps, Antebraço
+    //
+    // PADRÃO C - LEGS (Pernas):
+    //   Primário: Quadríceps, Isquiotibiais, Glúteos
+    //   Secundário: Panturrilha, Core
+    //
+    // VERSÃO 3 DIAS (1x por semana cada grupo):
+    // Seg: A - PUSH
+    // Qua: B - PULL
+    // Sex: C - LEGS
+    //
+    // VERSÃO 6 DIAS (2x por semana cada grupo - FREQUÊNCIA ÓTIMA):
+    // Seg: A1 - PUSH (variante 1)
+    // Ter: B1 - PULL (variante 1)
+    // Qua: C1 - LEGS (variante 1)
+    // Qui: A2 - PUSH (variante 2)
+    // Sex: B2 - PULL (variante 2)
+    // Sab: C2 - LEGS (variante 2)
+    abc_3: {
+        name: 'ABC (3 dias)',
+        description: 'Push / Pull / Legs - 1x por semana cada padrão',
         days: {
-            1: ['chest', 'shoulders', 'triceps'],
-            2: ['legs', 'core'],
-            3: ['back', 'biceps', 'forearms'],
-            4: ['chest', 'back', 'shoulders'],
-            5: ['legs', 'core']
+            1: ['chest', 'shoulders', 'triceps'],             // A - PUSH
+            3: ['back', 'biceps', 'forearms'],                // B - PULL
+            5: ['legs', 'core']                               // C - LEGS
         },
         default: ['chest', 'back', 'legs']
     },
 
-    // ============================================================
-    // PPL: 6 dias (Push/Pull/Legs 2x na semana)
-    // ============================================================
-    // Regra: Padrão científico ótimo para 6 dias
-    // Frequência: TODOS os grupos 2x/semana
-    //
-    // Dia 1: PUSH A (Peito, Ombros, Tríceps)
-    // Dia 2: PULL A (Costas, Bíceps, Antebraços)
-    // Dia 3: LEGS A (Pernas, Glúteos, Core)
-    // Dia 4: PUSH B (Peito, Ombros, Tríceps - variação)
-    // Dia 5: PULL B (Costas, Bíceps, Antebraços - variação)
-    // Dia 6: LEGS B (Pernas, Glúteos, Core - variação)
-    ppl: {
+    abc_6: {
+        name: 'ABC (6 dias)',
+        description: 'Push / Pull / Legs 2x por semana - frequência ótima',
         days: {
-            1: ['chest', 'shoulders', 'triceps'],
-            2: ['back', 'biceps', 'forearms'],
-            3: ['legs', 'core'],
-            4: ['chest', 'shoulders', 'triceps'],
-            5: ['back', 'biceps', 'forearms'],
-            6: ['legs', 'core']
+            1: ['chest', 'shoulders', 'triceps'],             // A1 - PUSH
+            2: ['back', 'biceps', 'forearms'],                // B1 - PULL
+            3: ['legs', 'core'],                              // C1 - LEGS
+            4: ['chest', 'shoulders', 'triceps'],             // A2 - PUSH (variado)
+            5: ['back', 'biceps', 'forearms'],                // B2 - PULL (variado)
+            6: ['legs', 'core']                               // C2 - LEGS (variado)
         },
         default: ['chest', 'shoulders', 'triceps']
     },
 
-    // ============================================================
-    // BRO SPLIT (DESCONTINUADO): Use HYBRID_5 em vez disso
-    // ============================================================
-    // ⚠️ AVISO: Bro Split (frequência 1x) é menos científico
-    // Para 5 dias, recomenda-se usar hybrid_5 em vez de bro_split
-    // Frequência 1x/semana é aceitável apenas com:
-    // - Volume MUITO alto por dia
-    // - Experiência avançada
-    // - Objetivo específico de especialização
-    bro_split: {
+    // ================================================================
+    // PPL (PUSH / PULL / LEGS) - 6 DIAS - Frequência ótima
+    // ================================================================
+    // Estrutura: 3 padrões de movimento repetidos 2x por semana
+    // Frequência: 2x por semana cada grupo (IDEAL para hipertrofia)
+    // Volume: Máximo sustentável
+    // Ideal para: Avançados, muito tempo para treino, boa recuperação
+    //
+    // Dia 1 (Segunda): PUSH A (Peito, Ombros, Tríceps)
+    // Dia 2 (Terça): PULL A (Costas, Bíceps, Antebraço)
+    // Dia 3 (Quarta): LEGS A (Pernas, Glúteos, Core)
+    // Dia 4 (Quinta): PUSH B (Peito, Ombros, Tríceps - variação)
+    // Dia 5 (Sexta): PULL B (Costas, Bíceps, Antebraço - variação)
+    // Dia 6 (Sábado): LEGS B (Pernas, Glúteos, Core - variação)
+    //
+    // Frequência real:
+    // - Peito: 2x (PUSH A, PUSH B)
+    // - Ombros: 2x (PUSH A, PUSH B)
+    // - Tríceps: 2x (PUSH A, PUSH B)
+    // - Costas: 2x (PULL A, PULL B)
+    // - Bíceps: 2x (PULL A, PULL B)
+    // - Antebraço: 2x (PULL A, PULL B)
+    // - Pernas: 2x (LEGS A, LEGS B)
+    // - Glúteos: 2x (LEGS A, LEGS B)
+    // - Core: 2x (LEGS A, LEGS B)
+    ppl: {
+        name: 'PPL (6 dias)',
+        description: 'Push / Pull / Legs 2x/semana - frequência e volume ótimos',
         days: {
-            1: ['chest'],
-            2: ['back'],
-            3: ['legs'],
-            4: ['shoulders'],
-            5: ['biceps', 'triceps']
+            1: ['chest', 'shoulders', 'triceps'],             // PUSH A
+            2: ['back', 'biceps', 'forearms'],                // PULL A
+            3: ['legs', 'core'],                              // LEGS A
+            4: ['chest', 'shoulders', 'triceps'],             // PUSH B (variado)
+            5: ['back', 'biceps', 'forearms'],                // PULL B (variado)
+            6: ['legs', 'core']                               // LEGS B (variado)
+        },
+        default: ['chest', 'shoulders', 'triceps']
+    },
+
+    // ================================================================
+    // AB (2 PADRÕES) - 2, 3 ou 4 dias conforme frequência
+    // ================================================================
+    // Estrutura: 2 blocos alternados (A - PUSH/UPPER, B - PULL/LOWER)
+    // Frequência: Variável conforme dias
+    // Volume: Distribuído entre 2 blocos
+    // Ideal para: Iniciantes com 2-4 dias, simplicidade
+    //
+    // BLOCO A: Peito, Ombros, Tríceps + Pernas/Core alternado
+    // BLOCO B: Costas, Bíceps, Antebraço + Pernas/Core alternado
+    ab_2: {
+        name: 'AB (2 dias)',
+        description: 'Alternância simples - Full day A, Full day B',
+        days: {
+            1: ['chest', 'shoulders', 'triceps', 'legs'],     // A
+            2: ['back', 'biceps', 'forearms', 'core']         // B
+        },
+        default: ['chest', 'back', 'legs']
+    },
+
+    ab_4: {
+        name: 'AB (4 dias)',
+        description: 'Alternância 2x - A1, B1, A2, B2',
+        days: {
+            1: ['chest', 'shoulders', 'triceps', 'core'],     // A1
+            2: ['back', 'biceps', 'forearms'],                // B1
+            3: ['legs'],                                      // C (intervalo)
+            4: ['chest', 'shoulders', 'triceps'],             // A2
+            5: ['back', 'biceps', 'forearms', 'core']         // B2
+        },
+        default: ['chest', 'back', 'legs']
+    },
+
+    // ================================================================
+    // ABCD (4 PADRÕES) - 4, 5 ou 6+ dias
+    // ================================================================
+    // Estrutura: 4 blocos específicos (muito segmentado)
+    // Frequência: 1x por semana cada grupo
+    // Volume: MUITO alto por dia
+    // Ideal para: Avançados, especialização, volume extremo
+    //
+    // Dia A: Peito (volume MUITO alto)
+    // Dia B: Costas (volume MUITO alto)
+    // Dia C: Pernas (volume MUITO alto)
+    // Dia D: Ombros + Braços (volume MUITO alto)
+    abcd_4: {
+        name: 'ABCD (4 dias)',
+        description: 'Um grupo por dia - Peito, Costas, Pernas, Ombros+Braços',
+        days: {
+            1: ['chest'],                                     // A - PEITO
+            2: ['back', 'biceps'],                            // B - COSTAS + BÍCEPS
+            3: ['legs'],                                      // C - PERNAS
+            4: ['shoulders', 'triceps', 'forearms']           // D - OMBROS + TRÍCEPS + ANTEBRAÇO
+        },
+        default: ['chest']
+    },
+
+    // ================================================================
+    // BRO SPLIT (5 DIAS) - Frequência baixa, volume MUITO alto
+    // ================================================================
+    // Estrutura: Um grupo muscular por dia (clássico)
+    // Frequência: 1x por semana cada grupo
+    // Volume: MÁXIMO sustentável
+    // Ideal para: Avançados experientes, preferência pessoal, foco muscular
+    // ⚠️ MENOS CIENTÍFICO que ABC/PPL (frequência 1x é menos ideal)
+    // ⚠️ Recomenda-se ABC 3x ou PPL para resultados melhores
+    //
+    // Dia 1 (Seg): Peito - MUITO alto volume
+    // Dia 2 (Ter): Costas - MUITO alto volume
+    // Dia 3 (Qua): Pernas - MUITO alto volume
+    // Dia 4 (Qui): Ombros - MUITO alto volume
+    // Dia 5 (Sex): Braços (Bíceps + Tríceps) - MUITO alto volume
+    // Dias 6-7: Descanso
+    bro_split: {
+        name: 'Bro Split (5 dias)',
+        description: '⚠️ 1 grupo/dia (frequência 1x) - Volume MUITO alto',
+        days: {
+            1: ['chest'],                                     // Seg: PEITO
+            2: ['back'],                                      // Ter: COSTAS
+            3: ['legs'],                                      // Qua: PERNAS
+            4: ['shoulders'],                                 // Qui: OMBROS
+            5: ['biceps', 'triceps']                          // Sex: BRAÇOS
         },
         default: ['chest']
     }

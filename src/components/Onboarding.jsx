@@ -85,13 +85,16 @@ const steps = [
     },
     {
         id: 'freq',
-        title: 'Divisão de Treino (Split)',
+        title: 'Quantos dias você pode treinar por semana?',
         options: [
-            { label: 'Full Body (3x)', value: 'full_body', desc: 'Todos os grupos 2x/semana — ótimo para iniciantes' },
-            { label: 'Upper/Lower (4x)', value: 'upper_lower', desc: 'Superior/Inferior alternado — todos 2x/semana' },
-            { label: 'Híbrido (5x)', value: 'hybrid_5', desc: 'Push/Pull/Legs/Upper — frequência balanceada' },
-            { label: 'PPL (6x)', value: 'ppl', desc: 'Push/Pull/Legs 2x — ideal para avançados' },
-            { label: 'Bro Split (5x)', value: 'bro_split', desc: '1 músculo/dia (frequência 1x) — volume muito alto' }
+            { label: '3 dias', value: 'full_body', desc: 'Full Body — todos os grupos cada dia' },
+            { label: '4 dias', value: 'traditional_4', desc: 'Tradicional — Peito/Tri, Costas/Bi, Pernas, Ombro/Tri' },
+            { label: '3-6 dias (ABC)', value: 'abc_3', desc: 'ABC 3 dias — Push/Pull/Legs 1x/semana' },
+            { label: '6 dias (ABC)', value: 'abc_6', desc: 'ABC 6 dias — Push/Pull/Legs 2x/semana' },
+            { label: '6 dias (PPL)', value: 'ppl', desc: 'PPL — Push/Pull/Legs 2x/semana (ideal avançado)' },
+            { label: '2-4 dias (AB)', value: 'ab_2', desc: 'AB — 2 blocos alternados (iniciante)' },
+            { label: '4 dias (ABCD)', value: 'abcd_4', desc: 'ABCD — 1 grupo/dia, volume MUITO alto' },
+            { label: '5 dias (Bro)', value: 'bro_split', desc: '⚠️ Bro Split — 1 grupo/dia, frequência 1x' }
         ]
     },
     {
