@@ -87,14 +87,12 @@ const steps = [
         id: 'freq',
         title: 'Quantos dias você pode treinar por semana?',
         options: [
-            { label: '3 dias', value: 'full_body', desc: 'Full Body — todos os grupos cada dia' },
-            { label: '4 dias', value: 'traditional_4', desc: 'Tradicional — Peito/Tri, Costas/Bi, Pernas, Ombro/Tri' },
-            { label: '3-6 dias (ABC)', value: 'abc_3', desc: 'ABC 3 dias — Push/Pull/Legs 1x/semana' },
-            { label: '6 dias (ABC)', value: 'abc_6', desc: 'ABC 6 dias — Push/Pull/Legs 2x/semana' },
-            { label: '6 dias (PPL)', value: 'ppl', desc: 'PPL — Push/Pull/Legs 2x/semana (ideal avançado)' },
-            { label: '2-4 dias (AB)', value: 'ab_2', desc: 'AB — 2 blocos alternados (iniciante)' },
-            { label: '4 dias (ABCD)', value: 'abcd_4', desc: 'ABCD — 1 grupo/dia, volume MUITO alto' },
-            { label: '5 dias (Bro)', value: 'bro_split', desc: '⚠️ Bro Split — 1 grupo/dia, frequência 1x' }
+            { label: '2 dias', value: '2' },
+            { label: '3 dias', value: '3' },
+            { label: '4 dias', value: '4' },
+            { label: '5 dias', value: '5' },
+            { label: '6 dias', value: '6' },
+            { label: '7 dias', value: '7' }
         ]
     },
     {
@@ -153,6 +151,43 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         return prev
     }
 
+    // Função inteligente que escolhe o melhor split
+    const selectBestSplit = (profile) => {
+        const days = parseInt(profile.freq)
+        const level = profile.level // 'beginner', 'intermediate', 'advanced'
+        const goal = profile.goal // 'muscle', 'strength', 'fat-loss'
+
+        // LÓGICA DE SELEÇÃO INTELIGENTE
+        if (days === 2) return 'ab_2'
+
+        if (days === 3) {
+            if (level === 'beginner') return 'full_body'
+            if (level === 'intermediate') return 'abc_3'
+            return 'abc_3'
+        }
+
+        if (days === 4) {
+            if (level === 'beginner') return 'ab_4'
+            if (level === 'intermediate') return 'traditional_4' // Seu pedido específico!
+            if (level === 'advanced') return 'abcd_4'
+            return 'traditional_4'
+        }
+
+        if (days === 5) {
+            if (level === 'beginner') return 'abc_3' // Reduzir para 3 dias
+            if (level === 'intermediate') return 'abc_6' // Usar 6 dias é melhor
+            return 'bro_split' // Avançados podem usar bro split
+        }
+
+        if (days === 6 || days === 7) {
+            if (level === 'advanced') return 'ppl' // Frequência máxima
+            if (level === 'intermediate') return 'abc_6'
+            return 'abc_6'
+        }
+
+        return 'full_body' // Default
+    }
+
     const isInputValid = (valToTest) => {
         if (!step.type) return true
         const rawVal = valToTest !== undefined ? valToTest : inputValue
@@ -188,7 +223,10 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         if (next < activeSteps.length) {
             setCurrentStep(next)
         } else {
-            onComplete(newAnswers)
+            // Escolher automaticamente o melhor split
+            const selectedSplit = selectBestSplit(newAnswers)
+            const finalProfile = { ...newAnswers, freq: selectedSplit }
+            onComplete(finalProfile)
         }
     }
 
