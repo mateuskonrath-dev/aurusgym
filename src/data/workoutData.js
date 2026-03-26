@@ -151,10 +151,68 @@ export const EXERCISES = {
 };
 
 export const SPLITS = {
-    full_body: { days: { 1: ['chest', 'back', 'legs', 'core'], 3: ['chest', 'shoulders', 'legs', 'triceps', 'biceps'], 5: ['back', 'legs', 'shoulders', 'core'] }, default: ['chest', 'back', 'legs', 'core'] },
-    upper_lower: { days: { 1: ['chest', 'triceps'], 2: ['back', 'biceps'], 4: ['legs'], 5: ['shoulders', 'core'] }, default: ['chest', 'back', 'legs'] },
-    ppl: { days: { 1: ['chest', 'shoulders', 'triceps'], 2: ['back', 'biceps', 'forearms'], 3: ['legs', 'core'], 4: ['chest', 'shoulders', 'triceps'], 5: ['back', 'biceps', 'forearms'], 6: ['legs', 'core'] }, default: ['chest', 'shoulders', 'triceps'] },
-    bro_split: { days: { 1: ['chest', 'core'], 2: ['back', 'forearms'], 3: ['legs'], 4: ['shoulders', 'core'], 5: ['biceps', 'triceps'] }, default: ['chest'] }
+    // FULL BODY: 3 dias com VARIAÇÃO
+    // Todos os grupos 2x/semana para frequência ótima
+    // Dia 1: Os 3 grandes (Peito, Costas, Pernas)
+    // Dia 3: Peito, Costas, Braços
+    // Dia 5: Pernas, Ombros, Braços
+    full_body: {
+        days: {
+            1: ['chest', 'back', 'legs'],
+            3: ['chest', 'back', 'shoulders', 'triceps', 'biceps'],
+            5: ['legs', 'shoulders', 'triceps', 'biceps']
+        },
+        default: ['chest', 'back', 'legs']
+    },
+
+    // UPPER/LOWER: 4 dias
+    // Upper A: Peito, Costas, Ombros, Bíceps, Tríceps (TUDO tronco)
+    // Lower: Pernas
+    // Upper B: Peito, Costas, Ombros, Bíceps, Tríceps (VARIADO)
+    // Lower: Pernas
+    // Frequência: Todos grupos 2x/semana
+    upper_lower: {
+        days: {
+            1: ['chest', 'back', 'shoulders', 'biceps', 'triceps'],
+            2: ['legs', 'core'],
+            4: ['chest', 'back', 'shoulders', 'biceps', 'triceps'],
+            5: ['legs', 'core']
+        },
+        default: ['chest', 'back', 'legs']
+    },
+
+    // PPL: 6 dias (cada grupo 2x/semana)
+    // PUSH: Peito, Ombros, Tríceps
+    // PULL: Costas, Bíceps, Antebraços
+    // LEGS: Pernas + Core
+    ppl: {
+        days: {
+            1: ['chest', 'shoulders', 'triceps'],
+            2: ['back', 'biceps', 'forearms'],
+            3: ['legs', 'core'],
+            4: ['chest', 'shoulders', 'triceps'],
+            5: ['back', 'biceps', 'forearms'],
+            6: ['legs', 'core']
+        },
+        default: ['chest', 'shoulders', 'triceps']
+    },
+
+    // BRO SPLIT: 5 dias (cada grupo 1x/semana)
+    // Segunda: Peito
+    // Terça: Costas
+    // Quarta: Pernas
+    // Quinta: Ombros
+    // Sexta: Braços (Bíceps + Tríceps)
+    bro_split: {
+        days: {
+            1: ['chest'],
+            2: ['back'],
+            3: ['legs'],
+            4: ['shoulders'],
+            5: ['biceps', 'triceps']
+        },
+        default: ['chest']
+    }
 };
 
 export function generateDailyWorkout(profile, dayIndex) {
@@ -177,19 +235,21 @@ export function generateDailyWorkout(profile, dayIndex) {
         targetTotal = variation[dayIndex % variation.length];
     }
 
-    // CORRIGIDO: Todos os exercícios de um grupo muscular ANTES de passar para o próximo
-    // Isso segue o padrão científico PPL/Upper-Lower que maximiza hipertrofia
+    // DISTRIBUIR EXERCÍCIOS ENTRE OS GRUPOS MUSCULARES
+    // Calcula quantos exercícios cada grupo deve receber
+    const exercisesPerMuscle = Math.ceil(targetTotal / muscles.length);
+
     for (const muscle of muscles) {
         let exercisesForMuscle = [...(EXERCISES[location][muscle] || [])];
         // Ordenar por tier (1 = mais importante, depois 2, depois 3)
         exercisesForMuscle.sort((a, b) => (a.tier || 3) - (b.tier || 3));
 
-        // Adicionar os exercícios deste grupo muscular até atingir o alvo
+        // Adicionar os exercícios deste grupo muscular (respeitando a cota por grupo)
+        let addedForThisMuscle = 0;
         for (const exercise of exercisesForMuscle) {
-            if (workout.length < targetTotal) {
+            if (workout.length < targetTotal && addedForThisMuscle < exercisesPerMuscle) {
                 workout.push(exercise);
-            } else {
-                break;
+                addedForThisMuscle++;
             }
         }
 
