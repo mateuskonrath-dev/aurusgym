@@ -165,17 +165,17 @@ export const SPLITS = {
         default: ['chest', 'back', 'legs']
     },
 
-    // UPPER/LOWER: 4 dias
-    // Upper A: Peito, Costas, Ombros, Bíceps, Tríceps (TUDO tronco)
-    // Lower: Pernas
-    // Upper B: Peito, Costas, Ombros, Bíceps, Tríceps (VARIADO)
-    // Lower: Pernas
-    // Frequência: Todos grupos 2x/semana
+    // UPPER/LOWER: 4 dias (PUSH / PULL / LOWER separados)
+    // Dia 1: PUSH → Peito, Ombros, Tríceps (empurrar)
+    // Dia 2: LOWER → Pernas, Abdômen
+    // Dia 4: PULL → Costas, Bíceps, Antebraço (puxar)
+    // Dia 5: LOWER → Pernas, Abdômen (variado)
+    // Frequência: PUSH 1x, PULL 1x, LOWER 2x (pernas são prioridade)
     upper_lower: {
         days: {
-            1: ['chest', 'back', 'shoulders', 'biceps', 'triceps'],
+            1: ['chest', 'shoulders', 'triceps'],
             2: ['legs', 'core'],
-            4: ['chest', 'back', 'shoulders', 'biceps', 'triceps'],
+            4: ['back', 'biceps', 'forearms'],
             5: ['legs', 'core']
         },
         default: ['chest', 'back', 'legs']
