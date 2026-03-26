@@ -276,8 +276,8 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                                 <>
                                     <ScrollPicker
                                         value={inputValue ? parseInt(inputValue) : (step.id === 'age' ? 25 : step.id === 'weight' ? 75 : 175)}
-                                        min={step.id === 'age' ? 13 : step.id === 'weight' ? 30 : step.id === 'height' ? 140 : 3}
-                                        max={step.id === 'age' ? 80 : step.id === 'weight' ? 250 : step.id === 'height' ? 220 : 60}
+                                        min={step.id === 'age' ? 13 : step.id === 'weight' ? 30 : 140}
+                                        max={step.id === 'age' ? 80 : step.id === 'weight' ? 250 : 220}
                                         unit={step.unit}
                                         onChange={(val) => {
                                             setInputValue(String(val))
