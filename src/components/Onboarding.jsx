@@ -40,13 +40,6 @@ const steps = [
         unit: 'cm'
     },
     {
-        id: 'bf',
-        title: 'Qual seu percentual de gordura?',
-        type: 'number',
-        placeholder: 'Ex: 15',
-        unit: '%'
-    },
-    {
         id: 'activity',
         title: 'Qual seu nível de atividade?',
         options: [
@@ -208,7 +201,6 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         if (step.id === 'age') return val >= 10 && val <= 100
         if (step.id === 'weight') return val >= 30 && val <= 250
         if (step.id === 'height') return val >= 140 && val <= 220
-        if (step.id === 'bf') return val >= 3 && val <= 60
 
         return true
     }
@@ -280,10 +272,10 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                         ))
                     ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            {['age', 'weight', 'height', 'bf'].includes(step.id) ? (
+                            {['age', 'weight', 'height'].includes(step.id) ? (
                                 <>
                                     <ScrollPicker
-                                        value={inputValue ? parseInt(inputValue) : (step.id === 'age' ? 25 : step.id === 'weight' ? 75 : step.id === 'height' ? 175 : 15)}
+                                        value={inputValue ? parseInt(inputValue) : (step.id === 'age' ? 25 : step.id === 'weight' ? 75 : 175)}
                                         min={step.id === 'age' ? 13 : step.id === 'weight' ? 30 : step.id === 'height' ? 140 : 3}
                                         max={step.id === 'age' ? 80 : step.id === 'weight' ? 250 : step.id === 'height' ? 220 : 60}
                                         unit={step.unit}
@@ -344,24 +336,6 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                                 </>
                             )}
 
-                            {step.id === 'bf' && (
-                                <button
-                                    className="btn-outline"
-                                    style={{ borderStyle: 'dashed', opacity: 0.7 }}
-                                    onClick={() => {
-                                        setInputValue('')
-                                        setShowError(false)
-                                        const newAnswers = { ...answers }
-                                        delete newAnswers.bf
-                                        setAnswers(newAnswers)
-                                        const next = nextStepIndex(currentStep)
-                                        if (next < activeSteps.length) setCurrentStep(next)
-                                        else onComplete(newAnswers)
-                                    }}
-                                >
-                                    NÃO SEI MEU BF%
-                                </button>
-                            )}
                         </div>
                     )}
                 </div>
