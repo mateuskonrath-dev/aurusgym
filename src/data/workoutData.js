@@ -152,6 +152,37 @@ export const EXERCISES = {
 
 export const SPLITS = {
     // ================================================================
+    // FULL BODY INTENSO: 1 DIA - Para quem tem apenas 1 dia/semana
+    // ================================================================
+    // Estrutura: TODOS os grupos em UM ÚNICO dia
+    // Frequência: 1x por semana (mínimo, mas funciona)
+    // Volume: MUITO alto em um só dia
+    // Duração: 90-120 minutos
+    // Ideal para: Pessoas ocupadas, 1 dia disponível
+    // ⚠️ Nota: Frequência 1x é menos ideal que 2x+
+    //         Mas é melhor que não treinar
+    //         Requer volume ALTO e técnica perfeita
+    //
+    // Estrutura do dia:
+    // - 2 exercícios PUSH (Peito/Ombro/Tríceps)
+    // - 2 exercícios PULL (Costas/Bíceps)
+    // - 2 exercícios PERNAS (Quad/Posterior/Glúteo)
+    // - 1 exercício CORE (Abdômen)
+    // Total: ~8 exercícios em 1 dia
+    //
+    // Frequência real:
+    // - Todos grupos: 1x/semana
+    // - Volume: MÁXIMO concentrado
+    full_body_1: {
+        name: 'Full Body Intenso (1 dia)',
+        description: 'Todos os grupos em 1 dia - para quem tem apenas 1 dia/semana',
+        days: {
+            1: ['chest', 'back', 'shoulders', 'legs', 'triceps', 'biceps', 'core']
+        },
+        default: ['chest', 'back', 'shoulders', 'legs', 'triceps', 'biceps', 'core']
+    },
+
+    // ================================================================
     // FULL BODY: 3 DIAS - Para iniciantes e pouco tempo disponível
     // ================================================================
     // Estrutura: Todos os grupos musculares em cada dia

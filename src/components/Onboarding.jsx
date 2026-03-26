@@ -87,6 +87,7 @@ const steps = [
         id: 'freq',
         title: 'Quantos dias você pode treinar por semana?',
         options: [
+            { label: '1 dia', value: '1' },
             { label: '2 dias', value: '2' },
             { label: '3 dias', value: '3' },
             { label: '4 dias', value: '4' },
@@ -158,6 +159,12 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         const goal = profile.goal // 'muscle', 'strength', 'fat-loss'
 
         // LÓGICA DE SELEÇÃO INTELIGENTE
+        if (days === 1) {
+            // 1 dia: Full Body intenso (todos os grupos em 1 dia)
+            // ⚠️ Menos ideal, mas é melhor que não treinar
+            return 'full_body_1'
+        }
+
         if (days === 2) return 'ab_2'
 
         if (days === 3) {
