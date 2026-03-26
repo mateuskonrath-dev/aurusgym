@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import SplashScreen from '@/components/SplashScreen'
+import ScrollPicker from '@/components/ScrollPicker'
 
 const steps = [
     {
@@ -279,43 +280,69 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                         ))
                     ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            <div style={{
-                                display: 'flex', alignItems: 'center', gap: '10px',
-                                background: 'var(--bg-card)', padding: '20px',
-                                borderRadius: '8px', border: '1px solid var(--border-subtle)'
-                            }}>
-                                <input
-                                    type={step.type === 'number' ? 'number' : 'text'}
-                                    inputMode={step.type === 'number' ? 'decimal' : 'text'}
-                                    value={inputValue}
-                                    onChange={(e) => { setInputValue(e.target.value); setShowError(false) }}
-                                    placeholder={step.placeholder}
-                                    autoFocus
-                                    style={{
-                                        background: 'transparent', border: 'none',
-                                        color: showError ? 'var(--brand-danger)' : 'var(--brand-primary)',
-                                        fontSize: step.type === 'text' ? '1.2rem' : '2rem',
-                                        fontWeight: 900, width: '100%', outline: 'none',
-                                        transition: 'color 0.3s ease'
-                                    }}
-                                />
-                                {step.unit && (
-                                    <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-low)' }}>
-                                        {step.unit}
-                                    </span>
-                                )}
-                            </div>
+                            {['age', 'weight', 'height', 'bf'].includes(step.id) ? (
+                                <>
+                                    <ScrollPicker
+                                        value={inputValue ? parseInt(inputValue) : (step.id === 'age' ? 25 : step.id === 'weight' ? 75 : step.id === 'height' ? 175 : 15)}
+                                        min={step.id === 'age' ? 13 : step.id === 'weight' ? 30 : step.id === 'height' ? 140 : 3}
+                                        max={step.id === 'age' ? 80 : step.id === 'weight' ? 250 : step.id === 'height' ? 220 : 60}
+                                        unit={step.unit}
+                                        onChange={(val) => {
+                                            setInputValue(String(val))
+                                            setShowError(false)
+                                        }}
+                                    />
+                                    {showError && (
+                                        <p className="animate-tech" style={{
+                                            color: 'var(--brand-danger)', fontSize: '0.7rem',
+                                            fontWeight: 800, marginTop: '-10px', letterSpacing: '1px'
+                                        }}>
+                                            ⚠️ VALOR FORA DOS PARÂMETROS OPERACIONAIS. AJUSTE PARA PROSSEGUIR.
+                                        </p>
+                                    )}
+                                    <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>
+                                </>
+                            ) : (
+                                <>
+                                    <div style={{
+                                        display: 'flex', alignItems: 'center', gap: '10px',
+                                        background: 'var(--bg-card)', padding: '20px',
+                                        borderRadius: '8px', border: '1px solid var(--border-subtle)'
+                                    }}>
+                                        <input
+                                            type={step.type === 'number' ? 'number' : 'text'}
+                                            inputMode={step.type === 'number' ? 'decimal' : 'text'}
+                                            value={inputValue}
+                                            onChange={(e) => { setInputValue(e.target.value); setShowError(false) }}
+                                            placeholder={step.placeholder}
+                                            autoFocus
+                                            style={{
+                                                background: 'transparent', border: 'none',
+                                                color: showError ? 'var(--brand-danger)' : 'var(--brand-primary)',
+                                                fontSize: step.type === 'text' ? '1.2rem' : '2rem',
+                                                fontWeight: 900, width: '100%', outline: 'none',
+                                                transition: 'color 0.3s ease'
+                                            }}
+                                        />
+                                        {step.unit && (
+                                            <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-low)' }}>
+                                                {step.unit}
+                                            </span>
+                                        )}
+                                    </div>
 
-                            {showError && (
-                                <p className="animate-tech" style={{
-                                    color: 'var(--brand-danger)', fontSize: '0.7rem',
-                                    fontWeight: 800, marginTop: '-10px', letterSpacing: '1px'
-                                }}>
-                                    ⚠️ VALOR FORA DOS PARÂMETROS OPERACIONAIS. AJUSTE PARA PROSSEGUIR.
-                                </p>
+                                    {showError && (
+                                        <p className="animate-tech" style={{
+                                            color: 'var(--brand-danger)', fontSize: '0.7rem',
+                                            fontWeight: 800, marginTop: '-10px', letterSpacing: '1px'
+                                        }}>
+                                            ⚠️ VALOR FORA DOS PARÂMETROS OPERACIONAIS. AJUSTE PARA PROSSEGUIR.
+                                        </p>
+                                    )}
+
+                                    <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>
+                                </>
                             )}
-
-                            <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>
 
                             {step.id === 'bf' && (
                                 <button
