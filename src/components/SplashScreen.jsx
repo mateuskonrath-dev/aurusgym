@@ -131,7 +131,7 @@ export default function SplashScreen({ onStart }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', justifyContent: 'center', marginBottom: '68px' }}>
                     <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, transparent, rgba(0,245,212,0.3))' }} />
                     <p style={{ fontSize: '0.52rem', color: 'rgba(0,245,212,0.65)', letterSpacing: '0.35em', fontWeight: 800, whiteSpace: 'nowrap' }}>
-                        ELITE TRAINING PROTOCOL
+                        PROTOCOLO DE TREINAMENTO ELITE
                     </p>
                     <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, rgba(0,245,212,0.3), transparent)' }} />
                 </div>
@@ -156,10 +156,6 @@ export default function SplashScreen({ onStart }) {
                     INICIAR PROTOCOLO
                 </button>
 
-                {/* Version badge */}
-                <p style={{ marginTop: '52px', fontSize: '0.48rem', color: '#222', letterSpacing: '0.2em', fontWeight: 700 }}>
-                    AURUS AI CORE v3 • ELITE SPORTS TECHNOLOGY
-                </p>
             </div>
         </div>
     )
