@@ -9,7 +9,8 @@ const steps = [
         title: 'Como devemos te chamar?',
         type: 'text',
         placeholder: 'Seu Nome ou Codinome',
-        unit: ''
+        unit: '',
+        hint: 'Seu identificador no sistema'
     },
     {
         id: 'sex',
@@ -17,28 +18,38 @@ const steps = [
         options: [
             { label: 'Masculino', value: 'male' },
             { label: 'Feminino', value: 'female' }
-        ]
+        ],
+        hint: 'Usado para cálculos de calorias basais'
     },
     {
         id: 'age',
         title: 'Qual sua idade?',
         type: 'number',
         placeholder: 'Ex: 25',
-        unit: 'anos'
+        unit: 'anos',
+        hint: '📏 Intervalo: 10-100 anos',
+        min: 10,
+        max: 100
     },
     {
         id: 'weight',
         title: 'Qual seu peso atual?',
         type: 'number',
         placeholder: 'Ex: 75',
-        unit: 'kg'
+        unit: 'kg',
+        hint: '⚖️ Intervalo: 30-250 kg',
+        min: 30,
+        max: 250
     },
     {
         id: 'height',
         title: 'Qual sua altura?',
         type: 'number',
         placeholder: 'Ex: 175',
-        unit: 'cm'
+        unit: 'cm',
+        hint: '📐 Intervalo: 140-220 cm',
+        min: 140,
+        max: 220
     },
     {
         id: 'activity',
@@ -124,9 +135,33 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
     const [answers, setAnswers] = useState(initialAnswers)
     const [inputValue, setInputValue] = useState('')
     const [showError, setShowError] = useState(false)
+    const [showSuccess, setShowSuccess] = useState(false)
 
     if (showSplash) {
         return <SplashScreen onStart={() => setShowSplash(false)} />
+    }
+
+    if (showSuccess) {
+        return (
+            <div className="onboarding-v3 animate-tech" style={{
+                padding: '30px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                gap: '20px'
+            }}>
+                <div style={{ fontSize: '4rem', marginBottom: '20px', animation: 'pulse 2s infinite' }}>✓</div>
+                <h1 style={{ fontSize: '2rem', textAlign: 'center', marginBottom: '10px' }}>Perfil Criado!</h1>
+                <p style={{ fontSize: '1rem', color: 'var(--text-med)', textAlign: 'center', maxWidth: '300px' }}>
+                    Bem-vindo, <strong>{answers.name}</strong>! Seu perfil foi configurado com sucesso.
+                </p>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-low)', marginTop: '20px', textAlign: 'center' }}>
+                    Carregando seu dashboard...
+                </p>
+            </div>
+        )
     }
 
     const step = activeSteps[currentStep]
@@ -194,14 +229,18 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         if (next < activeSteps.length) {
             setCurrentStep(next)
         } else {
-            // Escolher automaticamente o melhor split baseado em experiência e frequência
-            const selectedSplitId = selectBestSplit(newAnswers)
-            const finalProfile = {
-                ...newAnswers,
-                selectedSplit: selectedSplitId,  // ID do split (ex: '2d', '3d', '4d')
-                freq: parseInt(newAnswers.freq)   // Dias/semana (1-7) - mantém para compatibilidade
-            }
-            onComplete(finalProfile)
+            // Mostrar tela de sucesso por 1.5s antes de completar
+            setShowSuccess(true)
+            setTimeout(() => {
+                // Escolher automaticamente o melhor split baseado em experiência e frequência
+                const selectedSplitId = selectBestSplit(newAnswers)
+                const finalProfile = {
+                    ...newAnswers,
+                    selectedSplit: selectedSplitId,  // ID do split (ex: '2d', '3d', '4d')
+                    freq: parseInt(newAnswers.freq)   // Dias/semana (1-7) - mantém para compatibilidade
+                }
+                onComplete(finalProfile)
+            }, 1500)
         }
     }
 
@@ -219,14 +258,24 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                 <h1 style={{ fontSize: '1rem', letterSpacing: '0.3em', color: 'var(--brand-primary)' }}>
                     AURUS PRO <span className="title-italic">v3</span>
                 </h1>
-                <div className="progress-bar-container" style={{ marginTop: '15px' }}>
-                    <div className="progress-fill" style={{ width: `${progressPct}%` }} />
+                <div style={{ marginTop: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                    <div className="progress-bar-container" style={{ flex: 1 }}>
+                        <div className="progress-fill" style={{ width: `${progressPct}%`, transition: 'width 0.3s ease' }} />
+                    </div>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-med)', minWidth: '50px', textAlign: 'right' }}>
+                        {currentStep + 1}/{totalSteps}
+                    </span>
                 </div>
             </header>
 
             <section>
                 <p className="data-label">PARÂMETRO {String(currentStep + 1).padStart(2, '0')}</p>
-                <h2 style={{ fontSize: '1.8rem', marginBottom: '40px' }}>{step.title}</h2>
+                <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>{step.title}</h2>
+                {step.hint && (
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-med)', marginBottom: '30px', fontWeight: 600, letterSpacing: '0.3px' }}>
+                        {step.hint}
+                    </p>
+                )}
 
                 <div style={{ display: 'grid', gap: '12px' }}>
                     {step.options ? (
@@ -260,12 +309,29 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                                         }}
                                     />
                                     {showError && (
-                                        <p className="animate-tech" style={{
-                                            color: 'var(--brand-danger)', fontSize: '0.7rem',
-                                            fontWeight: 800, marginTop: '-10px', letterSpacing: '1px'
+                                        <div className="animate-tech" style={{
+                                            background: 'rgba(255, 59, 48, 0.1)',
+                                            border: '1px solid var(--brand-danger)',
+                                            borderRadius: 'var(--radius-pro)',
+                                            padding: '12px',
+                                            marginTop: '8px'
                                         }}>
-                                            ⚠️ VALOR FORA DOS PARÂMETROS OPERACIONAIS. AJUSTE PARA PROSSEGUIR.
-                                        </p>
+                                            <p style={{
+                                                color: 'var(--brand-danger)', fontSize: '0.7rem',
+                                                fontWeight: 800, margin: 0, letterSpacing: '1px'
+                                            }}>
+                                                ⚠️ VALOR FORA DOS PARÂMETROS
+                                            </p>
+                                            <p style={{
+                                                color: 'var(--text-med)', fontSize: '0.65rem',
+                                                margin: '4px 0 0 0', fontWeight: 600
+                                            }}>
+                                                {step.id === 'age' && `Esperado: 10-100 anos`}
+                                                {step.id === 'weight' && `Esperado: 30-250 kg`}
+                                                {step.id === 'height' && `Esperado: 140-220 cm`}
+                                                {step.id === 'name' && `Mínimo: 2 caracteres`}
+                                            </p>
+                                        </div>
                                     )}
                                     <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>
                                 </>
@@ -299,12 +365,29 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                                     </div>
 
                                     {showError && (
-                                        <p className="animate-tech" style={{
-                                            color: 'var(--brand-danger)', fontSize: '0.7rem',
-                                            fontWeight: 800, marginTop: '-10px', letterSpacing: '1px'
+                                        <div className="animate-tech" style={{
+                                            background: 'rgba(255, 59, 48, 0.1)',
+                                            border: '1px solid var(--brand-danger)',
+                                            borderRadius: 'var(--radius-pro)',
+                                            padding: '12px',
+                                            marginTop: '8px'
                                         }}>
-                                            ⚠️ VALOR FORA DOS PARÂMETROS OPERACIONAIS. AJUSTE PARA PROSSEGUIR.
-                                        </p>
+                                            <p style={{
+                                                color: 'var(--brand-danger)', fontSize: '0.7rem',
+                                                fontWeight: 800, margin: 0, letterSpacing: '1px'
+                                            }}>
+                                                ⚠️ VALOR FORA DOS PARÂMETROS
+                                            </p>
+                                            <p style={{
+                                                color: 'var(--text-med)', fontSize: '0.65rem',
+                                                margin: '4px 0 0 0', fontWeight: 600
+                                            }}>
+                                                {step.id === 'age' && `Esperado: 10-100 anos`}
+                                                {step.id === 'weight' && `Esperado: 30-250 kg`}
+                                                {step.id === 'height' && `Esperado: 140-220 cm`}
+                                                {step.id === 'name' && `Mínimo: 2 caracteres`}
+                                            </p>
+                                        </div>
                                     )}
 
                                     <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>

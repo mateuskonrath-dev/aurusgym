@@ -63,7 +63,7 @@ export default function ScrollPicker({ value, min, max, unit, onChange }) {
             scrollRef.current.scrollTop = scrollTop
         }
 
-        setTimeout(() => setIsScrolling(false), 300)
+        setTimeout(() => setIsScrolling(false), 400)
     }
 
     const handleTouchStart = (e) => {
@@ -101,12 +101,12 @@ export default function ScrollPicker({ value, min, max, unit, onChange }) {
     const handleTouchEnd = () => {
         setIsDragging(false)
 
-        // Inércia suave
+        // Inércia suave e fluida
         let currentVel = velocity
-        const friction = 0.95
+        const friction = 0.92  // Reduzido de 0.95 para deixar mais fluido
 
         const animate = () => {
-            if (Math.abs(currentVel) > 0.1) {
+            if (Math.abs(currentVel) > 0.05) {  // Aumentado de 0.1 para deslizar mais tempo
                 const delta = Math.round(-currentVel * itemHeight)
                 const newValue = Math.max(min, Math.min(max, currentValue + delta))
                 if (newValue !== currentValue) {
@@ -136,16 +136,47 @@ export default function ScrollPicker({ value, min, max, unit, onChange }) {
             const scrollTop = index * itemHeight - (containerHeight / 2 - itemHeight / 2)
             scrollRef.current.scrollTop = scrollTop
         }
-        setTimeout(() => setIsScrolling(false), 300)
+        setTimeout(() => setIsScrolling(false), 400)
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'ArrowUp') {
+            e.preventDefault()
+            const newValue = Math.max(min, currentValue - 1)
+            setCurrentValue(newValue)
+            onChange(newValue)
+            if (scrollRef.current) {
+                const index = values.indexOf(newValue)
+                const scrollTop = index * itemHeight - (containerHeight / 2 - itemHeight / 2)
+                scrollRef.current.scrollTop = scrollTop
+            }
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault()
+            const newValue = Math.min(max, currentValue + 1)
+            setCurrentValue(newValue)
+            onChange(newValue)
+            if (scrollRef.current) {
+                const index = values.indexOf(newValue)
+                const scrollTop = index * itemHeight - (containerHeight / 2 - itemHeight / 2)
+                scrollRef.current.scrollTop = scrollTop
+            }
+        }
     }
 
     return (
         <div
             ref={scrollRef}
+            role="spinbutton"
+            aria-valuenow={currentValue}
+            aria-valuemin={min}
+            aria-valuemax={max}
+            aria-label={`Seletor de valor entre ${min} e ${max}`}
             onWheel={handleWheel}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
             style={{
                 height: `${containerHeight}px`,
                 overflow: 'auto',
@@ -158,6 +189,9 @@ export default function ScrollPicker({ value, min, max, unit, onChange }) {
                 boxSizing: 'border-box',
                 scrollSnapType: 'none',
                 WebkitOverflowScrolling: 'touch',
+                WebkitBackfaceVisibility: 'hidden',
+                transform: 'translateZ(0)',
+                willChange: 'scroll-position',
             }}
         >
             {/* Overlay superior com fade suave */}
