@@ -478,23 +478,45 @@ export const SPLITS = {
             5: ['biceps', 'triceps']                          // Sex: BRAÇOS
         },
         default: ['chest']
+    },
+    seven_days: {
+        name: 'Full Frequency (7 dias)',
+        description: 'Cada grupo muscular 2x/semana + estímulo completo diário',
+        days: {
+            1: ['chest', 'triceps'],                          // Seg: PUSH A (Peito + Tríceps)
+            2: ['back', 'biceps'],                            // Ter: PULL A (Costas + Bíceps)
+            3: ['legs', 'core'],                              // Qua: PERNAS + Core
+            4: ['shoulders', 'core'],                         // Qui: OMBROS + Core
+            5: ['chest', 'back'],                             // Sex: PUSH/PULL B (Peito + Costas)
+            6: ['legs', 'shoulders'],                         // Sab: PERNAS + Ombros
+            7: ['biceps', 'triceps', 'core']                  // Dom: Braços + Core (recuperação ativa)
+        },
+        default: ['chest', 'triceps']
     }
+};
+
+// Mapeamento correto de selectedSplit para splitKey
+// Este mapeamento alinha com os splits que realmente existem em SPLITS
+export const SPLIT_KEY_MAP = {
+    '1d': 'full_body_1',    // 1 dia: Full Body intenso
+    '2d': 'ab_2',           // 2 dias: Upper/Lower
+    '3d': 'abc_3',          // 3 dias: Push/Pull/Legs
+    '4d': 'traditional_4',  // 4 dias: PPLU (Push/Pull/Legs/Upper)
+    '5d': 'bro_split',      // 5 dias: Bro Split (1 grupo/dia)
+    '6d': 'ppl',            // 6 dias: PPL 2x (Push/Pull/Legs repetido)
+    '7d': 'seven_days'      // 7 dias: Cada grupo 2x/semana
 };
 
 export function generateDailyWorkout(profile, dayIndex) {
     const location = profile.place === 'gym' ? 'gym' : (profile.place === 'calisthenics' ? 'calisthenics' : 'home');
 
-    // Mapear selectedSplit para o ID correto do split
+    // Mapear selectedSplit para o ID correto do split usando a constante SPLIT_KEY_MAP
     let splitKey = null;
     if (profile.selectedSplit) {
-        const splitMap = {
-            '1d': 'full_body_1', '2d': 'ab_2', '3d': 'ppl_3',
-            '4d': 'upper_lower_4', '5d': 'ppl_5', '6d': 'upper_lower_6', '7d': 'ppl_7'
-        };
-        splitKey = splitMap[profile.selectedSplit] || 'full_body_1';
+        splitKey = SPLIT_KEY_MAP[profile.selectedSplit] || 'full_body_1';
     } else {
         // Fallback antigo (compatibilidade)
-        splitKey = profile.freq ? `split_${profile.freq}` : 'full_body_1';
+        splitKey = profile.freq ? SPLIT_KEY_MAP[`${profile.freq}d`] || 'full_body_1' : 'full_body_1';
     }
 
     const split = SPLITS[splitKey];
@@ -527,6 +549,17 @@ export function generateDailyWorkout(profile, dayIndex) {
 
     for (const muscle of muscles) {
         let exercisesForMuscle = [...(EXERCISES[location][muscle] || [])];
+
+        // Filtrar exercícios baseado no objetivo (goal)
+        if (profile.goal === 'strength') {
+            // FORÇA: Priorizar compostos Tier 1 (pesos pesados, reps baixas)
+            exercisesForMuscle = exercisesForMuscle.filter(ex => (ex.tier || 3) === 1);
+        } else if (profile.goal === 'fat-loss') {
+            // EMAGRECIMENTO: Mais exercícios isolados Tier 2 e 3 (mais volume, reps altas)
+            exercisesForMuscle = exercisesForMuscle.filter(ex => (ex.tier || 3) >= 2);
+        }
+        // Para 'muscle' (hipertrofia): usar mix de todos os tiers (não filtrar)
+
         // Ordenar por tier (1 = mais importante, depois 2, depois 3)
         exercisesForMuscle.sort((a, b) => (a.tier || 3) - (b.tier || 3));
 
@@ -559,19 +592,13 @@ const MUSCLE_LABELS = {
 export function generateWeeklyPlan(profile) {
     const days = [1, 2, 3, 4, 5, 6, 7];
 
-    // Mapear selectedSplit (ex: "4d") para o ID do split correspondente
-    // Fallback para freq se selectedSplit não existir
+    // Mapear selectedSplit (ex: "4d") para o ID do split correspondente usando SPLIT_KEY_MAP
     let splitKey = null;
     if (profile.selectedSplit) {
-        // Mapeamento de selectedSplit para splitKey
-        const splitMap = {
-            '1d': 'full_body_1', '2d': 'ab_2', '3d': 'ppl_3',
-            '4d': 'upper_lower_4', '5d': 'ppl_5', '6d': 'upper_lower_6', '7d': 'ppl_7'
-        };
-        splitKey = splitMap[profile.selectedSplit] || 'full_body_1';
+        splitKey = SPLIT_KEY_MAP[profile.selectedSplit] || 'full_body_1';
     } else {
         // Fallback antigo (compatibilidade)
-        splitKey = profile.freq ? `split_${profile.freq}` : 'full_body_1';
+        splitKey = profile.freq ? SPLIT_KEY_MAP[`${profile.freq}d`] || 'full_body_1' : 'full_body_1';
     }
 
     const split = SPLITS[splitKey];
