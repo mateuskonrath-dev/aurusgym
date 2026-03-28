@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import SplashScreen from '@/components/SplashScreen'
 import ScrollPicker from '@/components/ScrollPicker'
+import { getRecommendedSplit } from '@/data/trainingSplits'
 
 const steps = [
     {
@@ -147,46 +148,16 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
     }
 
     // Função inteligente que escolhe o melhor split
+    // Baseada na pesquisa científica (@analyst) com 7 frequências (1-7 dias/semana)
     const selectBestSplit = (profile) => {
         const days = parseInt(profile.freq)
         const level = profile.level // 'beginner', 'intermediate', 'advanced'
-        const goal = profile.goal // 'muscle', 'strength', 'fat-loss'
 
-        // LÓGICA DE SELEÇÃO INTELIGENTE
-        if (days === 1) {
-            // 1 dia: Full Body intenso (todos os grupos em 1 dia)
-            // ⚠️ Menos ideal, mas é melhor que não treinar
-            return 'full_body_1'
-        }
+        // Usar a função getRecommendedSplit que já tem toda a lógica científica
+        const recommendedSplit = getRecommendedSplit(days, level)
 
-        if (days === 2) return 'ab_2'
-
-        if (days === 3) {
-            if (level === 'beginner') return 'full_body'
-            if (level === 'intermediate') return 'abc_3'
-            return 'abc_3'
-        }
-
-        if (days === 4) {
-            if (level === 'beginner') return 'ab_4'
-            if (level === 'intermediate') return 'traditional_4' // Seu pedido específico!
-            if (level === 'advanced') return 'abcd_4'
-            return 'traditional_4'
-        }
-
-        if (days === 5) {
-            if (level === 'beginner') return 'abc_3' // Reduzir para 3 dias
-            if (level === 'intermediate') return 'abc_6' // Usar 6 dias é melhor
-            return 'bro_split' // Avançados podem usar bro split
-        }
-
-        if (days === 6 || days === 7) {
-            if (level === 'advanced') return 'ppl' // Frequência máxima
-            if (level === 'intermediate') return 'abc_6'
-            return 'abc_6'
-        }
-
-        return 'full_body' // Default
+        // Retornar o ID do split (ex: '1d', '2d', '3d', etc)
+        return recommendedSplit.id
     }
 
     const isInputValid = (valToTest) => {
@@ -223,9 +194,13 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
         if (next < activeSteps.length) {
             setCurrentStep(next)
         } else {
-            // Escolher automaticamente o melhor split
-            const selectedSplit = selectBestSplit(newAnswers)
-            const finalProfile = { ...newAnswers, freq: selectedSplit }
+            // Escolher automaticamente o melhor split baseado em experiência e frequência
+            const selectedSplitId = selectBestSplit(newAnswers)
+            const finalProfile = {
+                ...newAnswers,
+                selectedSplit: selectedSplitId,  // ID do split (ex: '2d', '3d', '4d')
+                freq: parseInt(newAnswers.freq)   // Dias/semana (1-7) - mantém para compatibilidade
+            }
             onComplete(finalProfile)
         }
     }

@@ -3,13 +3,19 @@ import { useRef, useEffect, useState } from 'react'
 export default function ScrollPicker({ value, min, max, unit, onChange }) {
     const scrollRef = useRef(null)
     const [isDragging, setIsDragging] = useState(false)
-    const [startY, setStartY] = useState(0)
     const [currentValue, setCurrentValue] = useState(value || min)
     const [velocity, setVelocity] = useState(0)
     const [isScrolling, setIsScrolling] = useState(false)
     const lastYRef = useRef(0)
-    const lastTimeRef = useRef(Date.now())
+    const lastTimeRef = useRef(null)
     const animationRef = useRef(null)
+
+    // Initialize last time on mount
+    useEffect(() => {
+        if (!lastTimeRef.current) {
+            lastTimeRef.current = Date.now()
+        }
+    }, [])
 
     const itemHeight = 40
     const visibleItems = 5
@@ -28,7 +34,7 @@ export default function ScrollPicker({ value, min, max, unit, onChange }) {
             const scrollTop = index * itemHeight - (containerHeight / 2 - itemHeight / 2)
             scrollRef.current.scrollTop = scrollTop
         }
-    }, [value, min, max])
+    }, [value, min, max, containerHeight, values])
 
     // Snap to center quando param de scrollar
     useEffect(() => {
@@ -41,7 +47,7 @@ export default function ScrollPicker({ value, min, max, unit, onChange }) {
                 onChange(snappedValue)
             }
         }
-    }, [isScrolling])
+    }, [isScrolling, min, max, currentValue, onChange, values])
 
     const handleWheel = (e) => {
         e.preventDefault()

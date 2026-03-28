@@ -538,8 +538,30 @@ const MUSCLE_LABELS = {
 
 export function generateWeeklyPlan(profile) {
     const days = [1, 2, 3, 4, 5, 6, 7];
+
+    // Mapear selectedSplit (ex: "4d") para o ID do split correspondente
+    // Fallback para freq se selectedSplit não existir
+    let splitKey = null;
+    if (profile.selectedSplit) {
+        // Mapeamento de selectedSplit para splitKey
+        const splitMap = {
+            '1d': 'full_body_1', '2d': 'ab_2', '3d': 'ppl_3',
+            '4d': 'upper_lower_4', '5d': 'ppl_5', '6d': 'upper_lower_6', '7d': 'ppl_7'
+        };
+        splitKey = splitMap[profile.selectedSplit] || 'full_body_1';
+    } else {
+        // Fallback antigo (compatibilidade)
+        splitKey = profile.freq ? `split_${profile.freq}` : 'full_body_1';
+    }
+
+    const split = SPLITS[splitKey];
+    if (!split) {
+        console.warn(`Split ${splitKey} não encontrado, usando full_body_1`);
+        splitKey = 'full_body_1';
+    }
+
     return days.map(day => {
-        let muscles = SPLITS[profile.freq].days[day] || [];
+        let muscles = SPLITS[splitKey]?.days?.[day] || [];
         
         // Apply exclusion filters to the labeling
         if (profile.sex === 'female' && profile.includeChest === 'no') {

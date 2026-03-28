@@ -13,7 +13,9 @@ const calc1RM = (weight, reps) => {
 
 // Haptic feedback
 const vibrate = (pattern) => {
-    try { navigator.vibrate?.(pattern) } catch (e) {}
+    try { navigator.vibrate?.(pattern) } catch {
+        // Vibration not supported
+    }
 }
 
 // Beep on rest timer end
@@ -33,7 +35,9 @@ const playBeep = (count = 3) => {
             osc.start(t)
             osc.stop(t + 0.18)
         }
-    } catch (e) {}
+    } catch {
+        // Audio context not supported
+    }
 }
 
 // Rest duration based on goal/reps
@@ -61,9 +65,16 @@ export default function WorkoutPlayer({ workout, personalBests = {}, profile = {
     const restRef = useRef(null)
 
     // Duration timer
-    const startTimeRef = useRef(Date.now())
+    const startTimeRef = useRef(null)
     const [elapsed, setElapsed] = useState(0)
     const durationRef = useRef(null)
+
+    // Initialize start time on mount
+    useEffect(() => {
+        if (!startTimeRef.current) {
+            startTimeRef.current = Date.now()
+        }
+    }, [])
 
     // Last session pre-fill data
     const lastSession = useMemo(() => {
@@ -241,7 +252,9 @@ export default function WorkoutPlayer({ workout, personalBests = {}, profile = {
             const prev = JSON.parse(localStorage.getItem('aurus-history') || '[]')
             prev.unshift(historyEntry)
             localStorage.setItem('aurus-history', JSON.stringify(prev.slice(0, 50)))
-        } catch (e) {}
+        } catch {
+            // History save failed
+        }
 
         onComplete(cleanLogs)
     }

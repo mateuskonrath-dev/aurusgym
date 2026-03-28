@@ -132,11 +132,13 @@ export default function ProgressDashboard({ profile, personalBests = {}, volumeH
     const prCount = Object.keys(personalBests).length
 
     // Recent PRs (last 3)
+    // eslint-disable-next-line no-unused-vars
     const recentPRs = Object.entries(personalBests)
         .filter(([, pb]) => pb.date)
         .slice(0, 3)
 
     // Best 1RM exercises
+    // eslint-disable-next-line no-unused-vars
     const top3PRs = Object.entries(personalBests)
         .map(([id, pb]) => ({
             id,
@@ -148,6 +150,7 @@ export default function ProgressDashboard({ profile, personalBests = {}, volumeH
         .slice(0, 3)
 
     // ORION insights generation
+    // eslint-disable-next-line no-unused-vars
     const insights = useMemo(() => {
         const list = []
 
@@ -203,12 +206,14 @@ export default function ProgressDashboard({ profile, personalBests = {}, volumeH
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [completedDays.length, muscleVolume, streak, prCount, weekTonnage])
 
+    // eslint-disable-next-line no-unused-vars
     const insightColors = {
         success: 'rgba(0,245,212,0.08)',
         warn: 'rgba(255,75,75,0.08)',
         info: 'rgba(0,187,250,0.08)',
         ok: 'rgba(155,93,229,0.08)'
     }
+    // eslint-disable-next-line no-unused-vars
     const insightBorders = {
         success: 'rgba(0,245,212,0.25)',
         warn: 'rgba(255,75,75,0.25)',

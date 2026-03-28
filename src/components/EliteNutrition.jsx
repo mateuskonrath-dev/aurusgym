@@ -6,6 +6,28 @@ const GOAL_LABELS = {
     'fat-loss': 'Emagrecimento'
 }
 
+const MacroBar = ({ label, value, unit, pct, color }) => (
+    <div style={{ marginBottom: '14px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: 800, color: 'var(--text-med)', letterSpacing: '0.05em' }}>
+                {label}
+            </span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                <span style={{ fontWeight: 900, fontSize: '0.9rem', color }}>{value}</span>
+                <span style={{ fontSize: '0.52rem', opacity: 0.5 }}>{unit}</span>
+                <span style={{ fontSize: '0.52rem', opacity: 0.4, marginLeft: '4px' }}>{pct}%</span>
+            </div>
+        </div>
+        <div style={{ height: '4px', background: 'var(--bg-pure)', borderRadius: '2px', overflow: 'hidden' }}>
+            <div style={{
+                width: `${pct}%`, height: '100%',
+                background: color, borderRadius: '2px',
+                transition: 'width 0.6s ease'
+            }} />
+        </div>
+    </div>
+)
+
 export default function EliteNutrition({ profile }) {
     const nutrition = useMemo(() => {
         const { sex, age, weight, height, bf, activity, goal } = profile
@@ -59,28 +81,6 @@ export default function EliteNutrition({ profile }) {
             waterBase, waterTotal
         }
     }, [profile])
-
-    const MacroBar = ({ label, value, unit, pct, color }) => (
-        <div style={{ marginBottom: '14px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
-                <span style={{ fontSize: '0.62rem', fontWeight: 800, color: 'var(--text-med)', letterSpacing: '0.05em' }}>
-                    {label}
-                </span>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                    <span style={{ fontWeight: 900, fontSize: '0.9rem', color }}>{value}</span>
-                    <span style={{ fontSize: '0.52rem', opacity: 0.5 }}>{unit}</span>
-                    <span style={{ fontSize: '0.52rem', opacity: 0.4, marginLeft: '4px' }}>{pct}%</span>
-                </div>
-            </div>
-            <div style={{ height: '4px', background: 'var(--bg-pure)', borderRadius: '2px', overflow: 'hidden' }}>
-                <div style={{
-                    width: `${pct}%`, height: '100%',
-                    background: color, borderRadius: '2px',
-                    transition: 'width 0.6s ease'
-                }} />
-            </div>
-        </div>
-    )
 
     const goalLabel = GOAL_LABELS[profile.goal] || 'Desempenho'
     const surplusOrDeficit = nutrition.calories - nutrition.tdee

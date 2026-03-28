@@ -1,0 +1,1268 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "research_date": "2026-03-26",
+    "agent": "analyst",
+    "scientific_baseline": "Meta-analyses 2024-2026, peer-reviewed"
+  },
+  "volume_landmarks": {
+    "beginner": {
+      "mev": { "value": 6, "unit": "sets/week", "description": "Minimum Effective Volume" },
+      "mav": { "value": 14, "unit": "sets/week", "description": "Maintenance + Activity Volume (TARGET)" },
+      "mrv": { "value": 16, "unit": "sets/week", "description": "Maximum Recoverable Volume" },
+      "experience_years": "0-1"
+    },
+    "intermediate": {
+      "mev": { "value": 10, "unit": "sets/week" },
+      "mav": { "value": 16, "unit": "sets/week" },
+      "mrv": { "value": 20, "unit": "sets/week" },
+      "experience_years": "1-5"
+    },
+    "advanced": {
+      "mev": { "value": 12, "unit": "sets/week" },
+      "mav": { "value": 20, "unit": "sets/week" },
+      "mrv": { "value": 26, "unit": "sets/week" },
+      "experience_years": "5+"
+    }
+  },
+  "muscle_groups": {
+    "chest": {
+      "id": "chest",
+      "name": "Peito",
+      "name_en": "Chest",
+      "anatomical_region": "anterior_torso",
+      "primary_movers": ["pectoralis_major"],
+      "secondary_movers": ["anterior_deltoid", "triceps"],
+      "size_classification": "large",
+      "optimal_frequency_per_week": 2.5,
+      "mav_sets_per_week": 16,
+      "movement_patterns": ["press", "fly"],
+      "primary_exercises": [
+        "barbell_bench_press",
+        "incline_press",
+        "dumbbell_press"
+      ],
+      "isolation_exercises": [
+        "pec_deck_fly",
+        "cable_fly",
+        "machine_press"
+      ]
+    },
+    "back": {
+      "id": "back",
+      "name": "Costas",
+      "name_en": "Back",
+      "anatomical_region": "posterior_torso",
+      "primary_movers": ["latissimus_dorsi", "trapezius", "rhomboid"],
+      "secondary_movers": ["biceps", "rear_deltoid"],
+      "size_classification": "large",
+      "optimal_frequency_per_week": 2.5,
+      "mav_sets_per_week": 16,
+      "movement_patterns": ["pull", "row"],
+      "primary_exercises": [
+        "lat_pulldown",
+        "barbell_row",
+        "pull_ups",
+        "machine_row"
+      ],
+      "isolation_exercises": [
+        "face_pull",
+        "rear_delt_fly",
+        "cable_row"
+      ]
+    },
+    "quadriceps": {
+      "id": "quadriceps",
+      "name": "Quadríceps",
+      "name_en": "Quadriceps",
+      "anatomical_region": "anterior_lower_body",
+      "primary_movers": ["rectus_femoris", "vastus_group"],
+      "secondary_movers": ["adductors"],
+      "size_classification": "very_large",
+      "optimal_frequency_per_week": 2.5,
+      "mav_sets_per_week": 18,
+      "movement_patterns": ["squat", "knee_extension"],
+      "primary_exercises": [
+        "barbell_squat",
+        "leg_press",
+        "smith_machine_squat",
+        "hack_squat"
+      ],
+      "isolation_exercises": [
+        "leg_extension",
+        "machine_leg_press"
+      ]
+    },
+    "glutes": {
+      "id": "glutes",
+      "name": "Glúteo",
+      "name_en": "Glutes",
+      "anatomical_region": "posterior_lower_body",
+      "primary_movers": ["gluteus_maximus"],
+      "secondary_movers": ["hamstrings"],
+      "size_classification": "large",
+      "optimal_frequency_per_week": 2.5,
+      "mav_sets_per_week": 14,
+      "movement_patterns": ["hip_extension", "squat"],
+      "primary_exercises": [
+        "hip_thrust",
+        "barbell_squat",
+        "leg_press",
+        "deadlift_variation"
+      ],
+      "isolation_exercises": [
+        "hip_thrust_machine",
+        "glute_bridge"
+      ]
+    },
+    "hamstrings": {
+      "id": "hamstrings",
+      "name": "Isquiotibial",
+      "name_en": "Hamstrings",
+      "anatomical_region": "posterior_lower_body",
+      "primary_movers": ["biceps_femoris", "semitendinosus", "semimembranosus"],
+      "secondary_movers": ["glutes", "lower_back"],
+      "size_classification": "medium_large",
+      "optimal_frequency_per_week": 2.5,
+      "mav_sets_per_week": 12,
+      "movement_patterns": ["hip_extension", "knee_flexion"],
+      "primary_exercises": [
+        "leg_curl_machine",
+        "romanian_deadlift",
+        "good_morning",
+        "deadlift_variation"
+      ],
+      "isolation_exercises": [
+        "lying_leg_curl",
+        "sitting_leg_curl"
+      ]
+    },
+    "shoulders": {
+      "id": "shoulders",
+      "name": "Ombros",
+      "name_en": "Shoulders",
+      "anatomical_region": "lateral_torso",
+      "primary_movers": ["deltoid_lateral", "deltoid_anterior", "deltoid_posterior"],
+      "secondary_movers": ["trapezius", "triceps"],
+      "size_classification": "medium",
+      "optimal_frequency_per_week": 2.5,
+      "mav_sets_per_week": 12,
+      "movement_patterns": ["press", "lateral_raise", "rear_raise"],
+      "primary_exercises": [
+        "overhead_press",
+        "incline_press",
+        "lateral_raise"
+      ],
+      "isolation_exercises": [
+        "lateral_raise_machine",
+        "face_pull",
+        "rear_delt_fly"
+      ]
+    },
+    "biceps": {
+      "id": "biceps",
+      "name": "Bíceps",
+      "name_en": "Biceps",
+      "anatomical_region": "anterior_arm",
+      "primary_movers": ["biceps_brachii"],
+      "secondary_movers": ["brachialis"],
+      "size_classification": "small",
+      "optimal_frequency_per_week": 2.5,
+      "mav_sets_per_week": 10,
+      "movement_patterns": ["elbow_flexion"],
+      "primary_exercises": [
+        "barbell_curl",
+        "dumbbell_curl",
+        "incline_curl",
+        "curl_machine"
+      ],
+      "isolation_exercises": [
+        "preacher_curl",
+        "cable_curl",
+        "hammer_curl"
+      ]
+    },
+    "triceps": {
+      "id": "triceps",
+      "name": "Tríceps",
+      "name_en": "Triceps",
+      "anatomical_region": "posterior_arm",
+      "primary_movers": ["triceps_brachii"],
+      "secondary_movers": [],
+      "size_classification": "small",
+      "optimal_frequency_per_week": 2.5,
+      "mav_sets_per_week": 10,
+      "movement_patterns": ["elbow_extension"],
+      "primary_exercises": [
+        "triceps_rope_extension",
+        "skull_crusher",
+        "machine_triceps",
+        "dips"
+      ],
+      "isolation_exercises": [
+        "cable_extension",
+        "triceps_pushdown"
+      ]
+    },
+    "calves": {
+      "id": "calves",
+      "name": "Panturrilha",
+      "name_en": "Calves",
+      "anatomical_region": "posterior_lower_body",
+      "primary_movers": ["gastrocnemius", "soleus"],
+      "secondary_movers": [],
+      "size_classification": "small",
+      "optimal_frequency_per_week": 3,
+      "mav_sets_per_week": 14,
+      "movement_patterns": ["plantar_flexion"],
+      "primary_exercises": [
+        "standing_calf_raise",
+        "leg_press_calf_raise",
+        "seated_calf_raise"
+      ],
+      "isolation_exercises": [
+        "machine_calf_raise"
+      ]
+    },
+    "core": {
+      "id": "core",
+      "name": "Núcleo",
+      "name_en": "Core",
+      "anatomical_region": "anterior_torso",
+      "primary_movers": ["rectus_abdominis", "obliques"],
+      "secondary_movers": ["transverse_abdominis"],
+      "size_classification": "small",
+      "optimal_frequency_per_week": 2,
+      "mav_sets_per_week": 8,
+      "movement_patterns": ["flexion", "rotation", "anti_rotation"],
+      "primary_exercises": [
+        "crunch_machine",
+        "cable_crunch",
+        "ab_wheel"
+      ],
+      "isolation_exercises": [
+        "lying_crunch",
+        "machine_crunch",
+        "cable_woodchop"
+      ]
+    }
+  },
+  "exercise_patterns": {
+    "press": {
+      "id": "press",
+      "name": "Press",
+      "movement_type": "horizontal_push",
+      "primary_muscles": ["chest", "anterior_deltoid", "triceps"],
+      "intensity_range": "65-85%_1rm",
+      "rep_range": [6, 12],
+      "examples": ["bench_press", "incline_press", "overhead_press"]
+    },
+    "pull": {
+      "id": "pull",
+      "name": "Pull",
+      "movement_type": "vertical_pull",
+      "primary_muscles": ["lats", "biceps"],
+      "intensity_range": "70-80%_1rm",
+      "rep_range": [6, 12],
+      "examples": ["lat_pulldown", "pull_ups", "machine_row"]
+    },
+    "squat": {
+      "id": "squat",
+      "name": "Squat",
+      "movement_type": "lower_body_push",
+      "primary_muscles": ["quadriceps", "glutes"],
+      "intensity_range": "65-85%_1rm",
+      "rep_range": [5, 12],
+      "examples": ["barbell_squat", "leg_press", "smith_machine"]
+    },
+    "hinge": {
+      "id": "hinge",
+      "name": "Hinge",
+      "movement_type": "hip_extension",
+      "primary_muscles": ["hamstrings", "glutes", "lower_back"],
+      "intensity_range": "65-80%_1rm",
+      "rep_range": [6, 12],
+      "examples": ["deadlift", "romanian_deadlift", "good_morning"]
+    },
+    "isolation": {
+      "id": "isolation",
+      "name": "Isolation",
+      "movement_type": "single_joint",
+      "primary_muscles": ["targeted_group"],
+      "intensity_range": "60-75%_1rm",
+      "rep_range": [8, 20],
+      "examples": ["bicep_curl", "tricep_extension", "leg_curl"]
+    }
+  },
+  "training_splits": {
+    "1_day_per_week": {
+      "id": "1d",
+      "name": "Full Body 1x/Semana",
+      "level": "beginner_extreme",
+      "frequency_per_muscle_group": 1,
+      "sessions_per_week": 1,
+      "ideal_for": [
+        "Tempo muito limitado",
+        "Iniciantes absolutos",
+        "Rotina instável"
+      ],
+      "pros": [
+        "Simples de seguir",
+        "Pouco tempo por semana"
+      ],
+      "cons": [
+        "Frequência subótima (-32% vs 2x/sem)",
+        "Sessões muito longas (90+ min)",
+        "Se faltar 1 semana, interrompe completamente"
+      ],
+      "total_weekly_sets": 22,
+      "sets_per_session": 22,
+      "session_duration_minutes": 90,
+      "pattern": "A Rest Rest Rest Rest Rest Rest",
+      "muscle_group_distribution": {
+        "chest": 5,
+        "back": 5,
+        "legs": 8,
+        "shoulders": 2,
+        "arms": 4,
+        "core": 1
+      },
+      "session_template": {
+        "A": {
+          "name": "Full Body",
+          "duration_minutes": 90,
+          "exercises": [
+            {
+              "exercise": "Barbell Bench Press",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "muscle_groups": ["chest", "triceps", "anterior_deltoid"],
+              "intensity_percent": 82
+            },
+            {
+              "exercise": "Lat Pulldown",
+              "sets": 4,
+              "reps": "8-10",
+              "rest_seconds": 180,
+              "muscle_groups": ["back", "biceps"],
+              "intensity_percent": 76
+            },
+            {
+              "exercise": "Barbell Squat",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "muscle_groups": ["quadriceps", "glutes"],
+              "intensity_percent": 82
+            },
+            {
+              "exercise": "Romanian Deadlift",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "muscle_groups": ["hamstrings", "glutes"],
+              "intensity_percent": 74
+            },
+            {
+              "exercise": "Incline Press",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 120,
+              "muscle_groups": ["chest", "anterior_deltoid", "triceps"],
+              "intensity_percent": 70
+            },
+            {
+              "exercise": "Barbell Curl",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "muscle_groups": ["biceps"],
+              "intensity_percent": 70
+            }
+          ]
+        }
+      }
+    },
+    "2_days_per_week": {
+      "id": "2d",
+      "name": "Upper/Lower 2x/Semana",
+      "level": "beginner",
+      "frequency_per_muscle_group": 1,
+      "sessions_per_week": 2,
+      "ideal_for": [
+        "Iniciantes",
+        "Tempo limitado",
+        "Consistência moderada"
+      ],
+      "pros": [
+        "Frequência mínima recomendada",
+        "Sessões curtas (45-60 min)"
+      ],
+      "cons": [
+        "Cada grupo treina apenas 1x/semana",
+        "Recuperação marginal para avançados"
+      ],
+      "total_weekly_sets": 36,
+      "sets_per_session": 18,
+      "session_duration_minutes": 50,
+      "pattern": "Upper Lower Rest Upper Lower Rest Rest",
+      "split_type": "upper_lower",
+      "muscle_group_distribution_weekly": {
+        "chest": 6,
+        "back": 6,
+        "shoulders": 3,
+        "arms": 6,
+        "legs": 9,
+        "core": 2
+      },
+      "session_template": {
+        "upper": {
+          "name": "Upper Body",
+          "duration_minutes": 50,
+          "muscle_groups": ["chest", "back", "shoulders", "biceps", "triceps"],
+          "total_sets": 18,
+          "exercises": [
+            {
+              "exercise": "Barbell Bench Press",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "intensity_percent": 82
+            },
+            {
+              "exercise": "Lat Pulldown",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 76
+            },
+            {
+              "exercise": "Incline Dumbbell Press",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 75
+            },
+            {
+              "exercise": "Barbell Curl",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 70
+            },
+            {
+              "exercise": "Rope Extension",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 70
+            },
+            {
+              "exercise": "Lateral Raise",
+              "sets": 2,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "intensity_percent": 65
+            }
+          ]
+        },
+        "lower": {
+          "name": "Lower Body",
+          "duration_minutes": 50,
+          "muscle_groups": ["quadriceps", "glutes", "hamstrings", "calves", "core"],
+          "total_sets": 18,
+          "exercises": [
+            {
+              "exercise": "Barbell Squat",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "intensity_percent": 82
+            },
+            {
+              "exercise": "Leg Press",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 75
+            },
+            {
+              "exercise": "Romanian Deadlift",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 74
+            },
+            {
+              "exercise": "Leg Curl Machine",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 70
+            },
+            {
+              "exercise": "Standing Calf Raise",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "intensity_percent": 65
+            },
+            {
+              "exercise": "Machine Crunch",
+              "sets": 2,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "intensity_percent": 65
+            }
+          ]
+        }
+      }
+    },
+    "3_days_per_week": {
+      "id": "3d",
+      "name": "Full Body 3x/Semana",
+      "level": "beginner_intermediate",
+      "frequency_per_muscle_group": 1,
+      "sessions_per_week": 3,
+      "ideal_for": [
+        "Hipertrofia consistente",
+        "Iniciante-intermediário",
+        "Melhor progressão"
+      ],
+      "pros": [
+        "Frequência decente",
+        "Volume bem distribuído",
+        "3 estímulos diferentes (pesado, moderado, leve)"
+      ],
+      "cons": [
+        "Cada grupo treina apenas 1x/semana",
+        "Requer 3 dias consecutivos ou espalhados"
+      ],
+      "total_weekly_sets": 51,
+      "sets_per_session": 17,
+      "session_duration_minutes": 55,
+      "pattern": "A B C Rest A B Rest",
+      "split_type": "full_body_rotating",
+      "muscle_group_distribution_weekly": {
+        "chest": 6,
+        "back": 6,
+        "legs": 10,
+        "shoulders": 3,
+        "arms": 4,
+        "core": 2
+      },
+      "session_template": {
+        "day_a": {
+          "name": "Dia A - Pesado (Tensão Mecânica)",
+          "focus": "Força e Tensão",
+          "intensity": "alto",
+          "duration_minutes": 60,
+          "total_sets": 17,
+          "exercises": [
+            {
+              "exercise": "Barbell Bench Press",
+              "sets": 4,
+              "reps": "6-8",
+              "tempo": "2-1-3",
+              "rest_seconds": 180,
+              "intensity_percent": 85
+            },
+            {
+              "exercise": "Barbell Squat",
+              "sets": 4,
+              "reps": "6-8",
+              "tempo": "2-1-3",
+              "rest_seconds": 180,
+              "intensity_percent": 85
+            },
+            {
+              "exercise": "Barbell Row",
+              "sets": 3,
+              "reps": "8-10",
+              "tempo": "2-0-2",
+              "rest_seconds": 120,
+              "intensity_percent": 80
+            },
+            {
+              "exercise": "Barbell Curl",
+              "sets": 3,
+              "reps": "10-12",
+              "tempo": "2-0-2",
+              "rest_seconds": 90,
+              "intensity_percent": 75
+            },
+            {
+              "exercise": "Rope Extension",
+              "sets": 3,
+              "reps": "10-12",
+              "tempo": "2-0-2",
+              "rest_seconds": 90,
+              "intensity_percent": 75
+            }
+          ]
+        },
+        "day_b": {
+          "name": "Dia B - Moderado (Hipertrofia)",
+          "focus": "Hipertrofia",
+          "intensity": "moderado",
+          "duration_minutes": 55,
+          "total_sets": 17,
+          "exercises": [
+            {
+              "exercise": "Incline Dumbbell Press",
+              "sets": 4,
+              "reps": "8-10",
+              "tempo": "2-1-2",
+              "rest_seconds": 120,
+              "intensity_percent": 78
+            },
+            {
+              "exercise": "Leg Press",
+              "sets": 4,
+              "reps": "8-10",
+              "tempo": "2-1-2",
+              "rest_seconds": 120,
+              "intensity_percent": 77
+            },
+            {
+              "exercise": "Lat Pulldown",
+              "sets": 3,
+              "reps": "8-10",
+              "tempo": "2-1-2",
+              "rest_seconds": 90,
+              "intensity_percent": 76
+            },
+            {
+              "exercise": "Romanian Deadlift",
+              "sets": 3,
+              "reps": "8-10",
+              "tempo": "3-0-2",
+              "rest_seconds": 90,
+              "intensity_percent": 74
+            },
+            {
+              "exercise": "Preacher Curl",
+              "sets": 3,
+              "reps": "10-12",
+              "tempo": "2-0-2",
+              "rest_seconds": 60,
+              "intensity_percent": 72
+            }
+          ]
+        },
+        "day_c": {
+          "name": "Dia C - Leve/Bomba (Stress Metabólico)",
+          "focus": "Stress Metabólico e Recuperação Ativa",
+          "intensity": "baixo",
+          "duration_minutes": 45,
+          "total_sets": 17,
+          "exercises": [
+            {
+              "exercise": "Smith Machine Press",
+              "sets": 3,
+              "reps": "12-15",
+              "tempo": "2-0-2",
+              "rest_seconds": 60,
+              "intensity_percent": 68
+            },
+            {
+              "exercise": "Leg Press Machine",
+              "sets": 3,
+              "reps": "12-15",
+              "tempo": "2-0-1",
+              "rest_seconds": 60,
+              "intensity_percent": 67
+            },
+            {
+              "exercise": "Pec Deck Fly",
+              "sets": 3,
+              "reps": "12-15",
+              "tempo": "2-1-2",
+              "rest_seconds": 60,
+              "intensity_percent": 65
+            },
+            {
+              "exercise": "Machine Curl",
+              "sets": 3,
+              "reps": "12-15",
+              "tempo": "2-0-2",
+              "rest_seconds": 60,
+              "intensity_percent": 65
+            },
+            {
+              "exercise": "Standing Calf Raise",
+              "sets": 3,
+              "reps": "15-20",
+              "tempo": "2-1-2",
+              "rest_seconds": 60,
+              "intensity_percent": 62
+            },
+            {
+              "exercise": "Machine Crunch",
+              "sets": 2,
+              "reps": "15-20",
+              "tempo": "2-0-1",
+              "rest_seconds": 45,
+              "intensity_percent": 60
+            }
+          ]
+        }
+      }
+    },
+    "4_days_per_week": {
+      "id": "4d",
+      "name": "Upper/Lower 4x/Semana",
+      "level": "intermediate",
+      "frequency_per_muscle_group": 2,
+      "sessions_per_week": 4,
+      "ideal_for": [
+        "Ganho consistente",
+        "Intermediário",
+        "Progressão linear"
+      ],
+      "pros": [
+        "Frequência 2x/semana (IDEAL)",
+        "Distribuição de volume excelente",
+        "Sessões de duração moderada"
+      ],
+      "cons": [
+        "Requer 4 dias/semana de comprometimento",
+        "Mais volume total que 2x"
+      ],
+      "total_weekly_sets": 72,
+      "sets_per_session": 18,
+      "session_duration_minutes": 65,
+      "pattern": "Upper Lower Rest Upper Lower Rest Rest",
+      "split_type": "upper_lower_2x",
+      "muscle_group_distribution_weekly": {
+        "chest": 12,
+        "back": 12,
+        "shoulders": 6,
+        "arms": 12,
+        "legs": 18,
+        "core": 4
+      },
+      "session_template": {
+        "upper_heavy": {
+          "name": "Upper Pesado",
+          "focus": "Tensão Mecânica",
+          "intensity": "alto",
+          "exercises": [
+            {
+              "exercise": "Barbell Bench Press",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "intensity_percent": 85
+            },
+            {
+              "exercise": "Pull-ups (com peso se possível)",
+              "sets": 3,
+              "reps": "5-6",
+              "rest_seconds": 180,
+              "intensity_percent": 85
+            },
+            {
+              "exercise": "Overhead Press",
+              "sets": 3,
+              "reps": "6-8",
+              "rest_seconds": 150,
+              "intensity_percent": 82
+            },
+            {
+              "exercise": "Lat Pulldown",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 76
+            },
+            {
+              "exercise": "Barbell Curl",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 72
+            },
+            {
+              "exercise": "Rope Extension",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 72
+            }
+          ]
+        },
+        "lower_heavy": {
+          "name": "Lower Pesado",
+          "focus": "Tensão Mecânica",
+          "intensity": "alto",
+          "exercises": [
+            {
+              "exercise": "Barbell Squat",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "intensity_percent": 85
+            },
+            {
+              "exercise": "Romanian Deadlift",
+              "sets": 3,
+              "reps": "6-8",
+              "rest_seconds": 150,
+              "intensity_percent": 82
+            },
+            {
+              "exercise": "Leg Press",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 77
+            },
+            {
+              "exercise": "Leg Curl Machine",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 72
+            },
+            {
+              "exercise": "Standing Calf Raise",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 90,
+              "intensity_percent": 68
+            },
+            {
+              "exercise": "Machine Crunch",
+              "sets": 2,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "intensity_percent": 65
+            }
+          ]
+        },
+        "upper_moderate": {
+          "name": "Upper Moderado",
+          "focus": "Hipertrofia",
+          "intensity": "moderado",
+          "exercises": [
+            {
+              "exercise": "Incline Dumbbell Press",
+              "sets": 4,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 77
+            },
+            {
+              "exercise": "Barbell Row",
+              "sets": 4,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 76
+            },
+            {
+              "exercise": "Machine Pec Deck",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 72
+            },
+            {
+              "exercise": "Machine Curl",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 72
+            },
+            {
+              "exercise": "Face Pull",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "intensity_percent": 68
+            },
+            {
+              "exercise": "Lateral Raise Machine",
+              "sets": 2,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "intensity_percent": 65
+            }
+          ]
+        },
+        "lower_moderate": {
+          "name": "Lower Moderado",
+          "focus": "Hipertrofia",
+          "intensity": "moderado",
+          "exercises": [
+            {
+              "exercise": "Leg Press",
+              "sets": 4,
+              "reps": "10-12",
+              "rest_seconds": 120,
+              "intensity_percent": 75
+            },
+            {
+              "exercise": "Hack Squat",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 100,
+              "intensity_percent": 73
+            },
+            {
+              "exercise": "Leg Curl Machine",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 72
+            },
+            {
+              "exercise": "Leg Extension",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 72
+            },
+            {
+              "exercise": "Standing Calf Raise",
+              "sets": 3,
+              "reps": "15-20",
+              "rest_seconds": 90,
+              "intensity_percent": 65
+            },
+            {
+              "exercise": "Machine Crunch",
+              "sets": 2,
+              "reps": "15-20",
+              "rest_seconds": 60,
+              "intensity_percent": 60
+            }
+          ]
+        }
+      }
+    },
+    "5_days_per_week": {
+      "id": "5d",
+      "name": "Push/Pull/Legs 5x/Semana",
+      "level": "intermediate_advanced",
+      "frequency_per_muscle_group": 2,
+      "sessions_per_week": 5,
+      "ideal_for": [
+        "Hipertrofia máxima",
+        "Intermediário+",
+        "Atletas dedicados"
+      ],
+      "pros": [
+        "Frequência 2x/semana",
+        "Especialização por padrão de movimento",
+        "Volume muito bem distribuído"
+      ],
+      "cons": [
+        "Requer 5 dias/semana de comprometimento",
+        "Volume total alto (80+ sets)"
+      ],
+      "total_weekly_sets": 80,
+      "sets_per_session": 16,
+      "session_duration_minutes": 60,
+      "pattern": "Push Pull Legs Push Pull",
+      "split_type": "ppl",
+      "muscle_group_distribution_weekly": {
+        "chest": 13,
+        "back": 13,
+        "shoulders": 8,
+        "arms": 12,
+        "legs": 20,
+        "core": 2
+      },
+      "session_template": {
+        "push": {
+          "name": "Push",
+          "muscle_groups": ["chest", "anterior_deltoid", "triceps"],
+          "total_sets": 18,
+          "exercises": [
+            {
+              "exercise": "Barbell Bench Press",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "intensity_percent": 84
+            },
+            {
+              "exercise": "Incline Dumbbell Press",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 77
+            },
+            {
+              "exercise": "Overhead Press",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 76
+            },
+            {
+              "exercise": "Machine Pec Deck",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 72
+            },
+            {
+              "exercise": "Rope Extension",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 71
+            },
+            {
+              "exercise": "Lateral Raise",
+              "sets": 2,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "intensity_percent": 66
+            }
+          ]
+        },
+        "pull": {
+          "name": "Pull",
+          "muscle_groups": ["back", "biceps", "posterior_deltoid"],
+          "total_sets": 18,
+          "exercises": [
+            {
+              "exercise": "Pull-ups (com peso)",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "intensity_percent": 84
+            },
+            {
+              "exercise": "Barbell Row",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 77
+            },
+            {
+              "exercise": "Lat Pulldown",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 76
+            },
+            {
+              "exercise": "Face Pull",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 71
+            },
+            {
+              "exercise": "Barbell Curl",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 71
+            },
+            {
+              "exercise": "Hammer Curl",
+              "sets": 2,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "intensity_percent": 66
+            }
+          ]
+        },
+        "legs": {
+          "name": "Legs",
+          "muscle_groups": ["quadriceps", "glutes", "hamstrings", "calves"],
+          "total_sets": 20,
+          "exercises": [
+            {
+              "exercise": "Barbell Squat",
+              "sets": 4,
+              "reps": "6-8",
+              "rest_seconds": 180,
+              "intensity_percent": 84
+            },
+            {
+              "exercise": "Leg Press",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 77
+            },
+            {
+              "exercise": "Romanian Deadlift",
+              "sets": 3,
+              "reps": "8-10",
+              "rest_seconds": 120,
+              "intensity_percent": 76
+            },
+            {
+              "exercise": "Leg Extension",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 71
+            },
+            {
+              "exercise": "Leg Curl Machine",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "intensity_percent": 71
+            },
+            {
+              "exercise": "Standing Calf Raise",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 90,
+              "intensity_percent": 68
+            },
+            {
+              "exercise": "Machine Crunch",
+              "sets": 1,
+              "reps": "15-20",
+              "rest_seconds": 60,
+              "intensity_percent": 60
+            }
+          ]
+        }
+      }
+    },
+    "6_days_per_week": {
+      "id": "6d",
+      "name": "Push/Pull/Legs x2 - 6x/Semana",
+      "level": "advanced",
+      "frequency_per_muscle_group": 2,
+      "sessions_per_week": 6,
+      "ideal_for": [
+        "Hipertrofia avançada",
+        "Atletas dedicados",
+        "Volume muito alto"
+      ],
+      "pros": [
+        "Frequência ótima 2x/semana",
+        "Volume máximo distribuído",
+        "Especialização extrema"
+      ],
+      "cons": [
+        "Requer 6 dias/semana de compromisso",
+        "Volume total muito alto (85+ sets)",
+        "Recuperação crítica"
+      ],
+      "total_weekly_sets": 90,
+      "sets_per_session": 15,
+      "session_duration_minutes": 55,
+      "pattern": "Push Pull Legs Push Pull Legs",
+      "split_type": "ppl_double",
+      "muscle_group_distribution_weekly": {
+        "chest": 14,
+        "back": 14,
+        "shoulders": 10,
+        "arms": 14,
+        "legs": 24,
+        "core": 2
+      }
+    },
+    "7_days_per_week": {
+      "id": "7d",
+      "name": "PPL + Flex Day - 7x/Semana",
+      "level": "advanced_elite",
+      "frequency_per_muscle_group": "2-3",
+      "sessions_per_week": 7,
+      "ideal_for": [
+        "Elite bodybuilders",
+        "Physique competitors",
+        "Máxima hipertrofia"
+      ],
+      "pros": [
+        "Frequência máxima",
+        "Volume máximo",
+        "Dia dedicado para grupos fracos"
+      ],
+      "cons": [
+        "Requer 7 dias/semana",
+        "Volume extremo (100+ sets)",
+        "Recuperação crítica, necessita periodização"
+      ],
+      "total_weekly_sets": 100,
+      "sets_per_session": "15-24",
+      "session_duration_minutes": "60-75",
+      "pattern": "Push Pull Legs Push Pull Legs Flex",
+      "split_type": "ppl_flex"
+    }
+  },
+  "progression_protocols": {
+    "linear_progression": {
+      "name": "Linear Progression",
+      "description": "Aumentar peso consistentemente",
+      "frequency_days": 14,
+      "method": "+5-10% a cada 2 semanas",
+      "best_for": "Iniciantes, força",
+      "formula": "new_weight = current_weight × 1.05"
+    },
+    "double_progression": {
+      "name": "Double Progression",
+      "description": "Aumentar reps, depois peso",
+      "method": "Quando atinge reps máximo, aumenta peso em 5%",
+      "best_for": "Hipertrofia, iniciante-intermediário"
+    },
+    "undulating_periodization": {
+      "name": "Undulating Periodization",
+      "description": "Variar volume/intensidade por sessão",
+      "method": "Pesado-Moderado-Leve por semana",
+      "best_for": "Intermediário+, volume muito alto"
+    },
+    "deload_protocol": {
+      "name": "Deload Protocol",
+      "frequency_weeks": "4-8",
+      "volume_reduction_percent": 50,
+      "intensity_reduction_percent": 40,
+      "purpose": "CNS recovery, prevent overtraining"
+    }
+  },
+  "overtraining_indicators": {
+    "physical_signs": [
+      "Fadiga persistente",
+      "Performance em queda",
+      "Lesões recorrentes",
+      "Aumento de resting heart rate (+5-10 bpm)",
+      "Perda de massa muscular",
+      "Inflamação generalizada"
+    ],
+    "psychological_signs": [
+      "Falta de motivação",
+      "Irritabilidade",
+      "Dificuldade de concentração",
+      "Qualidade de sono ruim"
+    ],
+    "corrective_actions": [
+      "Imediato: Reduzir volume em 40-50%",
+      "Curto prazo: Deload de 1-2 semanas",
+      "Médio prazo: Reintroduzir progressivamente"
+    ]
+  },
+  "undertraining_indicators": [
+    "Sem progresso em 2+ semanas",
+    "Sem pump/inchaço após treino",
+    "Frequência < 2x/semana por grupo",
+    "Volume < MEV recomendado"
+  ],
+  "rest_period_recommendations": {
+    "compound_heavy": {
+      "duration_seconds": 180,
+      "purpose": "ATP recovery, CNS recovery"
+    },
+    "compound_moderate": {
+      "duration_seconds": 120,
+      "purpose": "Muscle recovery"
+    },
+    "isolation_exercises": {
+      "duration_seconds": 90,
+      "purpose": "Partial recovery"
+    }
+  }
+}

@@ -6,20 +6,36 @@ import EliteNutrition from '@/components/EliteNutrition'
 import TabNavigation from '@/components/TabNavigation'
 import ExerciseDetail from '@/components/ExerciseDetail'
 import ProgressDashboard from '@/components/ProgressDashboard'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import { EXERCISES } from '@/data/workoutData'
 
 function App() {
   const [userProfile, setUserProfile] = useState(() => {
-    const saved = localStorage.getItem('aurus-profile')
-    return saved ? JSON.parse(saved) : null
+    try {
+      const saved = localStorage.getItem('aurus-profile')
+      return saved ? JSON.parse(saved) : null
+    } catch (e) {
+      console.error('Erro ao restaurar perfil:', e)
+      return null
+    }
   })
   const [personalBests, setPersonalBests] = useState(() => {
-    const saved = localStorage.getItem('aurus-pbs')
-    return saved ? JSON.parse(saved) : {}
+    try {
+      const saved = localStorage.getItem('aurus-pbs')
+      return saved ? JSON.parse(saved) : {}
+    } catch (e) {
+      console.error('Erro ao restaurar PBs:', e)
+      return {}
+    }
   })
   const [volumeHistory, setVolumeHistory] = useState(() => {
-    const saved = localStorage.getItem('aurus-volume')
-    return saved ? JSON.parse(saved) : {}
+    try {
+      const saved = localStorage.getItem('aurus-volume')
+      return saved ? JSON.parse(saved) : {}
+    } catch (e) {
+      console.error('Erro ao restaurar histórico:', e)
+      return {}
+    }
   })
   const [activeTab, setActiveTab] = useState('home')
   const [libraryExercise, setLibraryExercise] = useState(null)
@@ -95,7 +111,7 @@ function App() {
         if (data.lastSession) localStorage.setItem('aurus-last-session', JSON.stringify(data.lastSession))
         if (data.history) localStorage.setItem('aurus-history', JSON.stringify(data.history))
         alert('✓ Dados restaurados com sucesso!')
-      } catch (e) {
+      } catch {
         alert('Arquivo inválido. Use apenas backups gerados pelo Aurus Gym.')
       }
     }
@@ -130,7 +146,8 @@ function App() {
   }
 
   return (
-    <div className="mobile-container" style={{ paddingBottom: userProfile ? '100px' : '0' }}>
+    <ErrorBoundary>
+      <div className="mobile-container" style={{ paddingBottom: userProfile ? '100px' : '0' }}>
       {!userProfile ? (
         <Onboarding onComplete={handleOnboardingComplete} />
       ) : (
@@ -328,7 +345,8 @@ function App() {
           />
         </>
       )}
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }
 
