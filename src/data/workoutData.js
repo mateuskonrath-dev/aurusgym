@@ -278,14 +278,13 @@ export const SPLITS = {
     // antes de ser estimulado novamente
     traditional_4: {
         name: '4 Dias Tradicional',
-        description: 'Descansos distribuídos - PUSH, PULL, LEGS com frequência 2x para ombro/braços',
+        description: '4 treinos por semana com 3 dias seguidos e 1 dia de descanso estratégico',
         days: {
-            1: ['chest', 'shoulders', 'triceps'],              // Segunda: PUSH A (frequência 1x peito, 2x ombro/tri)
-            2: [],                                              // Terça: DESCANSO (recuperação)
-            3: ['back', 'biceps', 'forearms'],                 // Quarta: PULL (frequência 1x)
-            4: [],                                              // Quinta: DESCANSO (antes dia pesado)
-            5: ['legs', 'core'],                               // Sexta: LEGS (volume MÁXIMO - dia mais pesado)
-            6: ['shoulders', 'triceps']                        // Sábado: UPPER 2 (complemento + frequência 2x)
+            1: ['chest', 'shoulders', 'triceps'],              // Segunda: PUSH A (Treino 1)
+            2: ['back', 'biceps', 'forearms'],                 // Terça: PULL (Treino 2)
+            3: ['legs', 'core'],                               // Quarta: LEGS (Treino 3)
+            4: [],                                              // Quinta: DESCANSO (recuperação)
+            5: ['shoulders', 'triceps']                        // Sexta: UPPER 2 (Treino 4 - complemento)
         },
         default: ['chest', 'back', 'legs']
     },
@@ -324,13 +323,12 @@ export const SPLITS = {
     // Sab: C2 - LEGS (variante 2)
     abc_3: {
         name: 'ABC (3 dias)',
-        description: 'Push / Pull / Legs - 1x/semana, descansos estratégicos',
+        description: 'Push / Pull / Legs - 3 treinos por semana com descanso estratégico no meio',
         days: {
-            1: ['chest', 'shoulders', 'triceps'],             // Segunda: A - PUSH
-            2: [],                                             // Terça: Descanso
-            3: ['back', 'biceps', 'forearms'],                // Quarta: B - PULL
-            4: [],                                             // Quinta: Descanso
-            5: ['legs', 'core']                               // Sexta: C - LEGS
+            1: ['chest', 'shoulders', 'triceps'],             // Segunda: A - PUSH (Treino 1)
+            2: ['back', 'biceps', 'forearms'],                // Terça: B - PULL (Treino 2)
+            3: [],                                             // Quarta: DESCANSO
+            4: ['legs', 'core']                               // Quinta: C - LEGS (Treino 3)
         },
         default: ['chest', 'back', 'legs']
     },
