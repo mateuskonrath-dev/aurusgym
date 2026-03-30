@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import SplashScreen from '@/components/SplashScreen'
-import ScrollPicker from '@/components/ScrollPicker'
 import { getRecommendedSplit } from '@/data/trainingSplits'
 
 const steps = [
@@ -296,104 +295,60 @@ export default function Onboarding({ onComplete, mode = 'onboarding', initialAns
                         ))
                     ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            {['age', 'weight', 'height'].includes(step.id) ? (
-                                <>
-                                    <ScrollPicker
-                                        value={inputValue ? parseInt(inputValue) : (step.id === 'age' ? 25 : step.id === 'weight' ? 75 : 175)}
-                                        min={step.id === 'age' ? 13 : step.id === 'weight' ? 30 : 140}
-                                        max={step.id === 'age' ? 80 : step.id === 'weight' ? 250 : 220}
-                                        unit={step.unit}
-                                        onChange={(val) => {
-                                            setInputValue(String(val))
-                                            setShowError(false)
-                                        }}
-                                    />
-                                    {showError && (
-                                        <div className="animate-tech" style={{
-                                            background: 'rgba(255, 59, 48, 0.1)',
-                                            border: '1px solid var(--brand-danger)',
-                                            borderRadius: 'var(--radius-pro)',
-                                            padding: '12px',
-                                            marginTop: '8px'
-                                        }}>
-                                            <p style={{
-                                                color: 'var(--brand-danger)', fontSize: '0.7rem',
-                                                fontWeight: 800, margin: 0, letterSpacing: '1px'
-                                            }}>
-                                                ⚠️ VALOR FORA DOS PARÂMETROS
-                                            </p>
-                                            <p style={{
-                                                color: 'var(--text-med)', fontSize: '0.65rem',
-                                                margin: '4px 0 0 0', fontWeight: 600
-                                            }}>
-                                                {step.id === 'age' && `Esperado: 10-100 anos`}
-                                                {step.id === 'weight' && `Esperado: 30-250 kg`}
-                                                {step.id === 'height' && `Esperado: 140-220 cm`}
-                                                {step.id === 'name' && `Mínimo: 2 caracteres`}
-                                            </p>
-                                        </div>
-                                    )}
-                                    <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>
-                                </>
-                            ) : (
-                                <>
-                                    <div style={{
-                                        display: 'flex', alignItems: 'center', gap: '10px',
-                                        background: 'var(--bg-card)', padding: '20px',
-                                        borderRadius: '8px', border: '1px solid var(--border-subtle)'
+                            <div style={{
+                                display: 'flex', alignItems: 'center', gap: '10px',
+                                background: 'var(--bg-card)', padding: '20px',
+                                borderRadius: '8px', border: '1px solid var(--border-subtle)'
+                            }}>
+                                <input
+                                    type={step.type === 'number' ? 'number' : 'text'}
+                                    inputMode={step.type === 'number' ? 'decimal' : 'text'}
+                                    value={inputValue}
+                                    onChange={(e) => { setInputValue(e.target.value); setShowError(false) }}
+                                    placeholder={step.placeholder}
+                                    autoFocus
+                                    style={{
+                                        background: 'transparent', border: 'none',
+                                        color: showError ? 'var(--brand-danger)' : 'var(--brand-primary)',
+                                        fontSize: step.type === 'text' ? '1.2rem' : '2rem',
+                                        fontWeight: 900, width: '100%', outline: 'none',
+                                        transition: 'color 0.3s ease'
+                                    }}
+                                />
+                                {step.unit && (
+                                    <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-low)' }}>
+                                        {step.unit}
+                                    </span>
+                                )}
+                            </div>
+
+                            {showError && (
+                                <div className="animate-tech" style={{
+                                    background: 'rgba(255, 59, 48, 0.1)',
+                                    border: '1px solid var(--brand-danger)',
+                                    borderRadius: 'var(--radius-pro)',
+                                    padding: '12px',
+                                    marginTop: '8px'
+                                }}>
+                                    <p style={{
+                                        color: 'var(--brand-danger)', fontSize: '0.7rem',
+                                        fontWeight: 800, margin: 0, letterSpacing: '1px'
                                     }}>
-                                        <input
-                                            type={step.type === 'number' ? 'number' : 'text'}
-                                            inputMode={step.type === 'number' ? 'decimal' : 'text'}
-                                            value={inputValue}
-                                            onChange={(e) => { setInputValue(e.target.value); setShowError(false) }}
-                                            placeholder={step.placeholder}
-                                            autoFocus
-                                            style={{
-                                                background: 'transparent', border: 'none',
-                                                color: showError ? 'var(--brand-danger)' : 'var(--brand-primary)',
-                                                fontSize: step.type === 'text' ? '1.2rem' : '2rem',
-                                                fontWeight: 900, width: '100%', outline: 'none',
-                                                transition: 'color 0.3s ease'
-                                            }}
-                                        />
-                                        {step.unit && (
-                                            <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-low)' }}>
-                                                {step.unit}
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {showError && (
-                                        <div className="animate-tech" style={{
-                                            background: 'rgba(255, 59, 48, 0.1)',
-                                            border: '1px solid var(--brand-danger)',
-                                            borderRadius: 'var(--radius-pro)',
-                                            padding: '12px',
-                                            marginTop: '8px'
-                                        }}>
-                                            <p style={{
-                                                color: 'var(--brand-danger)', fontSize: '0.7rem',
-                                                fontWeight: 800, margin: 0, letterSpacing: '1px'
-                                            }}>
-                                                ⚠️ VALOR FORA DOS PARÂMETROS
-                                            </p>
-                                            <p style={{
-                                                color: 'var(--text-med)', fontSize: '0.65rem',
-                                                margin: '4px 0 0 0', fontWeight: 600
-                                            }}>
-                                                {step.id === 'age' && `Esperado: 10-100 anos`}
-                                                {step.id === 'weight' && `Esperado: 30-250 kg`}
-                                                {step.id === 'height' && `Esperado: 140-220 cm`}
-                                                {step.id === 'name' && `Mínimo: 2 caracteres`}
-                                            </p>
-                                        </div>
-                                    )}
-
-                                    <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>
-                                </>
+                                        ⚠️ VALOR FORA DOS PARÂMETROS
+                                    </p>
+                                    <p style={{
+                                        color: 'var(--text-med)', fontSize: '0.65rem',
+                                        margin: '4px 0 0 0', fontWeight: 600
+                                    }}>
+                                        {step.id === 'age' && `Esperado: 10-100 anos`}
+                                        {step.id === 'weight' && `Esperado: 30-250 kg`}
+                                        {step.id === 'height' && `Esperado: 140-220 cm`}
+                                        {step.id === 'name' && `Mínimo: 2 caracteres`}
+                                    </p>
+                                </div>
                             )}
 
+                            <button className="btn-tech" onClick={() => handleNext()}>CONTINUAR</button>
                         </div>
                     )}
                 </div>
