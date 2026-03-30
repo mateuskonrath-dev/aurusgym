@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 
 export default function ScrollPicker({ value, min, max, unit, onChange }) {
     const scrollRef = useRef(null)
@@ -21,20 +21,25 @@ export default function ScrollPicker({ value, min, max, unit, onChange }) {
     const visibleItems = 5
     const containerHeight = itemHeight * visibleItems
 
-    // Gerar lista de valores
-    const values = []
-    for (let i = min; i <= max; i++) {
-        values.push(i)
-    }
+    // Gerar lista de valores (memoized para evitar recriação a cada render)
+    const values = useMemo(() => {
+        const arr = []
+        for (let i = min; i <= max; i++) {
+            arr.push(i)
+        }
+        return arr
+    }, [min, max])
 
     useEffect(() => {
-        setCurrentValue(value || min)
+        const newValue = value || min
+        setCurrentValue(newValue)
         if (scrollRef.current) {
-            const index = values.indexOf(value || min)
+            const index = values.indexOf(newValue)
             const scrollTop = index * itemHeight - (containerHeight / 2 - itemHeight / 2)
             scrollRef.current.scrollTop = scrollTop
         }
-    }, [value, min, max, containerHeight, values])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value, min])
 
     // Snap to center quando param de scrollar
     useEffect(() => {
@@ -43,8 +48,12 @@ export default function ScrollPicker({ value, min, max, unit, onChange }) {
             const closestIndex = Math.round(scrollTop / itemHeight)
             const snappedValue = Math.max(min, Math.min(max, values[closestIndex] || currentValue))
             if (snappedValue !== currentValue) {
-                setCurrentValue(snappedValue)
-                onChange(snappedValue)
+                // Use a small timeout to avoid cascading renders
+                const timer = setTimeout(() => {
+                    setCurrentValue(snappedValue)
+                    onChange(snappedValue)
+                }, 0)
+                return () => clearTimeout(timer)
             }
         }
     }, [isScrolling, min, max, currentValue, onChange, values])

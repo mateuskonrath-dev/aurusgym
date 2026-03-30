@@ -472,8 +472,9 @@ export const SPLITS = {
             1: ['chest'],                                     // Seg: PEITO
             2: ['back'],                                      // Ter: COSTAS
             3: ['legs'],                                      // Qua: PERNAS
-            4: ['shoulders'],                                 // Qui: OMBROS
-            5: ['biceps', 'triceps']                          // Sex: BRAÇOS
+            4: [],                                            // Qui: DESCANSO (recuperação estratégica)
+            5: ['shoulders'],                                 // Sex: OMBROS
+            6: ['biceps', 'triceps']                          // Sab: BRAÇOS
         },
         default: ['chest']
     },
