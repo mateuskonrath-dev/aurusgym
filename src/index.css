@@ -185,6 +185,21 @@ h3 {
   opacity: 0.88;
 }
 
+/* View containers - profile, progress, library, nutrition, prs */
+.profile-view,
+.progress-view,
+.library-view,
+.nutrition-view,
+.prs-view {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Panel hover for library */
 .library-view .panel-tech > div:hover {
   background: rgba(0, 245, 212, 0.06) !important;
