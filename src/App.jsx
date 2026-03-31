@@ -235,7 +235,18 @@ function App() {
             </div>
           )}
 
-          {activeTab === 'profile' && (
+          {activeTab === 'profile' && !userProfile && (
+            <div className="profile-view" style={{ padding: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-med)', textAlign: 'center', marginBottom: '20px' }}>
+                Você precisa completar o onboarding primeiro para acessar as configurações de atleta.
+              </p>
+              <button className="btn-tech" onClick={() => setActiveTab('reconfig')} style={{ maxWidth: '300px' }}>
+                CONFIGURAR AGORA
+              </button>
+            </div>
+          )}
+
+          {activeTab === 'profile' && userProfile && (
             <div className="profile-view animate-tech" style={{ padding: '30px' }}>
               <header style={{ marginBottom: '40px' }}>
                 <p className="data-label">SISTEMA ATLETA</p>
@@ -251,18 +262,18 @@ function App() {
                 }}>
                   👤
                 </div>
-                <h2 style={{ fontSize: '1rem', marginBottom: '5px' }}>{userProfile.name?.toUpperCase() || 'OPERADOR_01'}</h2>
+                <h2 style={{ fontSize: '1rem', marginBottom: '5px' }}>{userProfile?.name?.toUpperCase() || 'OPERADOR_01'}</h2>
                 <p style={{ color: 'var(--brand-secondary)', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '2px' }}>
-                  {(userProfile.level || 'INICIANTE').toUpperCase()}
+                  {(userProfile?.level || 'INICIANTE').toUpperCase()}
                 </p>
               </div>
 
               <div style={{ display: 'grid', gap: '10px' }}>
                 <div className="panel-tech" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', padding: '15px' }}>
                   {[
-                    { label: 'PESO', value: `${userProfile.weight} KG` },
-                    { label: 'ALTURA', value: `${userProfile.height} CM` },
-                    { label: 'BF%', value: `${userProfile.bf || '--'}%` }
+                    { label: 'PESO', value: `${userProfile?.weight} KG` },
+                    { label: 'ALTURA', value: `${userProfile?.height} CM` },
+                    { label: 'BF%', value: `${userProfile?.bf || '--'}%` }
                   ].map((item, i) => (
                     <div key={item.label} style={{
                       textAlign: 'center',
@@ -275,9 +286,9 @@ function App() {
                 </div>
 
                 {[
-                  { label: 'PROTOCOLO', value: (userProfile.goal || 'HIPERTROFIA').toUpperCase() },
-                  { label: 'CADÊNCIA', value: (userProfile.freq || 'PADRÃO').toUpperCase() },
-                  { label: 'AMBIENTE', value: userProfile.place === 'gym' ? 'CENTRO TÉCNICO' : userProfile.place === 'calisthenics' ? 'AO AR LIVRE' : 'HOME BASE' }
+                  { label: 'PROTOCOLO', value: (userProfile?.goal || 'HIPERTROFIA').toUpperCase() },
+                  { label: 'CADÊNCIA', value: (userProfile?.freq || 'PADRÃO').toUpperCase() },
+                  { label: 'AMBIENTE', value: userProfile?.place === 'gym' ? 'CENTRO TÉCNICO' : userProfile?.place === 'calisthenics' ? 'AO AR LIVRE' : 'HOME BASE' }
                 ].map(item => (
                   <div key={item.label} className="panel-tech" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px' }}>
                     <span className="data-label">{item.label}</span>
